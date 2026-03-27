@@ -153,7 +153,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 
 /* ═══ PAGE CONTAINER ═════════════════════════════════════════ */
 .page-container { position: absolute; inset: 0; top: calc(var(--safe-t) + var(--header-h)); bottom: calc(var(--safe-b) + var(--nav-h)); overflow: hidden; }
-.page { position: absolute; inset: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: 32px; opacity: 0; pointer-events: none; transform: translateX(20px); transition: opacity 0.2s, transform 0.2s; }
+.page { position: absolute; inset: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px)); opacity: 0; pointer-events: none; transform: translateX(20px); transition: opacity 0.2s, transform 0.2s; }
 .page.page-active { opacity: 1; pointer-events: all; transform: translateX(0); }
 
 /* ═══ PAGE HERO ══════════════════════════════════════════════ */
@@ -423,7 +423,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 @keyframes toastOut { from { opacity: 1; } to { opacity: 0; transform: translateY(-6px); } }
 
 /* ═══ PROFILE PAGE ═══════════════════════════════════════════ */
-.profile-page-inner { padding: 20px 18px 40px; }
+.profile-page-inner { padding: 20px 18px calc(40px + env(safe-area-inset-bottom, 0px)); }
 
 /* Avatar block */
 .profile-avatar-block {
@@ -1208,24 +1208,19 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
             </div>
             <svg class="profile-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
+          <div class="profile-row feedback" onclick="openFeedback()">
+            <div class="profile-row-icon">💬</div>
+            <div class="profile-row-body">
+              <strong>Share Your Feedback</strong>
+              <span>Help shape NeuroHabit — takes 2 min</span>
+            </div>
+            <svg class="profile-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
           <div class="profile-row" onclick="confirmNewDay()">
             <div class="profile-row-icon">🌅</div>
             <div class="profile-row-body">
               <strong>New Day — Reset Today</strong>
               <span>Clear all of today's habits</span>
-            </div>
-            <svg class="profile-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </div>
-        </div>
-
-        <!-- Feedback section -->
-        <div class="profile-section-label">Beta Feedback</div>
-        <div class="profile-rows">
-          <div class="profile-row feedback" onclick="window.open('https://forms.gle/oYkxx8B898Ur4JtV9', '_blank')">
-            <div class="profile-row-icon">💬</div>
-            <div class="profile-row-body">
-              <strong>Share Your Feedback</strong>
-              <span>Help shape NeuroHabit — takes 2 min</span>
             </div>
             <svg class="profile-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
@@ -1900,6 +1895,9 @@ function showHabitInfo(h) {
 function toggleHabit(key, type, idx) {
   appState[today][key] = !appState[today][key];
   sv(SK, appState);
+  // Fix 1: immediately lock today's score to weekData on every toggle
+  weekData[today] = Math.round(heroScore());
+  sv(WK, weekData);
   if (appState[today][key] && HABITS[type].habits[idx].foundational) {
     haptic('heavy');
     setTimeout(() => showTooltip(HABITS[type].habits[idx].tooltip), 150);
@@ -1915,6 +1913,9 @@ function toggleHabit(key, type, idx) {
 function toggleFlex(flexKey, type, idx) {
   appState[today][flexKey] = !appState[today][flexKey];
   sv(SK, appState);
+  // Fix 1: immediately lock today's score to weekData on every toggle
+  weekData[today] = Math.round(heroScore());
+  sv(WK, weekData);
   haptic('medium');
   renderSection(type);
   updateHeader();
@@ -1938,6 +1939,9 @@ function cycleTier(tierKey, type, idx, dir) {
   // Auto-complete habit when a tier is selected; un-complete when tier cleared to 0
   appState[today][key] = next > 0;
   sv(SK, appState);
+  // Fix 1: immediately lock today's score to weekData on every toggle
+  weekData[today] = Math.round(heroScore());
+  sv(WK, weekData);
   haptic('light');
   renderSection(type);
   updateHeader();
@@ -3329,6 +3333,12 @@ function launchApp() {
       if (currentDay !== today) location.reload();
     }
   });
+
+  /* Fix 2: Check every 60s — catches midnight even if screen stays on */
+  setInterval(() => {
+    const currentDay = new Date().toISOString().slice(0, 10);
+    if (currentDay !== today) location.reload();
+  }, 60000);
 }
 
 function initApp() {
@@ -3468,6 +3478,20 @@ function togglePremiumPanel() {
 /* ═══════════════════════════════════════════════════════════
    EXPOSE FUNCTIONS GLOBALLY (required for onclick handlers)
    ═══════════════════════════════════════════════════════════ */
+
+/* openFeedback — works in both browser and standalone PWA mode */
+function openFeedback() {
+  const url = 'https://forms.gle/oYkxx8B898Ur4JtV9';
+  const a = document.createElement('a');
+  a.href = url;
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+window.openFeedback        = openFeedback;
 window.togglePremiumPanel  = togglePremiumPanel;
 window.showToast          = showToast;
 window.signInWithGoogle   = signInWithGoogle;

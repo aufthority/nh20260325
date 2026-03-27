@@ -1,22 +1,21 @@
 /* ═══════════════════════════════════════════════════════════
-   NeuroHabit Service Worker
-   — Caches app shell + Firebase CDN scripts for offline use
+   NeuroHabit Service Worker v5
+   — index.html always network-first (never cached)
+   — Firebase/Fonts cached for offline use
    ═══════════════════════════════════════════════════════════ */
 
-const CACHE_NAME = 'neurohabit-v4';
+const CACHE_NAME = 'neurohabit-v5';
 
 const PRECACHE = [
-  '/neurohabit/',
-  '/neurohabit/index.html',
-  '/neurohabit/manifest.json',
-  '/neurohabit/icon-192.png',
-  '/neurohabit/icon-512.png',
+  '/neurohabitbeta/manifest.json',
+  '/neurohabitbeta/icon-192.png',
+  '/neurohabitbeta/icon-512.png',
   'https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js',
   'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js',
   'https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&display=swap',
 ];
 
-/* Install — cache everything in PRECACHE */
+/* Install — cache everything except index.html */
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(PRECACHE))
@@ -24,7 +23,7 @@ self.addEventListener('install', event => {
   self.skipWaiting();
 });
 
-/* Activate — delete old caches */
+/* Activate — delete all old caches immediately */
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
@@ -34,11 +33,19 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
-/* Fetch — cache-first for CDN scripts, network-first for everything else */
+/* Fetch strategy */
 self.addEventListener('fetch', event => {
   const url = event.request.url;
 
-  /* Cache-first: Firebase CDN and Google Fonts (rarely change) */
+  /* index.html — ALWAYS network-first, never serve from cache */
+  if (url.includes('/neurohabitbeta/index.html') || url.endsWith('/neurohabitbeta/') || url.endsWith('/neurohabitbeta')) {
+    event.respondWith(
+      fetch(event.request).catch(() => caches.match('/neurohabitbeta/index.html'))
+    );
+    return;
+  }
+
+  /* Firebase CDN and Google Fonts — cache-first (rarely change) */
   if (url.includes('gstatic.com/firebasejs') || url.includes('fonts.googleapis.com') || url.includes('fonts.gstatic.com')) {
     event.respondWith(
       caches.match(event.request).then(cached => {
@@ -53,15 +60,15 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  /* Network-first: app shell — fall back to cache if offline */
+  /* Navigate requests — network-first */
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      fetch(event.request).catch(() => caches.match('/neurohabit/index.html'))
+      fetch(event.request).catch(() => caches.match('/neurohabitbeta/index.html'))
     );
     return;
   }
 
-  /* Default: network with cache fallback */
+  /* Everything else — network with cache fallback */
   event.respondWith(
     fetch(event.request).catch(() => caches.match(event.request))
   );
