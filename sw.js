@@ -12,6 +12,7 @@ const PRECACHE = [
   '/neurohabitbeta/icon-512.png',
   'https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js',
   'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js',
+  'https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics-compat.js',
   'https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&display=swap',
 ];
 
@@ -46,7 +47,7 @@ self.addEventListener('fetch', event => {
   }
 
   /* Firebase CDN and Google Fonts — cache-first (rarely change) */
-  if (url.includes('gstatic.com/firebasejs') || url.includes('fonts.googleapis.com') || url.includes('fonts.gstatic.com')) {
+  if (url.includes('gstatic.com/firebasejs') || url.includes('fonts.googleapis.com') || url.includes('fonts.gstatic.com') || url.includes('firebase-analytics')) {
     event.respondWith(
       caches.match(event.request).then(cached => {
         if (cached) return cached;
