@@ -2,8 +2,8 @@
   "name": "NeuroHabit",
   "short_name": "NeuroHabit",
   "description": "Neuroscience-based daily habit tracker",
-  "start_url": "/nh-tracker-alpha/index.html",
-  "scope": "/nh-tracker-alpha/",
+  "start_url": "/neurohabitbeta/index.html",
+  "scope": "/neurohabitbeta/",
   "display": "standalone",
   "orientation": "portrait",
   "theme_color": "#1c1a17",
@@ -11,25 +11,25 @@
   "categories": ["health", "lifestyle", "productivity"],
   "icons": [
     {
-      "src": "/nh-tracker-alpha/icon-192.png",
+      "src": "/neurohabitbeta/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/nh-tracker-alpha/icon-192.png",
+      "src": "/neurohabitbeta/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/nh-tracker-alpha/icon-512.png",
+      "src": "/neurohabitbeta/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/nh-tracker-alpha/icon-512.png",
+      "src": "/neurohabitbeta/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
@@ -37,7 +37,7 @@
   ],
   "screenshots": [
     {
-      "src": "/nh-tracker-alpha/icon-512.png",
+      "src": "/neurohabitbeta/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "form_factor": "narrow",
@@ -47,7 +47,7 @@
   "shortcuts": [
     {
       "name": "Today's Habits",
-      "url": "/nh-tracker-alpha/index.html",
+      "url": "/neurohabitbeta/index.html",
       "description": "Open today's habit tracker"
     }
   ]

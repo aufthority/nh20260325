@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="NeuroHabit">
 <meta name="description" content="Neuroscience-based daily habit tracker by The Aufthority">
-<link rel="manifest" href="/nh-tracker-alpha/manifest.json">
+<link rel="manifest" href="/neurohabitbeta/manifest.json">
 <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%231c1a17'/><text y='128' x='90' text-anchor='middle' font-size='100'>🧠</text></svg>">
 <title>NeuroHabit</title>
 <script>
@@ -29,11 +29,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics-compat.js"></script>
 
 <!-- ============================================================
      NEUROHABIT PWA — by The Aufthority  v3
      Changes:
-       · All paths → /nh-tracker-alpha/
+       · All paths → /neurohabitbeta/
        · Habit masterlist fully revised (D/S/O/E)
        · OR-gates: Dopamine, Oxytocin, Endorphin
        · sleepOrPrayer gate for Serotonin
@@ -1060,18 +1061,18 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 </div>
 
 <!-- ══════════════════════════════════════════════════════════
-     AVATAR STEP — shown after habit selection
+     AVATAR — First onboarding screen (habits auto-configured from avatar)
      ══════════════════════════════════════════════════════════ -->
 <div class="screen" id="screen-avatar" style="display:none">
   <div class="onboard-inner">
     <div class="onboard-header">
       <div class="onboard-logo" id="avatarStepBrain" style="font-size:56px"></div>
-      <div class="onboard-title">Who are you today?</div>
-      <div class="onboard-sub">Pick the avatar that feels most like you right now. You can change it any time from your profile.</div>
+      <div class="onboard-title">What kind of person are you?</div>
+      <div class="onboard-sub">Pick the avatar that feels most like you. We will pre-select a habit set tailored to your lifestyle — you can fine-tune it anytime in the first 48 hours.</div>
     </div>
     <div class="avatar-grid" id="onboardAvatarGrid" style="margin-bottom:24px"></div>
-    <button class="onboard-cta-btn" onclick="finishOnboarding()">Start my habit journey →</button>
-    <div class="onboard-cta-note" style="margin-top:8px">Skip for now — you can choose later in your profile.</div>
+    <button class="onboard-cta-btn" id="avatarStartBtn" onclick="finishOnboarding()">Build my habit set →</button>
+    <div class="onboard-cta-note" style="margin-top:8px">Not sure? Skip and we will use a balanced default set.</div>
     <button onclick="finishOnboarding()" style="background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;padding:6px;margin-top:4px">Skip →</button>
   </div>
 </div>
@@ -1594,10 +1595,12 @@ const firebaseConfig = {
   projectId: "nh-app-2b4ed",
   storageBucket: "nh-app-2b4ed.firebasestorage.app",
   messagingSenderId: "701435542208",
-  appId: "1:701435542208:web:2088f67f9f2a5226c10b25"
+  appId: "1:701435542208:web:2088f67f9f2a5226c10b25",
+  measurementId: "G-W8VF2QG94S"
 };
 
 firebase.initializeApp(firebaseConfig);
+const analytics = firebase.analytics();
 const auth  = firebase.auth();
 const gprov = new firebase.auth.GoogleAuthProvider();
 
@@ -4100,6 +4103,24 @@ function showOnboarding() {
   renderOnboardAvatarGrid();
 }
 
+function showAvatarOnboarding() {
+  /* New primary onboarding: avatar first, habits auto-configured from mapping */
+  var avScreen = document.getElementById('screen-avatar');
+  avScreen.style.display = 'flex';
+  avScreen.classList.add('screen-active');
+  /* Draw brain in avatar step header */
+  var brainEl = document.getElementById('avatarStepBrain');
+  if (brainEl) {
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('width', '56'); svg.setAttribute('height', '56');
+    svg.setAttribute('viewBox', '0 0 96 96');
+    drawBrainSvg(svg, 1);
+    brainEl.innerHTML = '';
+    brainEl.appendChild(svg);
+  }
+  renderOnboardAvatarGrid();
+}
+
 function renderOnboardAvatarGrid() {
   const grid = document.getElementById('onboardAvatarGrid');
   if (!grid) return;
@@ -4481,9 +4502,9 @@ function launchApp() {
   appLaunched = true;
   document.getElementById('screen-login').classList.remove('screen-active');
   document.getElementById('screen-login').style.display = 'none';
-  // Show onboarding if no habit config yet, else go straight to app
+  // New flow: avatar first → habits pre-configured from avatar mapping
   if (!userHabitConfig) {
-    showOnboarding();
+    showAvatarOnboarding();
     return;
   }
   showMainApp();
@@ -4555,7 +4576,7 @@ function confirmNewDay() {
    PWA installability criteria on this page load
    ═══════════════════════════════════════════════════════════ */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/nh-tracker-alpha/sw.js', { scope: '/nh-tracker-alpha/' })
+  navigator.serviceWorker.register('/neurohabitbeta/sw.js', { scope: '/neurohabitbeta/' })
     .then(r => console.log('[SW] registered', r.scope))
     .catch(e => console.warn('[SW] registration failed', e));
 }
@@ -4698,6 +4719,7 @@ window.triggerInstall     = triggerInstall;
 window.showScreen         = showScreen;
 window.hideScreen         = hideScreen;
 window.showOnboarding      = showOnboarding;
+window.showAvatarOnboarding = showAvatarOnboarding;
 window.showAvatarPicker    = showAvatarPicker;
 window.toggleTheme              = toggleTheme;
 window.dismissPersonalisePrompt = dismissPersonalisePrompt;
