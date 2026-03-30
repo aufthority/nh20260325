@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="NeuroHabit">
 <meta name="description" content="Neuroscience-based daily habit tracker by The Aufthority">
-<link rel="manifest" href="/nh-tracker-alpha/manifest.json">
+<link rel="manifest" href="/neurohabitbeta/manifest.json">
 <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%231c1a17'/><text y='128' x='90' text-anchor='middle' font-size='100'>🧠</text></svg>">
 <title>NeuroHabit</title>
 <script>
@@ -34,7 +34,7 @@
 <!-- ============================================================
      NEUROHABIT PWA — by The Aufthority  v3
      Changes:
-       · All paths → /nh-tracker-alpha/
+       · All paths → /neurohabitbeta/
        · Habit masterlist fully revised (D/S/O/E)
        · OR-gates: Dopamine, Oxytocin, Endorphin
        · sleepOrPrayer gate for Serotonin
@@ -373,6 +373,10 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .coach-feed-card.card-nudge    { border-left-color: var(--dopamine); }
 .coach-feed-card.card-quote    { border-left-color: var(--subtle); background: var(--surface2); }
 .coach-feed-card.card-week     { border-left-color: var(--endorphin); }
+.coach-feed-card.card-personalise { border-left-color: var(--coach); background: color-mix(in srgb, var(--coach) 6%, var(--surface)); }
+.coach-feed-card.card-personalise .coach-feed-eyebrow { color: var(--coach); }
+.personalise-btn { display: inline-block; margin-top: 10px; padding: 7px 14px; border-radius: 20px; background: var(--coach); color: var(--text); font-size: 12px; font-weight: 600; border: none; cursor: pointer; font-family: 'Geist', sans-serif; transition: opacity 0.2s; }
+.personalise-btn:active { opacity: 0.8; }
 .coach-feed-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 5px; }
 .card-reflect .coach-feed-eyebrow { color: var(--serotonin); }
 .card-science .coach-feed-eyebrow { color: var(--coach); }
@@ -1085,7 +1089,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
       Continue with Google
     </button>
   </div>
-  <div class="login-skip" id="loginBtn-skip" onclick="skipLogin()">Continue without account →</div>
+
 </div>
 
 <!-- ══════════════════════════════════════════════════════════
@@ -1151,7 +1155,6 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
           <div id="weeklyTrendChart"></div>
         </div>
 
-        <button class="new-day-btn" onclick="confirmNewDay()">🌅 New Day — Reset Today</button>
 
         <!-- Premium Insights (collapsed) -->
         <div class="premium-collapse-wrap">
@@ -1786,7 +1789,7 @@ const HABITS = {
       {
         id: 'rh',
         label: 'Restorative Hobby (20+ min)',
-        weight: 1, foundational: false, type: 'bonus', flex: null,
+        weight: 1, foundational: false, type: 'secondary', flex: null,
         info: { body: "A non-digital hobby that genuinely restores you — reading, gardening, craft, drawing, or cooking for joy. Gaming does not qualify.", examples: ["Reading a physical book for 20+ min", "Gardening or tending plants", "Cooking a meal mindfully"] },
         tooltip: { icon: "📖", title: "Restorative hobbies boost Serotonin", body: "Reading reduces cortisol by up to 68% in 6 minutes (Sussex 2009)." }
       },
@@ -1944,12 +1947,118 @@ let userHabitConfig = ld(HCK) || null;   // null = not yet configured (triggers 
 let habitLockMeta   = ld(HLK) || null;   // { startDate, lockUntil, lockedSelection }
 
 /* ── Default config applied when user skips onboarding ─────────────── */
+/* ── Avatar-mapped starter configs ──────────────────────────────────
+ * One core + one secondary + one bonus per category, curated per avatar.
+ * Used by finishOnboarding() when userAvatar is set.
+ * Keys match AVATARS[].id values.
+ */
+const AVATAR_HABIT_CONFIGS = {
+  'tired-carer': {
+    dopamine:  { selected: ['mp','tl','ty'] },
+    serotonin: { selected: ['sl','nap','gr'] },
+    oxytocin:  { selected: ['pt','sm','sa'] },
+    endorphin: { selected: ['nt','ym','cp'] }
+  },
+  'shift-worker': {
+    dopamine:  { selected: ['sun','sc','tl'] },
+    serotonin: { selected: ['sl','bw','nap'] },
+    oxytocin:  { selected: ['as','rc','sa'] },
+    endorphin: { selected: ['ex','cs','ym'] }
+  },
+  'neurodivergent': {
+    dopamine:  { selected: ['mp','sk','sc'] },
+    serotonin: { selected: ['rm','bw','nap'] },
+    oxytocin:  { selected: ['sa','sl2','rc'] },
+    endorphin: { selected: ['nt','cp','ym'] }
+  },
+  'busy-student': {
+    dopamine:  { selected: ['dw','jn','fast'] },
+    serotonin: { selected: ['sl','vf','ns'] },
+    oxytocin:  { selected: ['as','sm','sl2'] },
+    endorphin: { selected: ['nt','ym','cs'] }
+  },
+  'gamer': {
+    dopamine:  { selected: ['dw','sc','tl'] },
+    serotonin: { selected: ['sl','ns','vf'] },
+    oxytocin:  { selected: ['sl2','as','sm'] },
+    endorphin: { selected: ['ex','cs','ym'] }
+  },
+  'outdoor-junkie': {
+    dopamine:  { selected: ['sun','mp','jn'] },
+    serotonin: { selected: ['rm','nw','vf'] },
+    oxytocin:  { selected: ['as','sm','ch'] },
+    endorphin: { selected: ['ex','nt','ym'] }
+  },
+  'corp-survivor': {
+    dopamine:  { selected: ['dw','tl','fast'] },
+    serotonin: { selected: ['sl','bw','ns'] },
+    oxytocin:  { selected: ['sa','sm','rc'] },
+    endorphin: { selected: ['nt','cs','ym'] }
+  },
+  'overachiever': {
+    dopamine:  { selected: ['dw','jn','sc'] },
+    serotonin: { selected: ['sl','ns','rh'] },
+    oxytocin:  { selected: ['as','sm','rc'] },
+    endorphin: { selected: ['ex','nt','ym'] }
+  },
+  'overthinker': {
+    dopamine:  { selected: ['mp','sun','tl'] },
+    serotonin: { selected: ['pr','bw','gr'] },
+    oxytocin:  { selected: ['sa','rc','sl2'] },
+    endorphin: { selected: ['ex','ym','cs'] }
+  },
+  'introvert': {
+    dopamine:  { selected: ['dw','sk','jn'] },
+    serotonin: { selected: ['rh','sl','gr'] },
+    oxytocin:  { selected: ['pt','sa','sm'] },
+    endorphin: { selected: ['ex','ym','cs'] }
+  },
+  'gym-devotee': {
+    dopamine:  { selected: ['mp','sun','tl'] },
+    serotonin: { selected: ['sl','pm','ns'] },
+    oxytocin:  { selected: ['as','sm','ch'] },
+    endorphin: { selected: ['ex','nt','ym'] }
+  },
+  'runner': {
+    dopamine:  { selected: ['sun','mp','jn'] },
+    serotonin: { selected: ['rm','pm','vf'] },
+    oxytocin:  { selected: ['as','ch','gs'] },
+    endorphin: { selected: ['ex','nt','ym'] }
+  },
+  'extrovert': {
+    dopamine:  { selected: ['mp','tl','sun'] },
+    serotonin: { selected: ['sl','gr','rh'] },
+    oxytocin:  { selected: ['as','sm','gs'] },
+    endorphin: { selected: ['ex','cp','nt'] }
+  },
+  'homemaker': {
+    dopamine:  { selected: ['mp','sun','tl'] },
+    serotonin: { selected: ['sl','vf','gr'] },
+    oxytocin:  { selected: ['pt','sm','ch'] },
+    endorphin: { selected: ['nt','rm','ym'] }
+  },
+  'creative': {
+    dopamine:  { selected: ['dw','sk','jn'] },
+    serotonin: { selected: ['sl','rh','nw'] },
+    oxytocin:  { selected: ['as','sm','gs'] },
+    endorphin: { selected: ['ex','cp','ym'] }
+  },
+};
+
+/* Fallback used when no avatar matched or user skips avatar selection */
 const DEFAULT_HABIT_CONFIG = {
   dopamine:  { selected: ['dw','sun','tl'] },
   serotonin: { selected: ['sl','pr','vf','nw'] },
   oxytocin:  { selected: ['as','sa','sm'] },
   endorphin: { selected: ['ex','nt','cs'] }
 };
+
+function getAvatarConfig() {
+  if (userAvatar && AVATAR_HABIT_CONFIGS[userAvatar.id]) {
+    return AVATAR_HABIT_CONFIGS[userAvatar.id];
+  }
+  return DEFAULT_HABIT_CONFIG;
+}
 
 /* ── Habit config helpers ───────────────────────────────────────────── */
 function getConfig() {
@@ -1974,13 +2083,19 @@ const LOCK_MIN_DAYS  = 28;
 const LOCK_REC_DAYS  = 42;
 
 function initHabitLock(config) {
-  const startDate = new Date().toISOString().slice(0, 10);
-  const lockUntil = new Date(Date.now() + LOCK_MIN_DAYS * 86400000).toISOString().slice(0, 10);
-  habitLockMeta = {
-    startDate,
-    lockUntil,
-    lockedSelection: JSON.parse(JSON.stringify(config))
-  };
+  var startDate = new Date().toISOString().slice(0, 10);
+  var lockUntil = new Date(Date.now() + LOCK_MIN_DAYS * 86400000).toISOString().slice(0, 10);
+  habitLockMeta = { startDate: startDate, lockUntil: lockUntil, lockedSelection: JSON.parse(JSON.stringify(config)) };
+  sv(HLK, habitLockMeta);
+}
+
+function initHabitLockWithGrace(config) {
+  /* 48-hour grace period — lock clock starts 2 days from now, not today.
+     This gives users time to review their auto-configured habit set. */
+  var GRACE_MS = 48 * 60 * 60 * 1000;
+  var startDate = new Date(Date.now() + GRACE_MS).toISOString().slice(0, 10);
+  var lockUntil = new Date(Date.now() + GRACE_MS + LOCK_MIN_DAYS * 86400000).toISOString().slice(0, 10);
+  habitLockMeta = { startDate: startDate, lockUntil: lockUntil, lockedSelection: JSON.parse(JSON.stringify(config)) };
   sv(HLK, habitLockMeta);
 }
 
@@ -2749,6 +2864,21 @@ function buildCoachFeed() {
   // All cards go into feed; thought bubble runs from THOUGHT_POOL independently
   renderThoughtBubble();
 
+  // Personalise prompt — shown once after avatar-mapped onboarding
+  var showPersonalise = localStorage.getItem('nh_show_personalise_prompt') === '1';
+  if (showPersonalise) {
+    var avatarLabel = userAvatar ? userAvatar.label : 'your profile';
+    var pCard = document.createElement('div');
+    pCard.className = 'coach-feed-card card-personalise';
+    pCard.innerHTML =
+      '<div class="coach-feed-eyebrow">Your habit set</div>' +
+      '<div class="coach-feed-body">Your habits were auto-configured for <strong>' + avatarLabel + '</strong>. Does this feel right? You can personalise it anytime from each habit category page.</div>' +
+      '<button class="personalise-btn" onclick="dismissPersonalisePrompt(true)">Review my habits →</button>' +
+      '<button style="background:none;border:none;color:var(--muted);font-size:11px;cursor:pointer;margin-left:10px;font-family:inherit" onclick="dismissPersonalisePrompt(false)">Looks good</button>';
+    feed.insertBefore(pCard, feed.firstChild);
+    // Do not dismiss yet — user must tap one of the buttons
+  }
+
   cards.forEach(function(card) {
     const el = document.createElement('div');
     el.className = 'coach-feed-card card-' + card.type;
@@ -2803,6 +2933,20 @@ function renderCorePips() {
     dot.style.border = ok ? 'none' : '1.5px solid var(--border2)';
     row.appendChild(dot);
   });
+}
+
+function dismissPersonalisePrompt(navigate) {
+  localStorage.removeItem('nh_show_personalise_prompt');
+  if (navigate) {
+    // Navigate to Dopamine tab so user can review habits
+    document.querySelectorAll('.nav-tab').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('page-active'); });
+    var dopTab = document.querySelector('[data-tab="dopamine"]');
+    if (dopTab) dopTab.classList.add('active');
+    var dopPage = document.getElementById('page-dopamine');
+    if (dopPage) dopPage.classList.add('page-active');
+  }
+  renderCoach();
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -3422,7 +3566,7 @@ async function generateShareImage() {
   ctx.fillRect(0, 0, W, H);
 
   /* Subtle phase-coloured glow behind centre */
-  var phaseColors = ['#4a4640','#6b6560','#c8712a','#b85070','#4a9e82'];
+  var phaseColors = ['#4a4640','#6b6560','#c8712a','#b85070','#4a9e82','#7c6ab8'];
   var phaseCol = phaseColors[phase];
   var bgGrd = ctx.createRadialGradient(W/2, H*0.38, 60, W/2, H*0.38, 480);
   bgGrd.addColorStop(0, phaseCol + '28');
@@ -3526,11 +3670,59 @@ async function generateShareImage() {
   ctx.font = 'italic 400 22px system-ui, sans-serif';
   wrapText(ctx, coachText, PAD, 830, W - PAD * 2, 34);
 
-  /* Footer */
-  ctx.fillStyle = '#504c45';
-  ctx.font = '400 18px system-ui, sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('neurohabit.app  \xb7  by The Aufthority', W / 2, H - 46);
+  /* User identity strip */
+  var identityY = H - 170;
+  ctx.strokeStyle = '#3d3a33'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(PAD, identityY - 16); ctx.lineTo(W - PAD, identityY - 16); ctx.stroke();
+
+  var userName    = (userData && userData.name) ? userData.name.split(' ')[0] : 'NeuroHabit';
+  var avatarLbl   = userAvatar ? userAvatar.label : '';
+  var photoR = 28, photoX = PAD + 28, photoY = identityY + 36;
+
+  var photoDrawn = false;
+  if (userData && userData.photo && !userData.skipAuth) {
+    try {
+      await new Promise(function(res) {
+        var pImg = new Image();
+        pImg.crossOrigin = 'anonymous';
+        pImg.onload = function() {
+          ctx.save();
+          ctx.beginPath(); ctx.arc(photoX, photoY, photoR, 0, Math.PI * 2); ctx.clip();
+          ctx.drawImage(pImg, photoX - photoR, photoY - photoR, photoR * 2, photoR * 2);
+          ctx.restore();
+          ctx.beginPath(); ctx.arc(photoX, photoY, photoR + 1.5, 0, Math.PI * 2);
+          ctx.strokeStyle = '#4a4640'; ctx.lineWidth = 2; ctx.stroke();
+          photoDrawn = true; res();
+        };
+        pImg.onerror = function() { res(); };
+        pImg.src = userData.photo;
+        setTimeout(res, 2000);
+      });
+    } catch(e) {}
+  }
+  if (!photoDrawn) {
+    ctx.beginPath(); ctx.arc(photoX, photoY, photoR, 0, Math.PI * 2);
+    ctx.fillStyle = '#2e2b24'; ctx.fill();
+    ctx.strokeStyle = '#4a4640'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.font = '26px system-ui'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(userAvatar ? userAvatar.emoji : '🧠', photoX, photoY + 1);
+    ctx.textBaseline = 'alphabetic';
+  }
+  var txX = PAD + photoR * 2 + 16;
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#e8e3d8'; ctx.font = '600 20px system-ui, sans-serif';
+  ctx.fillText(userName, txX, identityY + 28);
+  if (avatarLbl) {
+    ctx.fillStyle = '#7a7469'; ctx.font = '400 16px system-ui, sans-serif';
+    ctx.fillText(avatarLbl, txX, identityY + 50);
+  }
+  /* CTA on right */
+  ctx.textAlign = 'right';
+  ctx.fillStyle = '#7c6ab8'; ctx.font = '600 15px system-ui, sans-serif';
+  ctx.fillText('🧠 Try NeuroHabit free', W - PAD, identityY + 28);
+  ctx.fillStyle = '#504c45'; ctx.font = '400 14px system-ui, sans-serif';
+  ctx.fillText('neurohabit.app', W - PAD, identityY + 50);
+  ctx.textAlign = 'left';
 
   /* Export */
   canvas.toBlob(async function(blob) {
@@ -4090,13 +4282,16 @@ function proceedToAvatarStep() {
 }
 
 function finishOnboarding() {
-  /* Habit validation already done in proceedToAvatarStep().
-     Just commit config, init lock, and launch the app. */
-  if (!tempConfig) return; // safety guard — should never happen
-  userHabitConfig = tempConfig;
+  /* Option A onboarding — apply avatar-mapped config, no manual habit selection.
+     tempConfig may be null here if user came through avatar-only flow. */
+  var config = getAvatarConfig();
+  userHabitConfig = config;
   sv(HCK, userHabitConfig);
-  initHabitLock(userHabitConfig);
-  // Hide avatar screen before launching
+  // 48-hour grace period before lock clock starts (gives user time to review)
+  initHabitLockWithGrace(userHabitConfig);
+  // Mark that the personalise prompt should show on first coach load
+  localStorage.setItem('nh_show_personalise_prompt', '1');
+  // Hide avatar screen
   var avScreen = document.getElementById('screen-avatar');
   if (avScreen) { avScreen.classList.remove('screen-active'); avScreen.style.display = 'none'; }
   showMainApp();
@@ -4363,7 +4558,7 @@ function confirmNewDay() {
    PWA installability criteria on this page load
    ═══════════════════════════════════════════════════════════ */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/nh-tracker-alpha/sw.js', { scope: '/nh-tracker-alpha/' })
+  navigator.serviceWorker.register('/neurohabitbeta/sw.js', { scope: '/neurohabitbeta/' })
     .then(r => console.log('[SW] registered', r.scope))
     .catch(e => console.warn('[SW] registration failed', e));
 }
@@ -4507,7 +4702,8 @@ window.showScreen         = showScreen;
 window.hideScreen         = hideScreen;
 window.showOnboarding      = showOnboarding;
 window.showAvatarPicker    = showAvatarPicker;
-window.toggleTheme         = toggleTheme;
+window.toggleTheme              = toggleTheme;
+window.dismissPersonalisePrompt = dismissPersonalisePrompt;
 window.renderPhaseGuide    = renderPhaseGuide;
 window.finishOnboarding    = finishOnboarding;
 window.proceedToAvatarStep = proceedToAvatarStep;
