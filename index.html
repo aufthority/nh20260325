@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="NeuroHabit">
 <meta name="description" content="Neuroscience-based daily habit tracker by The Aufthority">
-<link rel="manifest" href="/neurohabitbeta/manifest.json">
+<link rel="manifest" href="/nh-tracker-alpha/manifest.json">
 <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%231c1a17'/><text y='128' x='90' text-anchor='middle' font-size='100'>🧠</text></svg>">
 <title>NeuroHabit</title>
 <script>
@@ -29,11 +29,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics-compat.js"></script>
 
 <!-- ============================================================
      NEUROHABIT PWA — by The Aufthority  v3
      Changes:
-       · All paths → /neurohabitbeta/
+       · All paths → /nh-tracker-alpha/
        · Habit masterlist fully revised (D/S/O/E)
        · OR-gates: Dopamine, Oxytocin, Endorphin
        · sleepOrPrayer gate for Serotonin
@@ -1591,12 +1592,14 @@ const firebaseConfig = {
   projectId: "nh-app-2b4ed",
   storageBucket: "nh-app-2b4ed.firebasestorage.app",
   messagingSenderId: "701435542208",
-  appId: "1:701435542208:web:2088f67f9f2a5226c10b25"
+  appId: "1:701435542208:web:2088f67f9f2a5226c10b25",
+  measurementId: "G-W8VF2QG94S"
 };
 
 firebase.initializeApp(firebaseConfig);
-const auth  = firebase.auth();
-const gprov = new firebase.auth.GoogleAuthProvider();
+const auth      = firebase.auth();
+const gprov     = new firebase.auth.GoogleAuthProvider();
+const analytics = firebase.analytics();
 
 /* ═══════════════════════════════════════════════════════════
    HABIT REGISTRY
@@ -4360,7 +4363,7 @@ function confirmNewDay() {
    PWA installability criteria on this page load
    ═══════════════════════════════════════════════════════════ */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/neurohabitbeta/sw.js', { scope: '/neurohabitbeta/' })
+  navigator.serviceWorker.register('/nh-tracker-alpha/sw.js', { scope: '/nh-tracker-alpha/' })
     .then(r => console.log('[SW] registered', r.scope))
     .catch(e => console.warn('[SW] registration failed', e));
 }
