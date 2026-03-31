@@ -1938,6 +1938,12 @@ const APP_VERSION = '1.0.0';
 const APP_BUILD   = 19;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 
+/* Stamp login screen version badge immediately — before any login flow runs */
+document.addEventListener('DOMContentLoaded', function() {
+  var lv = document.getElementById('loginVersionBadge');
+  if (lv) lv.textContent = APP_VERSION_STRING;
+});
+
 const SK  = 'nh_pwa_state';
 const STK = 'nh_pwa_streak';
 const WK  = 'nh_pwa_week';
