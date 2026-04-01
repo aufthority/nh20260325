@@ -1700,14 +1700,14 @@ const HABITS = {
       /* ── FOUNDATIONAL OPTIONS (user picks ≥1) ─────────────────── */
       {
         id: 'sl',
-        label: 'Sleep (7–9 hrs)',
-        weight: 2, foundational: true, type: 'foundational',
+        label: 'Sleep',
+        weight: 3, foundational: true, type: 'foundational',
         flex: { multiSession: true, tiers: [
-          { label: 'Restful sleep — any duration', weight: 1, sessions: 1 },
-          { label: 'Sleep hygiene done',            weight: 1, sessions: 2 },
-          { label: '7–9 hrs restful sleep',         weight: 2, sessions: 3 },
+          { label: '2–3 hrs', weight: 1, sessions: 1 },
+          { label: '4–6 hrs', weight: 2, sessions: 2 },
+          { label: '7–9 hrs', weight: 3, sessions: 3 },
         ]},
-        info: { body: "A full night of restful sleep. For shift workers: restful any duration or sleep hygiene (no screens 1hr before, consistent bedtime) still earn points.", examples: ["Restful any hrs = did what you could", "Sleep hygiene done = protected the conditions for sleep", "7–9 hrs restful = full recovery sleep"] },
+        info: { body: "A full night of sleep. Log the closest tier to your actual duration — partial sleep still earns points.", examples: ["2–3 hrs = something is better than nothing", "4–6 hrs = partial recovery", "7–9 hrs = full restorative sleep"] },
         tooltip: { icon: "😴", title: "Sleep is the master regulator", body: "During deep sleep, tryptophan converts to serotonin and melatonin. Nothing replaces this pathway fully." }
       },
       {
@@ -1935,14 +1935,8 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 19;
+const APP_BUILD   = 20;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
-
-/* Stamp login screen version badge immediately — before any login flow runs */
-document.addEventListener('DOMContentLoaded', function() {
-  var lv = document.getElementById('loginVersionBadge');
-  if (lv) lv.textContent = APP_VERSION_STRING;
-});
 
 const SK  = 'nh_pwa_state';
 const STK = 'nh_pwa_streak';
@@ -2114,8 +2108,22 @@ function initHabitLockWithGrace(config) {
   sv(HLK, habitLockMeta);
 }
 
+function isInGracePeriod() {
+  /* Returns true during the 48-hour window after onboarding when
+     habitLockMeta.startDate is still in the future. */
+  if (!habitLockMeta || !habitLockMeta.startDate) return false;
+  return today < habitLockMeta.startDate;
+}
+
+function hoursUntilGraceEnd() {
+  if (!habitLockMeta || !habitLockMeta.startDate) return 0;
+  const ms = new Date(habitLockMeta.startDate) - Date.now();
+  return Math.max(0, Math.ceil(ms / (60 * 60 * 1000)));
+}
+
 function isLockActive() {
   if (!habitLockMeta) return false;
+  if (isInGracePeriod()) return false; // grace window: lock not yet active
   return today <= habitLockMeta.lockUntil;
 }
 
@@ -2136,6 +2144,7 @@ function canAddHabit(type, habitId) {
 }
 
 function canRemoveHabit(type, habitId) {
+  if (isInGracePeriod()) return true; // grace window: all changes allowed
   if (isLockActive()) return false;
   // Must keep at least one foundational per category
   const h = HABITS[type].habits.find(x => x.id === habitId);
@@ -2250,9 +2259,11 @@ function renderSection(type) {
   const cfg = getConfig();
   const selected = cfg[type].selected;
 
-  // Sort: selected habits first (in selection order), then unselected
+  // Sort: selected habits first ordered by type (Core → Secondary → Bonus), then unselected
+  const typeOrder = { foundational: 0, secondary: 1, bonus: 2 };
   const allHabits = HABITS[type].habits.map(function(h, i) { return { h: h, i: i }; });
-  const selectedHabits   = selected.map(function(id) { return allHabits.find(function(x) { return x.h.id === id; }); }).filter(Boolean);
+  const selectedHabits   = selected.map(function(id) { return allHabits.find(function(x) { return x.h.id === id; }); }).filter(Boolean)
+    .sort(function(a, b) { return (typeOrder[a.h.type] || 0) - (typeOrder[b.h.type] || 0); });
   const unselectedHabits = allHabits.filter(function(x) { return !selected.includes(x.h.id); });
   const sortedHabits     = selectedHabits.concat(unselectedHabits);
 
@@ -2280,10 +2291,7 @@ function renderSection(type) {
     const typeMap  = { foundational: 'Core', secondary: 'Secondary', bonus: 'Bonus' };
     const stars    = '⭐'.repeat(Math.max(1, Math.min(3, w)));
 
-    let displayLabel = h.label;
-    if (isMulti && tierIdx > 0 && h.flex.tiers[tierIdx - 1]) {
-      displayLabel = h.flex.tiers[tierIdx - 1].label;
-    }
+    const displayLabel = h.label;
 
     /* ── Unselected habit — show as discoverable ── */
     if (!isInSet) {
@@ -2344,7 +2352,7 @@ function renderSection(type) {
 
     let flexCtrlHTML = '';
     if (isMulti) {
-      const tierLabel = tierIdx === 0 ? 'Set sessions' : h.flex.tiers[tierIdx-1].sessions + '+ sessions';
+      const tierLabel = tierIdx === 0 ? 'Set session' : h.flex.tiers[tierIdx-1].label;
       flexCtrlHTML = '<div class="session-flex-ctrl">' +
         '<button class="session-tier-btn" data-dir="-1" title="Fewer sessions">‹</button>' +
         '<span class="session-tier-label">' + tierLabel + '</span>' +
@@ -2356,7 +2364,7 @@ function renderSection(type) {
     }
 
     const canRem = canRemoveHabit(type, h.id);
-    const lockInfo = isLockActive() ? ' (unlocks in ' + daysUntilUnlock() + 'd)' : '';
+    const lockInfo = isInGracePeriod() ? ' (free to change — ' + hoursUntilGraceEnd() + 'h left)' : isLockActive() ? ' (unlocks in ' + daysUntilUnlock() + 'd)' : '';
     const remBtn = '<button class="habit-rem-btn" data-type="' + type + '" data-id="' + h.id + '" title="' + (canRem ? 'Remove from your set' : 'Locked' + lockInfo) + '" style="opacity:' + (canRem ? '0.6' : '0.25') + ';cursor:' + (canRem ? 'pointer' : 'default') + '">✕</button>';
 
     row.innerHTML =
@@ -4395,6 +4403,17 @@ function removeHabitFromSet(type, hid) {
     }
     return;
   }
+  // During grace period, skip the reflection prompt — user is still setting up
+  if (isInGracePeriod()) {
+    if (!userHabitConfig) userHabitConfig = JSON.parse(JSON.stringify(DEFAULT_HABIT_CONFIG));
+    userHabitConfig[type].selected = userHabitConfig[type].selected.filter(function(id) { return id !== hid; });
+    sv(HCK, userHabitConfig);
+    renderSection(type);
+    updateCatUI(type);
+    renderCoach();
+    showToast('Habit removed. You have ' + hoursUntilGraceEnd() + ' hrs left to adjust your set.', 'success');
+    return;
+  }
   // Reflection prompt before removal (deliberate friction)
   const reason = prompt('Before removing this habit — what made it difficult? (This helps you reflect, not a requirement)');
   if (reason === null) return; // cancelled
@@ -4552,8 +4571,19 @@ function showMainApp() {
     if (!document.hidden) handleDateRollover();
   });
 
-  /* Check every 60s — catches midnight even if screen stays on */
-  setInterval(handleDateRollover, 60000);
+  /* Schedule exact midnight rollover using phone's local clock.
+     Calculates ms until 00:00:00, fires handleDateRollover, then
+     reschedules itself for the next midnight. */
+  function scheduleMidnightRollover() {
+    const now = new Date();
+    const msUntilMidnight =
+      new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0) - now;
+    setTimeout(function() {
+      handleDateRollover();
+      scheduleMidnightRollover(); // reschedule for next midnight
+    }, msUntilMidnight);
+  }
+  scheduleMidnightRollover();
 }
 
 function initApp() {
