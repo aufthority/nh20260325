@@ -373,8 +373,6 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .coach-feed-card.card-nudge    { border-left-color: var(--dopamine); }
 .coach-feed-card.card-quote    { border-left-color: var(--subtle); background: var(--surface2); }
 .coach-feed-card.card-week     { border-left-color: var(--endorphin); }
-.coach-feed-card.card-valley   { border-left-color: var(--warning); background: color-mix(in srgb, var(--warning) 6%, var(--surface)); }
-.coach-feed-card.card-reinforce { border-left-color: var(--serotonin); background: color-mix(in srgb, var(--serotonin) 6%, var(--surface)); }
 .coach-feed-card.card-personalise { border-left-color: var(--coach); background: color-mix(in srgb, var(--coach) 6%, var(--surface)); }
 .coach-feed-card.card-personalise .coach-feed-eyebrow { color: var(--coach); }
 .personalise-btn { display: inline-block; margin-top: 10px; padding: 7px 14px; border-radius: 20px; background: var(--coach); color: var(--text); font-size: 12px; font-weight: 600; border: none; cursor: pointer; font-family: 'Geist', sans-serif; transition: opacity 0.2s; }
@@ -385,8 +383,6 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .card-nudge   .coach-feed-eyebrow { color: var(--dopamine); }
 .card-quote   .coach-feed-eyebrow { color: var(--muted); }
 .card-week    .coach-feed-eyebrow { color: var(--endorphin); }
-.card-valley  .coach-feed-eyebrow { color: var(--warning); }
-.card-reinforce .coach-feed-eyebrow { color: var(--serotonin); }
 .coach-feed-body { font-size: 13px; color: var(--text); line-height: 1.7; }
 .card-quote .coach-feed-body { font-style: italic; color: var(--muted); }
 .coach-feed-attr { font-size: 11px; color: var(--subtle); margin-top: 5px; }
@@ -1022,7 +1018,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .habit-rem-btn { font-size: 11px; padding: 2px 6px; border-radius: 4px; border: none; background: transparent; color: var(--muted); cursor: pointer; transition: color 0.15s; }
 .habit-rem-btn:hover { color: var(--text); }
 .habit-core-tag { font-size: 9px; font-weight: 600; padding: 1px 5px; border-radius: 4px; margin-left: 4px; display: inline-block; }
-.lock-status-bar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: color-mix(in srgb, var(--coach) 10%, var(--surface2)); border: 1px solid color-mix(in srgb, var(--coach) 25%, transparent); border-radius: var(--radius-sm); margin: 0 14px 10px; font-size: 11.5px; color: var(--muted); }
+.lock-status-bar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: color-mix(in srgb, var(--coach) 10%, var(--surface2)); border: 1px solid color-mix(in srgb, var(--coach) 25%, transparent); border-radius: var(--radius-sm); margin: 0 0 10px; font-size: 11.5px; color: var(--muted); }
 .lock-status-bar strong { color: var(--coach); }
 
 /* ═══ RESPONSIVE ════════════════════════════════════════════ */
@@ -1628,9 +1624,9 @@ const HABITS = {
         label: 'Deep Work / Main Goal',
         weight: 3, foundational: true, type: 'foundational',
         flex: { multiSession: true, tiers: [
-          { label: '45 min',   weight: 1, sessions: 1 },
-          { label: '90 min',   weight: 2, sessions: 2 },
-          { label: '135+ min', weight: 3, sessions: 3 },
+          { label: 'Deep Work — 1 session (45 min)',      weight: 1, sessions: 1 },
+          { label: 'Deep Work — 2 sessions (90 min)',     weight: 2, sessions: 2 },
+          { label: 'Deep Work — 3+ sessions (135+ min)', weight: 3, sessions: 3 },
         ]},
         info: { body: "Dedicated, distraction-free work on your most important goal. Each session is 45+ minutes of uninterrupted focus.", examples: ["1 session (45 min) = a focused start", "2 sessions (90 min) = a strong productive day", "3+ sessions = elite deep work output"] },
         tooltip: { icon: "⚡", title: "Deep Work activates Dopamine", body: "Sustained focused effort is the strongest natural dopamine trigger. Each session compounds the reward signal." }
@@ -1719,9 +1715,9 @@ const HABITS = {
         label: 'Solat / Daily Prayer / Mindfulness',
         weight: 3, foundational: true, type: 'foundational',
         flex: { multiSession: true, tiers: [
-          { label: '1 session',  weight: 1, sessions: 1 },
-          { label: '3 sessions', weight: 2, sessions: 3 },
-          { label: '5 sessions', weight: 2, sessions: 5 },
+          { label: 'Prayer / Mindfulness — 1 session',   weight: 1, sessions: 1 },
+          { label: 'Prayer / Mindfulness — 3 sessions',  weight: 2, sessions: 3 },
+          { label: 'Prayer / Mindfulness — 5 sessions',  weight: 2, sessions: 5 },
         ]},
         info: { body: "Structured prayer or mindfulness practice. Both activate the HPA axis downregulation pathway that protects serotonin from cortisol depletion (Matousek et al. Psychoneuroendocrinology 2020).", examples: ["1 session = at least one prayer or 5-min meditation", "3 sessions = Fajr, Dhuhr, Asar or 3 mindfulness blocks", "5 sessions = all 5 solat on time, or 5 mindfulness sessions"] },
         tooltip: { icon: "🕌", title: "Prayer and mindfulness protect Serotonin", body: "8-week mindfulness programmes produce significant increases in urinary 5-HIAA (primary serotonin metabolite). The mechanism is HPA axis downregulation reducing cortisol competition for brain tryptophan entry." }
@@ -1758,9 +1754,9 @@ const HABITS = {
         label: 'Protein-Rich Meals',
         weight: 2, foundational: false, type: 'secondary',
         flex: { multiSession: true, tiers: [
-          { label: '1 serving',   weight: 1, sessions: 1 },
-          { label: '2 servings',  weight: 2, sessions: 2 },
-          { label: '3+ servings', weight: 2, sessions: 3 },
+          { label: '1 palm-sized protein',   weight: 1, sessions: 1 },
+          { label: '2 palm-sized proteins',  weight: 2, sessions: 2 },
+          { label: '3+ palm-sized proteins', weight: 2, sessions: 3 },
         ]},
         info: { body: "A palm-sized protein portion at each main meal. Tryptophan — the precursor to serotonin — is found only in protein.", examples: ["1 palm = one chicken breast at lunch", "2 palms = eggs at breakfast + fish at dinner", "3+ palms = protein at every main meal"] },
         tooltip: { icon: "🥩", title: "Protein provides Tryptophan", body: "Without adequate dietary protein, your brain lacks the raw material to produce serotonin." }
@@ -1777,9 +1773,9 @@ const HABITS = {
         label: 'Breathwork / Dhikr',
         weight: 1, foundational: false, type: 'bonus',
         flex: { multiSession: true, tiers: [
-          { label: '1 session', weight: 1, sessions: 1 },
-          { label: '3 sessions', weight: 2, sessions: 3 },
-          { label: '5 sessions', weight: 2, sessions: 5 },
+          { label: 'Breathwork / Dhikr — 1 session', weight: 1, sessions: 1 },
+          { label: 'Breathwork / Dhikr — 3 sessions', weight: 2, sessions: 3 },
+          { label: 'Breathwork / Dhikr — 5 sessions', weight: 2, sessions: 5 },
         ]},
         info: { body: "Intentional breathwork or dhikr practice. If you selected Prayer as foundational, this is the top-up habit for additional sessions.", examples: ["Box breathing or 4-7-8 technique", "Tasbih, subhanallah, alhamdulillah sequences", "Guided breathwork session"] },
         tooltip: { icon: "🧘", title: "Breathwork calms the nervous system", body: "Activates the parasympathetic nervous system and reduces cortisol." }
@@ -1885,9 +1881,9 @@ const HABITS = {
         label: 'Exercise (Dedicated Session)',
         weight: 3, foundational: true, type: 'foundational',
         flex: { multiSession: true, tiers: [
-          { label: 'Light — 15–20 min',    weight: 1, sessions: 1 },
-          { label: 'Moderate — 30 min',    weight: 2, sessions: 2 },
-          { label: 'Vigorous — 45+ min',   weight: 3, sessions: 3 },
+          { label: 'Light — 15–20 min (walk, yoga)',        weight: 1, sessions: 1 },
+          { label: 'Moderate — 30 min sustained',           weight: 2, sessions: 2 },
+          { label: 'Vigorous — 45+ min / HIIT / weights',   weight: 3, sessions: 3 },
         ]},
         info: { body: "A dedicated exercise session — intentional, with elevated heart rate. Can be logged alongside Active Day: they are independent neurochemical events (Stamatakis et al. BJSM 2024).", examples: ["Light = 15–20 min walk, yoga, or easy swim", "Moderate = 30 min jog, cycling, or brisk swim", "Vigorous = 45+ min HIIT, weights, or intense sport"] },
         tooltip: { icon: "🏃", title: "Exercise is the endorphin king", body: "Sustained exercise triggers endorphin release, produces BDNF, reduces cortisol, and improves both depression and anxiety (Singh et al. BJSM 2023)." }
@@ -1897,9 +1893,9 @@ const HABITS = {
         label: 'Active Day (Incidental Steps)',
         weight: 3, foundational: true, type: 'foundational',
         flex: { multiSession: true, tiers: [
-          { label: '3,000–5,000 steps',  weight: 1, sessions: 1 },
-          { label: '5,000–7,500 steps',  weight: 2, sessions: 2 },
-          { label: '7,500–10,000 steps', weight: 3, sessions: 3 },
+          { label: '3,000–4,999 incidental steps',   weight: 1, sessions: 1 },
+          { label: '5,000–7,499 incidental steps',   weight: 2, sessions: 2 },
+          { label: '7,500–10,000+ incidental steps', weight: 3, sessions: 3 },
         ]},
         info: { body: "Incidental steps from daily life — stairs, walking errands, standing. Independent from and additive to exercise: structured exercise and incidental movement have separate neurochemical effects (Stamatakis et al. BJSM 2024, Paluch et al. JAMA 2022).", examples: ["3k–5k steps = took stairs, parked further away", "5k–7.5k steps = walked to meetings, active errands", "7.5k–10k+ steps = consistently active all day"] },
         tooltip: { icon: "🚶", title: "Movement is medicine, any amount", body: "Step count has a clear dose-response mortality and mental health benefit — independent of any exercise session (Paluch et al. JAMA 2022)." }
@@ -1939,7 +1935,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 23;
+const APP_BUILD   = 20;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 
 const SK  = 'nh_pwa_state';
@@ -2148,16 +2144,13 @@ function canAddHabit(type, habitId) {
 }
 
 function canRemoveHabit(type, habitId) {
-  // Non-core habits are always freely removable (grace or not)
+  if (isInGracePeriod()) return true; // grace window: all changes allowed
+  if (isLockActive()) return false;
+  // Must keep at least one foundational per category
   const h = HABITS[type].habits.find(x => x.id === habitId);
   if (!h || !h.foundational) return true;
-  // Core habit: must always keep at least one per category
   const selectedFdns = getSelectedFoundationals(type);
-  if (selectedFdns.length <= 1) return false; // only one left — trigger replace flow
-  // Core habit with 2+ selected: freely removable during grace, blocked during lock
-  if (isInGracePeriod()) return true;
-  if (isLockActive()) return false;
-  return true;
+  return selectedFdns.length > 1; // can only remove if ≥2 foundationals selected
 }
 
 const today = new Date().toISOString().slice(0, 10);
@@ -2768,27 +2761,6 @@ const THOUGHT_POOL = [
   { cat: 'stoic', eye: "Today's thought", body: "An unexamined life is not worth living.", attr: "Socrates" },
   { cat: 'stoic', eye: "Today's thought", body: "The secret of getting ahead is getting started.", attr: "Mark Twain" },
   { cat: 'stoic', eye: "Today's thought", body: "Small habits do not add up. They compound.", attr: "James Clear" },
-  /* ── Breuning — Habits of a Happy Brain ─────────────────── */
-  { cat: 'neuro', eye: 'Happy Brain Science', body: "Happy chemicals — dopamine, serotonin, oxytocin, and endorphin — evolved to promote survival, not to flow constantly. Each burst is a signal to move toward something good. The feeling fades by design, to keep you moving.", attr: "Breuning, Habits of a Happy Brain" },
-  { cat: 'neuro', eye: 'Happy Brain Science', body: "Cortisol is not the enemy — it evolved to save your life. But when it runs chronically high, it crowds out the happy chemical pathways. The fastest way to lower cortisol is to activate any one of the four positive systems.", attr: "Breuning, Habits of a Happy Brain" },
-  { cat: 'neuro', eye: 'Happy Brain Science', body: "Your brain inherited its reward circuitry from mammals who needed to find food, avoid predators, and maintain social bonds. Every habit in NeuroHabit maps to one of these ancient survival drives — that is why they work.", attr: "Breuning, Habits of a Happy Brain" },
-  { cat: 'neuro', eye: 'Happy Brain Science', body: "The mammalian brain builds new neural pathways slowly — it takes about 45 days of repeated activation for a new habit to feel natural rather than effortful. The discomfort you feel is the pathway being built.", attr: "Breuning, Habits of a Happy Brain" },
-  { cat: 'neuro', eye: 'Happy Brain Science', body: "Serotonin evolved for social status — the feeling that you matter and are respected. This is why recognition, accomplishment, and being seen by others feels so powerful. It is ancient wiring, not vanity.", attr: "Breuning, Habits of a Happy Brain" },
-  /* ── Clear — Atomic Habits ──────────────────────────────────── */
-  { cat: 'nutrition', eye: 'Atomic Habits', body: "Every action you take is a vote for the type of person you wish to become. No single instance will transform your beliefs, but as votes accumulate, so does the evidence of your identity.", attr: "Clear, Atomic Habits" },
-  { cat: 'nutrition', eye: 'Atomic Habits', body: "The Valley of Disappointment is the gap between expectations and results in the early stages of a new habit. You expect linear progress. You get a flat line — then a sudden breakthrough. The work before the breakthrough is not wasted. It is stored.", attr: "Clear, Atomic Habits" },
-  { cat: 'nutrition', eye: 'Atomic Habits', body: "Make it obvious, make it attractive, make it easy, make it satisfying. The Four Laws of Behaviour Change are not a checklist — they are a sequence. Environment sets the stage before willpower even enters the room.", attr: "Clear, Atomic Habits" },
-  { cat: 'nutrition', eye: 'Atomic Habits', body: "The two-minute rule: when you start a new habit, it should take less than two minutes to do. A habit must be established before it can be improved. The goal is to show up — the rest comes later.", attr: "Clear, Atomic Habits" },
-  { cat: 'nutrition', eye: 'Atomic Habits', body: "You do not rise to the level of your goals. You fall to the level of your systems. Goals are about the results you want to achieve. Systems are about the processes that lead to those results.", attr: "Clear, Atomic Habits" },
-  /* ── Hollins — Neuro-Habits ──────────────────────────────────────── */
-  { cat: 'nutrition', eye: 'Neuro-Habits', body: "Keystone habits are small behaviours with disproportionate reach. When they are consistently activated, they create a cascade of secondary improvements — often in areas that seem completely unrelated.", attr: "Hollins, Neuro-Habits" },
-  { cat: 'nutrition', eye: 'Neuro-Habits', body: "Your environment is doing more habit work than your willpower ever could. Redesigning your physical space to make good behaviours the path of least resistance is not cheating — it is the strategy.", attr: "Hollins, Neuro-Habits" },
-  { cat: 'nutrition', eye: 'Neuro-Habits', body: "If/then planning works because it moves a behaviour from reactive to pre-decided. 'If it is 7am, then I will walk outside' removes the daily decision. Your brain stops treating it as a choice.", attr: "Hollins, Neuro-Habits" },
-  /* ── Additional stoic and philosophical quotes ─────────────────── */
-  { cat: 'stoic', eye: "Today's thought", body: "The secret of change is to focus all your energy not on fighting the old, but on building the new.", attr: "Socrates" },
-  { cat: 'stoic', eye: "Today's thought", body: "Be not afraid of going slowly. Be afraid only of standing still.", attr: "Chinese proverb" },
-  { cat: 'stoic', eye: "Today's thought", body: "A man who is master of patience is master of everything else.", attr: "George Savile" },
-  { cat: 'stoic', eye: "Today's thought", body: "Motivation gets you started. Habit keeps you going. But what builds the habit? Showing up when motivation is gone.", attr: "Jim Ryun, adapted" },
 ];
 
 /* Build an interleaved sequence so tapping always cycles through categories:
@@ -2879,30 +2851,6 @@ function buildCoachFeed() {
     reflectBody = 'One habit logged is one pathway activated. That is how all good days begin.';
   }
   cards.push({ type: 'reflect', eye: 'Today', body: reflectBody });
-
-  // Valley of Disappointment card — days 5–20 of the habit journey
-  if (habitLockMeta && habitLockMeta.startDate) {
-    var _journeyDays = Math.floor((new Date(today) - new Date(habitLockMeta.startDate)) / 86400000);
-    if (_journeyDays >= 5 && _journeyDays <= 20) {
-      var _valleyBody = _journeyDays >= 14
-        ? 'You are deep in the Valley of Disappointment — day ' + _journeyDays + ' of your habit journey. You have been putting in real effort and the results still feel invisible. This is not a sign that it is not working. It is the sign that it is working. Your neural pathways are being physically rewired right now. The breakthrough comes after the valley, not before it.'
-        : 'You are in the Valley of Disappointment — day ' + _journeyDays + '. Effort is real. Visible results are lagging. This gap is normal and temporary. Your brain is building new circuitry beneath the surface. The habits you log today are compounding even when you cannot feel them yet.';
-      cards.push({ type: 'valley', eye: 'Day ' + _journeyDays + ' — Valley of Disappointment', body: _valleyBody, attr: 'Atomic Habits, James Clear' });
-    }
-    if (_journeyDays >= 28 && _journeyDays <= 45) {
-      var _daysLeft  = Math.max(0, 45 - _journeyDays);
-      var _reinBody;
-      if (_journeyDays >= 45) {
-        _reinBody = 'Day ' + _journeyDays + '. You have crossed the 45-day threshold. Breuning's research marks this as the point where a habit shifts from deliberate effort to automatic behaviour — a genuinely wired neural pathway. What keeps you here now is identity, not structure. That is the whole point.';
-      } else if (_journeyDays >= 37) {
-        _reinBody = 'Day ' + _journeyDays + '. You are ' + _daysLeft + ' days from the 45-day mark — where neuroscience says the habit becomes truly automatic. The 28-day lock ended, but the real wiring is still happening. You are in the home stretch.';
-      } else {
-        _reinBody = 'Day ' + _journeyDays + '. Your 28-day habit lock has ended — well done. But the neuroscience is not finished yet. Breuning's research points to 45 days for a habit to feel automatic rather than effortful. You have ' + _daysLeft + ' days left in the reinforcement window. Keep your set intact.';
-      }
-      var _reinEye = _journeyDays >= 45 ? 'Day ' + _journeyDays + ' — Habit Wired' : 'Day ' + _journeyDays + ' — Reinforcement Phase';
-      cards.push({ type: 'reinforce', eye: _reinEye, body: _reinBody, attr: 'Habits of a Happy Brain, Loretta Breuning' });
-    }
-  }
 
   // Card 2: Gentle nudge — references user's actual selected core habit for that category
   if (gatesQuiet.length > 0 && totalLogged > 0) {
@@ -3406,36 +3354,36 @@ function renderAdvInsights() {
 
   // 1. Overall performance read
   if (score === 0) {
-    insights.push({ icon:'🌅', text: `Nothing logged yet today. Pick whichever category feels easiest right now — one habit is one pathway activated, and that is enough to start.` });
+    insights.push({ icon:'🌅', text: `No habits tracked yet. Your brain is waiting. Even one completed habit today will activate a neurochemical pathway — start with whichever category feels most natural right now.` });
   } else if (score >= 80) {
-    insights.push({ icon:'🏆', text: `${score}% today — that is a genuinely strong day. All four systems are getting what they need. Your future self is quietly grateful.` });
+    insights.push({ icon:'🏆', text: `Outstanding day — ${score}% Hero Score. You're in the top tier of neurochemical activation. This is the kind of day your future self will thank you for.` });
   } else if (score >= 50) {
-    insights.push({ icon:'📈', text: `You are at ${score}% — streak is safe. If you want to push higher, your ${catNames[weakest[0]]} habits are the lowest right now. That is the highest-leverage place to focus.` });
+    insights.push({ icon:'📈', text: `Solid day at ${score}%. You've cleared the halfway mark which earns your streak. To push higher, focus on completing the foundational habit in your weakest category: ${catNames[weakest[0]]}.` });
   } else {
-    insights.push({ icon:'⚠️', text: `You are at ${score}% today — just below the streak threshold. One thing can change that: your top ${catNames[weakest[0]]} habit. It is the highest-leverage move you have right now.` });
+    insights.push({ icon:'⚠️', text: `Below 50% today (${score}%). Your streak is at risk. The fastest single move: complete the ⭐⭐⭐ habit in ${catNames[weakest[0]]} to unlock its full gauge.` });
   }
 
   // 2. Imbalance insight
   if (strongest[1] - weakest[1] > 35) {
-    insights.push({ icon:'⚖️', text: `You are strong on ${catNames[strongest[0]]} today but ${catNames[weakest[0]]} is barely active at ${weakest[1]}%. That gap is worth closing — even one small win there shifts your whole neurochemical balance.` });
+    insights.push({ icon:'⚖️', text: `Significant imbalance detected: ${catNames[strongest[0]]} is at ${strongest[1]}% while ${catNames[weakest[0]]} is only ${weakest[1]}%. A lopsided brain can mask deficits — even small wins in your weakest area compound quickly.` });
   }
 
   // 3. Streak insight
   if (streak.count >= 7) {
-    insights.push({ icon:'🔥', text: `${streak.count} days in a row. You are ${21 - streak.count > 0 ? (21 - streak.count) + ' days from the point' : 'past the point'} where research says this stops feeling like effort and starts feeling like you. Keep that going.` });
+    insights.push({ icon:'🔥', text: `${streak.count}-day streak — you're in the habit-formation zone. Research suggests 21 days of consistent behaviour begins to automate the neural pathway. You're ${21 - streak.count > 0 ? 21 - streak.count + ' days from' : 'past'} that threshold.` });
   } else if (streak.count > 0) {
-    insights.push({ icon:'🔥', text: `${streak.count}-day streak and building. It is much easier to keep this going than to restart it once it is broken. Show up tomorrow.` });
+    insights.push({ icon:'🔥', text: `${streak.count}-day streak building. Protect it — the activation energy to restart a broken streak is 3× higher than maintaining one. Keep going tomorrow.` });
   }
 
   // 4. Specific category nudge
   if (cats.serotonin < 40) {
-    insights.push({ icon:'🌸', text: `Your Serotonin is low today (${cats.serotonin}%) — that is your mood and steadiness system. Sleep is almost always the reason. Protect tonight and tomorrow will feel different.` });
+    insights.push({ icon:'🌸', text: `Low Serotonin detected (${cats.serotonin}%). This is your mood stabilisation system. Inadequate sleep is the most common culprit — prioritise it tonight. Even one night of 7–9 hrs can meaningfully shift tomorrow's baseline.` });
   }
   if (cats.oxytocin < 30) {
-    insights.push({ icon:'🤝', text: `Oxytocin is at ${cats.oxytocin}% — connection has been missing today. Your body genuinely needs this, not as a nice-to-have. One real conversation before you sleep is enough to move the needle.` });
+    insights.push({ icon:'🤝', text: `Oxytocin is your lowest system today at ${cats.oxytocin}%. Human connection is not a luxury — it's a physiological need. One meaningful conversation or physical touch before day's end can shift your stress chemistry significantly.` });
   }
   if (cats.dopamine === 0) {
-    insights.push({ icon:'⚡', text: `No Dopamine activity yet today. Your drive and reward system has nothing to run on. Twenty minutes on your most important task — that is all it takes to get it firing again.` });
+    insights.push({ icon:'⚡', text: `Dopamine is completely inactive today. Without at least one block of focused work, your brain's reward system has no anchor. Even 20 minutes of intentional effort on your most important task can break the inertia.` });
   }
 
   // 5. Historical pattern (if data available)
@@ -3444,9 +3392,9 @@ function renderAdvInsights() {
     const recent3 = dayScores.slice(-3).map(([,s]) => s);
     const trend   = recent3[2] - recent3[0];
     if (trend > 15) {
-      insights.push({ icon:'📊', text: `Your last 3 days have been trending up (+${trend}%). That is real momentum. Good time to push a little further — or lock in a habit you have been putting off.` });
+      insights.push({ icon:'📊', text: `Your scores have been trending upward over the last 3 days (+${trend}%). Momentum is building. This is the most powerful time to commit to a new foundational habit.` });
     } else if (trend < -15) {
-      insights.push({ icon:'📊', text: `Your last 3 days have been trending down. This happens — but something shifted. Worth checking which category went quiet first; that is usually where it starts.` });
+      insights.push({ icon:'📊', text: `Your scores have declined over the last 3 days (${trend}%). This is a normal dip — but worth noticing. Check which category dropped first; that's usually the trigger.` });
     }
   }
 
@@ -4446,80 +4394,7 @@ function addHabitToSet(type, hid) {
   showToast(h.label + ' added to your set', 'success');
 }
 
-function showCoreReplaceModal(type, hid) {
-  var existing = document.getElementById('coreReplaceModal');
-  if (existing) existing.remove();
-  var catNames = { dopamine: 'Dopamine', serotonin: 'Serotonin', oxytocin: 'Oxytocin', endorphin: 'Endorphin' };
-  var catName  = catNames[type] || type;
-  var currentHabit = HABITS[type].habits.find(function(x) { return x.id === hid; });
-  var currentLabel = currentHabit ? currentHabit.label : hid;
-  var fdnIds      = HABITS[type].foundationalIds;
-  var selectedIds = getConfig()[type].selected;
-  var alternatives = HABITS[type].habits.filter(function(h) {
-    return fdnIds.includes(h.id) && h.id !== hid && !selectedIds.includes(h.id);
-  });
-  var overlay = document.createElement('div');
-  overlay.id = 'coreReplaceModal';
-  overlay.className = 'modal-overlay';
-  overlay.style.display = 'flex';
-  var altButtons = alternatives.map(function(h) {
-    return '<button class="modal-close" style="margin-top:8px;background:var(--surface2);border-color:var(--border2);color:var(--text);text-align:left;padding:12px 14px;border-radius:var(--radius-sm)" ' +
-      'onclick="confirmCoreSwap('' + type + '','' + hid + '','' + h.id + '')">' +
-      '<span style="font-size:12px;font-weight:600;display:block;color:var(--text)">' + h.label + '</span>' +
-      '<span style="font-size:11px;color:var(--muted)">Swap to this core habit</span>' +
-      '</button>';
-  }).join('');
-  var noAltMsg = alternatives.length === 0
-    ? '<p style="font-size:12.5px;color:var(--muted);line-height:1.6;margin-top:8px">No other core habits are available to swap to in this category. Add a different core habit to your set first, then remove this one.</p>'
-    : '';
-  overlay.innerHTML =
-    '<div class="modal-card" onclick="event.stopPropagation()" style="max-width:420px">' +
-      '<div class="modal-handle"></div>' +
-      '<div class="modal-header">' +
-        '<div class="modal-icon">🔄</div>' +
-        '<div class="modal-title">Replace core habit</div>' +
-      '</div>' +
-      '<div class="modal-body" style="margin-bottom:10px">' +
-        '<p style="font-size:13px;color:var(--text);line-height:1.6;margin-bottom:10px">' +
-          '<strong>' + currentLabel + '</strong> is your only ' + catName + ' core habit. ' +
-          'Every category needs at least one core habit — that is the foundation the whole system is built on.' +
-        '</p>' +
-        '<p style="font-size:12.5px;color:var(--muted);line-height:1.6">' +
-          (alternatives.length > 0 ? 'Pick a replacement and we will swap it in. Your ' + catName + ' category stays active.' : '') +
-        '</p>' +
-        noAltMsg +
-        altButtons +
-      '</div>' +
-      '<button class="modal-close" id="coreReplaceCloseBtn">Cancel</button>' +
-    '</div>';
-  overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
-  document.body.appendChild(overlay);
-  var cancelBtn = document.getElementById('coreReplaceCloseBtn');
-  if (cancelBtn) cancelBtn.addEventListener('click', function() { overlay.remove(); });
-}
-
-function confirmCoreSwap(type, oldHid, newHid) {
-  document.getElementById('coreReplaceModal').remove();
-  if (!userHabitConfig) userHabitConfig = JSON.parse(JSON.stringify(DEFAULT_HABIT_CONFIG));
-  if (!userHabitConfig[type].selected.includes(newHid)) {
-    userHabitConfig[type].selected.push(newHid);
-  }
-  userHabitConfig[type].selected = userHabitConfig[type].selected.filter(function(id) { return id !== oldHid; });
-  sv(HCK, userHabitConfig);
-  renderSection(type);
-  updateCatUI(type);
-  renderCoach();
-  var newHabit = HABITS[type].habits.find(function(h) { return h.id === newHid; });
-  showToast('Swapped to ' + (newHabit ? newHabit.label : newHid), 'success');
-}
-
-function removeHabitFromSetfunction confirmCoreSwap(type, hid) {
-  var h = HABITS[type].habits.find(function(x) { return x.id === hid; });
-  var isCore = h && h.foundational;
-  if (isCore && getSelectedFoundationals(type).length <= 1) {
-    showCoreReplaceModal(type, hid);
-    return;
-  }
+function removeHabitFromSet(type, hid) {
   if (!canRemoveHabit(type, hid)) {
     if (isLockActive()) {
       showToast('Habit set locked for ' + daysUntilUnlock() + ' more days. Science shows ' + LOCK_MIN_DAYS + ' days is the minimum to know if a habit works for you.', 'info');
@@ -4528,6 +4403,7 @@ function removeHabitFromSetfunction confirmCoreSwap(type, hid) {
     }
     return;
   }
+  // During grace period, skip the reflection prompt — user is still setting up
   if (isInGracePeriod()) {
     if (!userHabitConfig) userHabitConfig = JSON.parse(JSON.stringify(DEFAULT_HABIT_CONFIG));
     userHabitConfig[type].selected = userHabitConfig[type].selected.filter(function(id) { return id !== hid; });
@@ -4538,8 +4414,9 @@ function removeHabitFromSetfunction confirmCoreSwap(type, hid) {
     showToast('Habit removed. You have ' + hoursUntilGraceEnd() + ' hrs left to adjust your set.', 'success');
     return;
   }
+  // Reflection prompt before removal (deliberate friction)
   const reason = prompt('Before removing this habit — what made it difficult? (This helps you reflect, not a requirement)');
-  if (reason === null) return;
+  if (reason === null) return; // cancelled
   if (!userHabitConfig) userHabitConfig = JSON.parse(JSON.stringify(DEFAULT_HABIT_CONFIG));
   userHabitConfig[type].selected = userHabitConfig[type].selected.filter(function(id) { return id !== hid; });
   sv(HCK, userHabitConfig);
@@ -4908,7 +4785,6 @@ window.finishOnboarding    = finishOnboarding;
 window.proceedToAvatarStep = proceedToAvatarStep;
 window.addHabitToSet       = addHabitToSet;
 window.removeHabitFromSet  = removeHabitFromSet;
-window.confirmCoreSwap     = confirmCoreSwap;
 window.showMainApp         = showMainApp;
 window.openShareModal     = openShareModal;
 window.generateShareImage = generateShareImage;
