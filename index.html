@@ -4447,19 +4447,21 @@ function showCoreReplaceModal(type, hid) {
         '</p>' +
         '<p style="font-size:12.5px;color:var(--muted);line-height:1.6">' +
           (alternatives.length > 0
-            ? 'Pick a replacement below and we'll swap it in for you. Your ' + catName + ' category stays active.'
+            ? 'Pick a replacement below and we will swap it in for you. Your ' + catName + ' category stays active.'
             : '') +
         '</p>' +
         noAltMsg +
         altButtons +
       '</div>' +
-      '<button class="modal-close" onclick="document.getElementById('coreReplaceModal').remove()">Cancel</button>' +
+      '<button class="modal-close" id="coreReplaceCloseBtn">Cancel</button>' +
     '</div>';
 
   overlay.addEventListener('click', function(e) {
     if (e.target === overlay) overlay.remove();
   });
   document.body.appendChild(overlay);
+  var cancelBtn = document.getElementById('coreReplaceCloseBtn');
+  if (cancelBtn) cancelBtn.addEventListener('click', function() { overlay.remove(); });
 }
 
 function confirmCoreSwap(type, oldHid, newHid) {
