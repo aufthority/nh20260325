@@ -373,6 +373,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .coach-feed-card.card-nudge    { border-left-color: var(--dopamine); }
 .coach-feed-card.card-quote    { border-left-color: var(--subtle); background: var(--surface2); }
 .coach-feed-card.card-week     { border-left-color: var(--endorphin); }
+.coach-feed-card.card-valley   { border-left-color: var(--warning); background: color-mix(in srgb, var(--warning) 6%, var(--surface)); }
+.coach-feed-card.card-reinforce { border-left-color: var(--serotonin); background: color-mix(in srgb, var(--serotonin) 6%, var(--surface)); }
 .coach-feed-card.card-personalise { border-left-color: var(--coach); background: color-mix(in srgb, var(--coach) 6%, var(--surface)); }
 .coach-feed-card.card-personalise .coach-feed-eyebrow { color: var(--coach); }
 .personalise-btn { display: inline-block; margin-top: 10px; padding: 7px 14px; border-radius: 20px; background: var(--coach); color: var(--text); font-size: 12px; font-weight: 600; border: none; cursor: pointer; font-family: 'Geist', sans-serif; transition: opacity 0.2s; }
@@ -383,6 +385,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .card-nudge   .coach-feed-eyebrow { color: var(--dopamine); }
 .card-quote   .coach-feed-eyebrow { color: var(--muted); }
 .card-week    .coach-feed-eyebrow { color: var(--endorphin); }
+.card-valley  .coach-feed-eyebrow { color: var(--warning); }
+.card-reinforce .coach-feed-eyebrow { color: var(--serotonin); }
 .coach-feed-body { font-size: 13px; color: var(--text); line-height: 1.7; }
 .card-quote .coach-feed-body { font-style: italic; color: var(--muted); }
 .coach-feed-attr { font-size: 11px; color: var(--subtle); margin-top: 5px; }
@@ -1935,7 +1939,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 20;
+const APP_BUILD   = 22;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 
 const SK  = 'nh_pwa_state';
@@ -2761,6 +2765,27 @@ const THOUGHT_POOL = [
   { cat: 'stoic', eye: "Today's thought", body: "An unexamined life is not worth living.", attr: "Socrates" },
   { cat: 'stoic', eye: "Today's thought", body: "The secret of getting ahead is getting started.", attr: "Mark Twain" },
   { cat: 'stoic', eye: "Today's thought", body: "Small habits do not add up. They compound.", attr: "James Clear" },
+  /* ── Breuning — Habits of a Happy Brain ──────────────────── */
+  { cat: 'neuro', eye: 'Happy Brain Science', body: "Happy chemicals — dopamine, serotonin, oxytocin, and endorphin — evolved to promote survival, not to flow constantly. Each burst is a signal to move toward something good. The feeling fades by design, to keep you moving.", attr: "Breuning, Habits of a Happy Brain" },
+  { cat: 'neuro', eye: 'Happy Brain Science', body: "Cortisol is not the enemy — it evolved to save your life. But when it runs chronically high, it crowds out the happy chemical pathways. The fastest way to lower cortisol is to activate any one of the four positive systems.", attr: "Breuning, Habits of a Happy Brain" },
+  { cat: 'neuro', eye: 'Happy Brain Science', body: "Your brain inherited its reward circuitry from mammals who needed to find food, avoid predators, and maintain social bonds. Every habit in NeuroHabit maps to one of these ancient survival drives — that is why they work.", attr: "Breuning, Habits of a Happy Brain" },
+  { cat: 'neuro', eye: 'Happy Brain Science', body: "The mammalian brain builds new neural pathways slowly — it takes about 45 days of repeated activation for a new habit to feel natural rather than effortful. The discomfort you feel is the pathway being built.", attr: "Breuning, Habits of a Happy Brain" },
+  { cat: 'neuro', eye: 'Happy Brain Science', body: "Serotonin evolved for social status — the feeling that you matter and are respected. This is why recognition, accomplishment, and being seen by others feels so powerful. It is ancient wiring, not vanity.", attr: "Breuning, Habits of a Happy Brain" },
+  /* ── Clear — Atomic Habits ────────────────────────────────── */
+  { cat: 'nutrition', eye: 'Atomic Habits', body: "Every action you take is a vote for the type of person you wish to become. No single instance will transform your beliefs, but as votes accumulate, so does the evidence of your identity.", attr: "Clear, Atomic Habits" },
+  { cat: 'nutrition', eye: 'Atomic Habits', body: "The Valley of Disappointment is the gap between expectations and results in the early stages of a new habit. You expect linear progress. You get a flat line — then a sudden breakthrough. The work before the breakthrough is not wasted. It is stored.", attr: "Clear, Atomic Habits" },
+  { cat: 'nutrition', eye: 'Atomic Habits', body: "Make it obvious, make it attractive, make it easy, make it satisfying. The Four Laws of Behaviour Change are not a checklist — they are a sequence. Environment sets the stage before willpower even enters the room.", attr: "Clear, Atomic Habits" },
+  { cat: 'nutrition', eye: 'Atomic Habits', body: "The two-minute rule: when you start a new habit, it should take less than two minutes to do. A habit must be established before it can be improved. The goal is to show up — the rest comes later.", attr: "Clear, Atomic Habits" },
+  { cat: 'nutrition', eye: 'Atomic Habits', body: "You do not rise to the level of your goals. You fall to the level of your systems. Goals are about the results you want to achieve. Systems are about the processes that lead to those results.", attr: "Clear, Atomic Habits" },
+  /* ── Hollins — Neuro-Habits ───────────────────────────────── */
+  { cat: 'nutrition', eye: 'Neuro-Habits', body: "Keystone habits are small behaviours with disproportionate reach. When they are consistently activated, they create a cascade of secondary improvements — often in areas that seem completely unrelated.", attr: "Hollins, Neuro-Habits" },
+  { cat: 'nutrition', eye: 'Neuro-Habits', body: "Your environment is doing more habit work than your willpower ever could. Redesigning your physical space to make good behaviours the path of least resistance is not cheating — it is the strategy.", attr: "Hollins, Neuro-Habits" },
+  { cat: 'nutrition', eye: 'Neuro-Habits', body: "If/then planning works because it moves a behaviour from reactive to pre-decided. 'If it is 7am, then I will walk outside' removes the daily decision. Your brain stops treating it as a choice.", attr: "Hollins, Neuro-Habits" },
+  /* ── Additional stoic and philosophical quotes ────────────── */
+  { cat: 'stoic', eye: "Today's thought", body: "The secret of change is to focus all your energy not on fighting the old, but on building the new.", attr: "Socrates" },
+  { cat: 'stoic', eye: "Today's thought", body: "Be not afraid of going slowly. Be afraid only of standing still.", attr: "Chinese proverb" },
+  { cat: 'stoic', eye: "Today's thought", body: "A man who is master of patience is master of everything else.", attr: "George Savile" },
+  { cat: 'stoic', eye: "Today's thought", body: "Motivation gets you started. Habit keeps you going. But what builds the habit? Showing up when motivation is gone.", attr: "Jim Ryun, adapted" },
 ];
 
 /* Build an interleaved sequence so tapping always cycles through categories:
@@ -2852,7 +2877,30 @@ function buildCoachFeed() {
   }
   cards.push({ type: 'reflect', eye: 'Today', body: reflectBody });
 
-  // Card 2: Gentle nudge — references user's actual selected core habit for that category
+  // Valley of Disappointment card — days 5–20 of the habit journey
+  if (habitLockMeta && habitLockMeta.startDate) {
+    var _journeyDays = Math.floor((new Date(today) - new Date(habitLockMeta.startDate)) / 86400000);
+    if (_journeyDays >= 5 && _journeyDays <= 20) {
+      var _valleyBody = _journeyDays >= 14
+        ? 'You are deep in the Valley of Disappointment — day ' + _journeyDays + ' of your habit journey. You have been putting in real effort and the results still feel invisible. This is not a sign that it is not working. It is the sign that it is working. Your neural pathways are being physically rewired right now. The breakthrough comes after the valley, not before it.'
+        : 'You are in the Valley of Disappointment — day ' + _journeyDays + '. Effort is real. Visible results are lagging. This gap is normal and temporary. Your brain is building new circuitry beneath the surface. The habits you log today are compounding even when you cannot feel them yet.';
+      cards.push({ type: 'valley', eye: 'Day ' + _journeyDays + ' — Valley of Disappointment', body: _valleyBody, attr: 'Atomic Habits, James Clear' });
+    }
+    // Post-Day 28 Reinforcement card — days 28–45
+    if (_journeyDays >= 28 && _journeyDays <= 45) {
+      var _daysLeft  = Math.max(0, 45 - _journeyDays);
+      var _reinBody;
+      if (_journeyDays >= 45) {
+        _reinBody = 'Day ' + _journeyDays + '. You have crossed the 45-day threshold. Breuning\'s research marks this as the point where a habit shifts from deliberate effort to automatic behaviour — a genuinely wired neural pathway. What keeps you here now is identity, not structure. That is the whole point.';
+      } else if (_journeyDays >= 37) {
+        _reinBody = 'Day ' + _journeyDays + '. You are ' + _daysLeft + ' days from the 45-day mark — where neuroscience says the habit becomes truly automatic. The 28-day lock ended, but the real wiring is still happening. You are in the home stretch.';
+      } else {
+        _reinBody = 'Day ' + _journeyDays + '. Your 28-day habit lock has ended — well done. But the neuroscience is not finished yet. Breuning\'s research points to 45 days for a habit to feel automatic rather than effortful. You have ' + _daysLeft + ' days left in the reinforcement window. Keep your set intact.';
+      }
+      var _reinEye = _journeyDays >= 45 ? 'Day ' + _journeyDays + ' — Habit Wired' : 'Day ' + _journeyDays + ' — Reinforcement Phase';
+      cards.push({ type: 'reinforce', eye: _reinEye, body: _reinBody, attr: 'Habits of a Happy Brain, Loretta Breuning' });
+    }
+  }
   if (gatesQuiet.length > 0 && totalLogged > 0) {
     const qCat = gatesQuiet[0];
     const qFdns = getSelectedFoundationals(qCat);
