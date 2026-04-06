@@ -506,6 +506,12 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 /* ═══ PROFILE PAGE ═══════════════════════════════════════════ */
 .profile-page-inner { padding: 20px 18px calc(40px + env(safe-area-inset-bottom, 0px)); }
 
+/* Changelog items */
+.changelog-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); }
+.changelog-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.changelog-body strong { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+.changelog-body span { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
 /* Guest sign-up banner */
 .guest-signup-banner {
   background: color-mix(in srgb, var(--coach) 8%, var(--surface));
@@ -1470,6 +1476,24 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
       </div>
     </div>
 
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     CHANGELOG MODAL — shown once on first launch of a new build
+     ══════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="changelogModal" onclick="closeChangelogModal(event)">
+  <div class="modal-card" onclick="event.stopPropagation()" style="max-height:85vh;overflow-y:auto">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <span class="modal-icon">✨</span>
+      <div class="modal-title">What's new in NeuroHabit</div>
+    </div>
+    <div style="font-size:10px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--muted);margin-bottom:14px">Build 30 — today's update</div>
+    <div id="changelogList" style="display:flex;flex-direction:column;gap:12px;margin-bottom:4px">
+      <!-- Items injected by JS so they can reference live CSS vars -->
+    </div>
+    <button class="modal-close" onclick="closeChangelogModal()" style="margin-top:18px">Got it — let's go</button>
   </div>
 </div>
 
@@ -5127,6 +5151,50 @@ function initApp() {
   renderLockStatusBars();
   Object.keys(HABITS).forEach(function(t) { renderSection(t); });
   updateHeader(); renderCoach(); renderWeek(); checkStreak(); renderProfile();
+  // Show changelog once for returning users updating to a new build
+  maybeShowChangelog();
+}
+
+const CHANGELOG_BUILD_KEY = 'nh_last_seen_build';
+
+function maybeShowChangelog() {
+  try {
+    var stored = localStorage.getItem(CHANGELOG_BUILD_KEY);
+    // Only show for returning users (stored build exists) who are on an older build
+    if (stored !== null && parseInt(stored, 10) < APP_BUILD) {
+      setTimeout(showChangelog, 800); // slight delay so app renders first
+    }
+    // Always stamp current build so future updates trigger the modal
+    localStorage.setItem(CHANGELOG_BUILD_KEY, String(APP_BUILD));
+  } catch(e) {}
+}
+
+function showChangelog() {
+  var items = [
+    { icon: '🎯', title: 'On-track strip', desc: 'The Coach page now shows your daily goal (Foundation Active, Phase 3) and tells you exactly when you\'ve hit it.' },
+    { icon: 'ℹ️', title: 'Phase explainer — one tap', desc: 'Tap the ⓘ next to your brain phase to see all six phases explained in a bottom sheet — no more hunting through Profile.' },
+    { icon: '🔄', title: 'Habit swap enforcement', desc: 'Habits must now be swapped within the same category. Core swaps with core, secondary with secondary — no outright removal after the grace period.' },
+    { icon: '📊', title: 'Radar share card', desc: 'When you reach Foundation Active (Phase 3), your share card upgrades to the Brain Balance Radar with a personalised evidence-based insight.' },
+    { icon: '🔒', title: 'Sign in from guest mode', desc: 'Guest users can now sign in with Google directly from the Profile page without losing their habit data.' },
+    { icon: '🌙', title: 'Light mode brain fix', desc: 'The Brainvatar now has a visible outline in light mode — all six phases are clearly readable on both themes.' },
+  ];
+
+  var list = document.getElementById('changelogList');
+  if (!list) return;
+  list.innerHTML = items.map(function(item) {
+    return '<div class="changelog-item">' +
+      '<span class="changelog-icon">' + item.icon + '</span>' +
+      '<div class="changelog-body"><strong>' + item.title + '</strong><span>' + item.desc + '</span></div>' +
+      '</div>';
+  }).join('');
+
+  document.getElementById('changelogModal').classList.add('show');
+}
+
+function closeChangelogModal(e) {
+  if (!e || e.target === document.getElementById('changelogModal')) {
+    document.getElementById('changelogModal').classList.remove('show');
+  }
 }
 
 function renderLockStatusBars() {
@@ -5310,6 +5378,7 @@ window.dismissPersonalisePrompt = dismissPersonalisePrompt;
 window.renderPhaseGuide    = renderPhaseGuide;
 window.openPhaseModal      = openPhaseModal;
 window.closePhaseModal     = closePhaseModal;
+window.closeChangelogModal = closeChangelogModal;
 window.finishOnboarding    = finishOnboarding;
 window.proceedToAvatarStep = proceedToAvatarStep;
 window.addHabitToSet       = addHabitToSet;
