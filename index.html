@@ -353,7 +353,22 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .brain-phase-block { display: flex; flex-direction: column; align-items: center; padding: 18px 0 10px; margin-bottom: 8px; }
 .brain-phase-svg { margin-bottom: 10px; }
 .brain-phase-label { font-family: 'Instrument Serif', serif; font-size: 20px; font-weight: 400; color: var(--text); text-align: center; line-height: 1.2; margin-bottom: 3px; }
+.brain-phase-label-row { display: flex; align-items: center; gap: 7px; margin-bottom: 3px; }
+.brain-phase-label-row .brain-phase-label { margin-bottom: 0; }
+.phase-info-btn { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--border2); background: var(--surface2); color: var(--muted); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 11px; font-weight: 700; font-family: 'Geist', sans-serif; transition: all 0.2s; flex-shrink: 0; line-height: 1; }
+.phase-info-btn:hover { border-color: var(--coach); color: var(--coach); background: color-mix(in srgb, var(--coach) 10%, var(--surface2)); }
 .brain-phase-sub { font-size: 12.5px; color: var(--muted); text-align: center; line-height: 1.5; max-width: 280px; }
+/* On-track strip — Layer 1 */
+.ontrack-strip { display: flex; align-items: flex-start; gap: 9px; padding: 8px 12px; border-radius: var(--radius-sm); margin: 4px 14px 10px; font-size: 12px; font-weight: 500; line-height: 1.4; border: 1px solid; }
+.ontrack-strip.not-yet { background: color-mix(in srgb, var(--warning) 8%, var(--surface)); border-color: color-mix(in srgb, var(--warning) 22%, transparent); color: var(--warning); }
+.ontrack-strip.reached { background: color-mix(in srgb, var(--serotonin) 10%, var(--surface)); border-color: color-mix(in srgb, var(--serotonin) 28%, transparent); color: var(--serotonin); }
+.ontrack-icon { font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+.ontrack-text span { display: block; font-size: 10.5px; font-weight: 400; opacity: 0.78; margin-top: 2px; }
+/* Goal callout inside grade screen — Layer 2 */
+.grade-goal-callout { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border-radius: var(--radius-sm); margin-bottom: 14px; font-size: 12.5px; color: var(--text); line-height: 1.55; border: 1px solid; }
+.grade-goal-callout.not-yet { background: color-mix(in srgb, var(--oxytocin) 10%, var(--surface2)); border-color: color-mix(in srgb, var(--oxytocin) 25%, transparent); }
+.grade-goal-callout.reached { background: color-mix(in srgb, var(--serotonin) 10%, var(--surface2)); border-color: color-mix(in srgb, var(--serotonin) 25%, transparent); }
+.grade-goal-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
 .brain-state-chip { display: flex; align-items: center; gap: 6px; background: var(--surface2); border: 1px solid var(--border2); border-radius: 30px; padding: 5px 11px 5px 7px; }
 .brain-state-chip span { font-size: 12px; font-weight: 500; color: var(--text); }
 .core-pips-row { display: flex; justify-content: center; gap: 6px; margin-bottom: 12px; }
@@ -1077,9 +1092,14 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
         <!-- Brain Phase Display + Thought Bubble -->
         <div class="brain-phase-block">
           <svg id="brainvatarSvg" class="brain-phase-svg" width="96" height="96" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"></svg>
-          <div class="brain-phase-label" id="brainvatarLabel">Ready</div>
+          <div class="brain-phase-label-row">
+            <div class="brain-phase-label" id="brainvatarLabel">Ready</div>
+            <button class="phase-info-btn" onclick="showScreen('screen-grade')" title="What does this mean?">i</button>
+          </div>
           <div class="brain-phase-sub" id="brainvatarSub">Log your first habit to begin</div>
         </div>
+        <!-- On-track strip — rendered by renderCoach() -->
+        <div id="ontrackStrip" style="display:none"></div>
         <!-- Thought Bubble — points upward toward the main brain -->
         <div id="brainThoughtWrap" style="display:none;padding:0 4px;margin-bottom:14px">
           <div id="thoughtBubbleContent" class="thought-bubble thought-up" style="cursor:pointer" title="Tap for next thought"></div>
@@ -1419,6 +1439,11 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
   <div class="grade-screen-content">
     <h2>Your Brain Phases</h2>
     <p>Your brain phase reflects how much of your core foundation is active today. It is not a grade — it is a mirror. Every phase is valid.</p>
+    <!-- Layer 2: goal callout — rendered by renderPhaseGuide() -->
+    <div id="gradeGoalCallout" class="grade-goal-callout not-yet" style="margin-top:14px">
+      <span class="grade-goal-icon">🎯</span>
+      <div id="gradeGoalCalloutText">Your daily goal is <strong>Phase 3 — Foundation Active</strong>. Everything above that is a bonus. The science says reaching Phase 3 is a genuinely good day for your brain.</div>
+    </div>
     <div class="phase-guide" id="phaseGuideEl"></div>
     <div class="scoring-explainer" style="margin-top:20px">
       <h3>How the phases work</h3>
@@ -1887,7 +1912,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 24;
+const APP_BUILD   = 28;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 
 const SK  = 'nh_pwa_state';
@@ -2599,8 +2624,14 @@ const BRAIN_SUBS   = [
 
 function drawBrainSvg(svgEl, phase) {
   if (!svgEl) return;
-  const c  = BRAIN_PHASE_COLS[phase];
-  const ey = BRAIN_PHASE_EYECOL[phase];
+  const isLight = document.documentElement.classList.contains('light-theme');
+  const COLS_DARK  = ['#4a4640','#6b6560','#c8712a','#b85070','#4a9e82','#7c6ab8'];
+  const COLS_LIGHT = ['#b0a898','#8a8278','#c8712a','#b85070','#4a9e82','#7c6ab8'];
+  const EYE_DARK   = ['#2e2b24','#3d3a33','#7a3800','#7a3800','#085041','#3b2d6e'];
+  const EYE_LIGHT  = ['#6b6256','#504840','#7a3800','#7a3800','#085041','#3b2d6e'];
+  const c  = (isLight ? COLS_LIGHT : COLS_DARK)[phase];
+  const ey = (isLight ? EYE_LIGHT  : EYE_DARK)[phase];
+  const zzzCol = isLight ? '#8a8070' : '#504c45';
   const glow = phase >= 2
     ? '<ellipse cx="48" cy="54" rx="34" ry="26" fill="' + c + '28"/>'
     : '';
@@ -2627,7 +2658,7 @@ function drawBrainSvg(svgEl, phase) {
          + '<path d="M72 10 L73.5 14 L77.5 14 L74.5 16.5 L75.5 20.5 L72 18 L68.5 20.5 L69.5 16.5 L66.5 14 L70.5 14 Z" fill="' + c + '" opacity=".9"/>'
          + '<path d="M18 12 L19 15 L22 15 L19.8 17 L20.5 20 L18 18.5 L15.5 20 L16.2 17 L14 15 L17 15 Z" fill="' + c + '" opacity=".7"/>';
   }
-  const zzz = phase === 0 ? '<text x="60" y="26" font-size="9" fill="#504c45" font-family="sans-serif" opacity=".6">z</text><text x="66" y="18" font-size="11" fill="#504c45" font-family="sans-serif" opacity=".4">z</text>' : '';
+  const zzz = phase === 0 ? '<text x="60" y="26" font-size="9" fill="' + zzzCol + '" font-family="sans-serif" opacity=".6">z</text><text x="66" y="18" font-size="11" fill="' + zzzCol + '" font-family="sans-serif" opacity=".4">z</text>' : '';
   let lEye, rEye;
   if (phase === 0) {
     lEye = '<path d="M30 51 Q32 54 34 51" fill="none" stroke="' + ey + '" stroke-width="1.5" stroke-linecap="round"/>';
@@ -2971,6 +3002,22 @@ function renderCoach() {
   drawBrainSvg(document.getElementById('brainvatarSvg'), phase);
   document.getElementById('brainvatarLabel').textContent = BRAIN_LABELS[phase];
   document.getElementById('brainvatarSub').textContent   = BRAIN_SUBS[phase];
+
+  // On-track strip — Layer 1
+  var strip = document.getElementById('ontrackStrip');
+  if (strip) {
+    if (phase === 0) {
+      strip.style.display = 'none';
+    } else if (phase >= 3) {
+      strip.style.display = 'flex';
+      strip.className = 'ontrack-strip reached';
+      strip.innerHTML = '<span class="ontrack-icon">✓</span><div class="ontrack-text">Foundation reached — you\'re on track today.<span>Every habit you add from here deepens the signal.</span></div>';
+    } else {
+      strip.style.display = 'flex';
+      strip.className = 'ontrack-strip not-yet';
+      strip.innerHTML = '<span class="ontrack-icon">🎯</span><div class="ontrack-text">Today\'s goal: Foundation Active (Phase 3)<span>Log one core habit per category to get there.</span></div>';
+    }
+  }
 
   // Core day badge
   const { done: fdnDone, rate: fdnRateCoach } = countFoundationals();
@@ -4334,6 +4381,7 @@ function finishOnboarding() {
 function renderPhaseGuide() {
   const el = document.getElementById('phaseGuideEl');
   if (!el) return;
+  const currentPhase = brainPhase();
   const phases = [
     { phase: 0, name: 'Dormant',            desc: 'No habits logged yet today. Your brain is resting.', trigger: 'No habits logged', col: '#4a4640' },
     { phase: 1, name: 'Awakening',          desc: 'Habits are being logged but no core habit is complete yet. Your brain is starting to respond.', trigger: '1 or more habits logged, no core complete', col: '#6b6560' },
@@ -4343,6 +4391,21 @@ function renderPhaseGuide() {
     { phase: 5, name: 'Enlightened',        desc: 'Every selected core habit completed at maximum session depth. All four neurochemical systems fully anchored. A genuinely rare achievement.', trigger: 'All core habits at maximum session tier', col: '#7c6ab8' },
   ];
 
+  // Layer 2: update goal callout
+  var callout = document.getElementById('gradeGoalCallout');
+  var calloutText = document.getElementById('gradeGoalCalloutText');
+  if (callout && calloutText) {
+    if (currentPhase >= 3) {
+      callout.className = 'grade-goal-callout reached';
+      callout.querySelector('.grade-goal-icon').textContent = '✓';
+      calloutText.innerHTML = 'You have reached <strong>Phase 3 — Foundation Active</strong>, today\'s goal. Everything from here is a bonus for your brain.';
+    } else {
+      callout.className = 'grade-goal-callout not-yet';
+      callout.querySelector('.grade-goal-icon').textContent = '🎯';
+      calloutText.innerHTML = 'Your daily goal is <strong>Phase 3 — Foundation Active</strong>. Everything above that is a bonus. The science says reaching Phase 3 is a genuinely good day for your brain.';
+    }
+  }
+
   el.innerHTML = phases.map(function(p) {
     var svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svgEl.setAttribute('width', '48');
@@ -4350,10 +4413,21 @@ function renderPhaseGuide() {
     svgEl.setAttribute('viewBox', '0 0 96 96');
     drawBrainSvg(svgEl, p.phase);
     var svgStr = svgEl.outerHTML;
-    return '<div class="phase-row">' +
+    var isCurrent = p.phase === currentPhase;
+    var isGoal    = p.phase === 3;
+    var isGoalAndCurrent = isCurrent && isGoal;
+    var badge = '';
+    if (isGoalAndCurrent) badge = '<span style="display:inline-block;font-size:9px;font-weight:600;letter-spacing:0.3px;padding:1px 6px;border-radius:8px;margin-left:6px;vertical-align:middle;background:color-mix(in srgb,var(--serotonin) 18%,transparent);color:var(--serotonin)">goal reached ✓</span>';
+    else if (isCurrent)   badge = '<span style="display:inline-block;font-size:9px;font-weight:600;letter-spacing:0.3px;padding:1px 6px;border-radius:8px;margin-left:6px;vertical-align:middle;background:color-mix(in srgb,var(--coach) 18%,transparent);color:var(--coach)">you are here</span>';
+    else if (isGoal)      badge = '<span style="display:inline-block;font-size:9px;font-weight:600;letter-spacing:0.3px;padding:1px 6px;border-radius:8px;margin-left:6px;vertical-align:middle;background:color-mix(in srgb,var(--oxytocin) 18%,transparent);color:var(--oxytocin)">daily goal</span>';
+    var rowStyle = '';
+    if (isGoalAndCurrent) rowStyle = 'background:color-mix(in srgb,var(--serotonin) 8%,var(--surface2));border:1px solid color-mix(in srgb,var(--serotonin) 22%,transparent);border-radius:var(--radius-sm);padding:10px 10px;margin:3px -2px;';
+    else if (isCurrent)   rowStyle = 'background:color-mix(in srgb,var(--coach) 7%,var(--surface2));border:1px solid color-mix(in srgb,var(--coach) 20%,transparent);border-radius:var(--radius-sm);padding:10px 10px;margin:3px -2px;';
+    else if (isGoal)      rowStyle = 'background:color-mix(in srgb,var(--oxytocin) 7%,var(--surface2));border:1px solid color-mix(in srgb,var(--oxytocin) 20%,transparent);border-radius:var(--radius-sm);padding:10px 10px;margin:3px -2px;';
+    return '<div class="phase-row" style="' + rowStyle + '">' +
       '<div class="phase-row-brain">' + svgStr + '</div>' +
       '<div class="phase-row-info">' +
-        '<div class="phase-row-name" style="color:' + p.col + '">' + p.name + '</div>' +
+        '<div class="phase-row-name" style="color:' + p.col + '">' + p.name + badge + '</div>' +
         '<div class="phase-row-desc">' + p.desc + '</div>' +
         '<div class="phase-row-trigger" style="color:' + p.col + '">' + p.trigger + '</div>' +
       '</div>' +
@@ -4847,6 +4921,10 @@ function toggleTheme() {
   }
   updateThemeUI();
   updateThemeMetaTag();
+  // Redraw brain SVGs so colours update immediately on theme switch
+  updateHeader();
+  var brainvatarSvg = document.getElementById('brainvatarSvg');
+  if (brainvatarSvg) drawBrainSvg(brainvatarSvg, brainPhase());
 }
 function updateThemeMetaTag() {
   var meta = document.querySelector('meta[name="theme-color"]');
