@@ -272,16 +272,26 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
   text-align: center;
 }
 
-/* ── REVISION 4: Info icon button ── */
-.habit-info-btn {
+/* ── BUILD 32: Info text-link (replaces icon button) ── */
+.habit-learn-btn {
   background: none; border: none; cursor: pointer;
-  color: var(--muted); padding: 2px;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 50%; transition: color 0.2s;
-  line-height: 1;
+  color: var(--muted); padding: 0;
+  font-family: 'Geist', sans-serif; font-size: 11px;
+  letter-spacing: 0.2px;
+  display: inline-flex; align-items: center; gap: 3px;
+  transition: color 0.18s; line-height: 1;
 }
-.habit-info-btn:hover { color: var(--text); }
-.habit-info-btn svg { display: block; }
+.habit-learn-btn:hover { color: var(--text); }
+.habit-learn-btn::after { content: '\203A'; font-size: 13px; line-height: 1; }
+
+/* ── BUILD 32: Reserved note zone at bottom of info modal ── */
+.info-modal-note-zone {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  min-height: 28px;
+  /* intentionally empty — reserved for future note input */
+}
 
 /* ═══ MODALS ═════════════════════════════════════════════════ */
 /* Shared bottom-sheet modal */
@@ -1592,6 +1602,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
     </div>
     <div class="modal-body" id="infoBody"></div>
     <div class="habit-examples" id="infoExamples"></div>
+    <div class="info-modal-note-zone" id="infoNoteZone"></div>
     <button class="modal-close" onclick="closeModal('infoOverlay')">Close</button>
   </div>
 </div>
@@ -2025,7 +2036,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 31;
+const APP_BUILD   = 32;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -2394,23 +2405,16 @@ function renderSection(type) {
             '<span class="habit-type-tag">' + typeMap[h.type] + '</span>' +
             '<span class="habit-unsel-badge">Not in your set</span>' +
           '</div>' +
+          '<button class="habit-learn-btn" aria-label="Learn about ' + h.label + '">What counts</button>' +
         '</div>' +
         '<div class="habit-right" style="gap:5px;">' +
-          '<button class="habit-info-btn" title="Learn about this habit" aria-label="Info: ' + h.label + '">' +
-            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>' +
-          '</button>' +
           (canAdd ? '<button class="habit-add-btn" data-type="' + type + '" data-id="' + h.id + '">+ Add</button>' : '') +
         '</div>';
 
-      const infoBtn = discRow.querySelector('.habit-info-btn');
+      const infoBtn = discRow.querySelector('.habit-learn-btn');
       if (infoBtn) infoBtn.addEventListener('click', function(e) {
         e.stopPropagation();
-        const existing = discRow.querySelector('.habit-inline-info');
-        if (existing) { existing.classList.toggle('show'); return; }
-        const div = document.createElement('div');
-        div.className = 'habit-inline-info show';
-        div.innerHTML = '<span>' + (h.info && h.info.body ? h.info.body : '') + '</span>';
-        discRow.querySelector('.habit-body').appendChild(div);
+        showHabitInfo(h);
       });
       const addBtn = discRow.querySelector('.habit-add-btn');
       if (addBtn) addBtn.addEventListener('click', function(e) {
@@ -2468,27 +2472,25 @@ function renderSection(type) {
 
           (isFlex ? '<span class="flex-tag show">' + (isMulti ? 'SESSIONS' : 'FLEX') + '</span>' : '') +
         '</div>' +
+        '<button class="habit-learn-btn" aria-label="Learn about ' + h.label + '">What counts</button>' +
       '</div>' +
       '<div class="habit-right">' +
         '<div style="display:flex;align-items:center;gap:5px;">' +
           '<div class="weight-badge">' + stars + ' ' + w + '</div>' +
-          '<button class="habit-info-btn" title="What counts as this habit?" aria-label="Info: ' + h.label + '">' +
-            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>' +
-          '</button>' +
           remBtn +
         '</div>' +
         flexCtrlHTML +
       '</div>';
 
     row.addEventListener('click', function(e) {
-      if (e.target.closest('.habit-info-btn') || e.target.closest('.flex-toggle-btn') ||
+      if (e.target.closest('.habit-learn-btn') || e.target.closest('.flex-toggle-btn') ||
           e.target.closest('.session-flex-ctrl') || e.target.closest('.habit-rem-btn')) return;
       toggleHabit(key, type, i);
     });
 
     let pressTimer;
     row.addEventListener('pointerdown', function(e) {
-      if (e.target.closest('.habit-info-btn') || e.target.closest('.flex-toggle-btn') ||
+      if (e.target.closest('.habit-learn-btn') || e.target.closest('.flex-toggle-btn') ||
           e.target.closest('.session-flex-ctrl') || e.target.closest('.habit-rem-btn')) return;
       pressTimer = setTimeout(function() { showTooltip(h.tooltip); }, 500);
     });
@@ -2508,17 +2510,10 @@ function renderSection(type) {
       });
     });
 
-    const infoBtn = row.querySelector('.habit-info-btn');
-    if (infoBtn) infoBtn.addEventListener('click', function(e) {
+    const learnBtn = row.querySelector('.habit-learn-btn');
+    if (learnBtn) learnBtn.addEventListener('click', function(e) {
       e.stopPropagation();
-      const existing = row.querySelector('.habit-inline-info');
-      if (existing) { existing.classList.toggle('show'); return; }
-      const div = document.createElement('div');
-      div.className = 'habit-inline-info show';
-      div.innerHTML = '<span>' + (h.info && h.info.body ? h.info.body : '') + '</span>' +
-        (h.info && h.info.examples && h.info.examples.length ?
-          '<div class="habit-inline-examples">' + h.info.examples.map(function(ex) { return '<span>' + ex + '</span>'; }).join('') + '</div>' : '');
-      row.querySelector('.habit-body').appendChild(div);
+      showHabitInfo(h);
     });
 
     const remBtn2 = row.querySelector('.habit-rem-btn');
@@ -2580,6 +2575,10 @@ function showHabitInfo(h) {
 function toggleHabit(key, type, idx) {
   if (isHabitLocked(type, idx)) return;
   appState[today][key] = !appState[today][key];
+  // BUILD 32: stub note field for future note input feature
+  if (appState[today][key] && appState[today][key + '_note'] === undefined) {
+    appState[today][key + '_note'] = null;
+  }
   sv(SK, appState);
   // Fix 1: immediately lock today's score to weekData on every toggle
   weekData[today] = Math.round(heroScore());
@@ -2624,6 +2623,10 @@ function cycleTier(tierKey, type, idx, dir) {
   appState[today][tierKey] = next;
   // Auto-complete habit when a tier is selected; un-complete when tier cleared to 0
   appState[today][key] = next > 0;
+  // BUILD 32: stub note field for future note input feature
+  if (appState[today][key] && appState[today][key + '_note'] === undefined) {
+    appState[today][key + '_note'] = null;
+  }
   sv(SK, appState);
   // Fix 1: immediately lock today's score to weekData on every toggle
   weekData[today] = Math.round(heroScore());
