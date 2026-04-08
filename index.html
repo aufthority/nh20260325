@@ -2045,7 +2045,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 33;
+const APP_BUILD   = 34;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -2203,8 +2203,8 @@ const LOCK_MIN_DAYS  = 28;
 const LOCK_REC_DAYS  = 42;
 
 function initHabitLock(config) {
-  var startDate = new Date().toISOString().slice(0, 10);
-  var lockUntil = new Date(Date.now() + LOCK_MIN_DAYS * 86400000).toISOString().slice(0, 10);
+  var startDate = localDateStr();
+  var lockUntil = localDateStr(new Date(Date.now() + LOCK_MIN_DAYS * 86400000));
   habitLockMeta = { startDate: startDate, lockUntil: lockUntil, lockedSelection: JSON.parse(JSON.stringify(config)) };
   sv(HLK, habitLockMeta);
 }
@@ -2213,8 +2213,8 @@ function initHabitLockWithGrace(config) {
   /* 48-hour grace period — lock clock starts 2 days from now, not today.
      This gives users time to review their auto-configured habit set. */
   var GRACE_MS = 48 * 60 * 60 * 1000;
-  var startDate = new Date(Date.now() + GRACE_MS).toISOString().slice(0, 10);
-  var lockUntil = new Date(Date.now() + GRACE_MS + LOCK_MIN_DAYS * 86400000).toISOString().slice(0, 10);
+  var startDate = localDateStr(new Date(Date.now() + GRACE_MS));
+  var lockUntil = localDateStr(new Date(Date.now() + GRACE_MS + LOCK_MIN_DAYS * 86400000));
   habitLockMeta = { startDate: startDate, lockUntil: lockUntil, lockedSelection: JSON.parse(JSON.stringify(config)) };
   sv(HLK, habitLockMeta);
 }
@@ -2261,7 +2261,17 @@ function canRemoveHabit(type, habitId) {
   return false;
 }
 
-const today = new Date().toISOString().slice(0, 10);
+/* ── TZ-01: Local-date helper — always uses device local clock, never UTC.
+   Fixes midnight rollover for UTC+ timezones (e.g. MYT = UTC+8 would
+   otherwise not roll over until 8am local time). ── */
+function localDateStr(d) {
+  d = d || new Date();
+  return d.getFullYear() + '-' +
+    String(d.getMonth() + 1).padStart(2, '0') + '-' +
+    String(d.getDate()).padStart(2, '0');
+}
+
+const today = localDateStr();
 if (!appState[today]) appState[today] = {};
 
 /* ═══════════════════════════════════════════════════════════
@@ -3220,7 +3230,7 @@ function renderWeeklyTrend() {
 
   const days = Array.from({ length: 7 }, function(_, i) {
     const d   = new Date(now); d.setDate(now.getDate() + monOff + i);
-    const key = d.toISOString().slice(0, 10);
+    const key = localDateStr(d);
     const isToday  = key === today;
     const isFuture = key > today;
     const active = isToday
@@ -3343,7 +3353,7 @@ function renderCatStreaks() {
   // Build last 7 days keys
   const recentKeys = Array.from({ length: 7 }, (_, i) => {
     const d = new Date(now); d.setDate(now.getDate() + monOff + i);
-    return d.toISOString().slice(0, 10);
+    return localDateStr(d);
   }).filter(k => k <= today);
 
   el.innerHTML = catInfo.map(cat => {
@@ -4165,7 +4175,7 @@ function renderWeek() {
 
   grid.innerHTML = Array.from({ length: 7 }, (_, i) => {
     const d   = new Date(now); d.setDate(now.getDate() + monOff + i);
-    const key = d.toISOString().slice(0, 10);
+    const key = localDateStr(d);
     const isFuture = key > today, isToday = key === today;
     const s   = isToday ? score : (weekData[key] ?? 0);
     let cls   = isFuture ? 'future' : s >= 100 ? 'perfect' : s >= 50 ? 'filled' : '';
@@ -4183,9 +4193,9 @@ function checkStreak() {
 
   if (score >= 50 && streak.lastDate !== today) {
     const yest = new Date(); yest.setDate(yest.getDate() - 1);
-    const yKey  = yest.toISOString().slice(0, 10);
+    const yKey  = localDateStr(yest);
     const twoDaysAgo = new Date(); twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
-    const twoKey = twoDaysAgo.toISOString().slice(0, 10);
+    const twoKey = localDateStr(twoDaysAgo);
     const prevDate = streak.lastDate;
 
     /* BV-06: null lastDate means first ever use — treat as new streak start,
@@ -5136,7 +5146,7 @@ function showMainApp() {
   /* EG-01: Midnight rollover — save today's final score BEFORE reloading
      so past days are never overwritten by the new day's live score. */
   function handleDateRollover() {
-    const currentDay = new Date().toISOString().slice(0, 10);
+    const currentDay = localDateStr();
     if (currentDay !== today) {
       weekData[today] = Math.round(heroScore());
       sv(WK, weekData);
