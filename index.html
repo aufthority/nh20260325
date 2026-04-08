@@ -971,6 +971,43 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .trend-day-label.today { fill: var(--text); font-weight: 600; }
 .trend-active-dot { transition: r 0.2s; }
 
+/* ═══ HISTORY SCREEN ════════════════════════════════════════ */
+.history-back-bar { position: sticky; top: 0; z-index: 50; background: var(--surface); border-bottom: 1px solid var(--border); padding: calc(var(--safe-t) + 12px) 18px 12px; display: flex; align-items: center; gap: 10px; }
+.history-screen-content { overflow-y: auto; flex: 1; padding: 24px 20px 80px; }
+.history-screen-title { font-family: 'Instrument Serif', serif; font-size: 22px; font-weight: 400; letter-spacing: -0.3px; margin-bottom: 4px; }
+.history-screen-sub { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 24px; }
+.history-grid-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 20px; }
+.history-grid-card-label { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+.history-month-labels { display: flex; margin-bottom: 4px; padding-left: 22px; min-height: 12px; }
+.history-month-label { font-size: 9px; color: var(--muted); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; }
+.history-grid-body { display: flex; gap: 3px; align-items: flex-start; }
+.history-dow-labels { display: flex; flex-direction: column; gap: 3px; padding-top: 1px; flex-shrink: 0; width: 22px; }
+.history-dow-label { font-size: 9px; color: var(--muted); height: 14px; line-height: 14px; text-align: right; }
+.history-grid-cells { display: flex; gap: 3px; flex: 1; min-width: 0; overflow: hidden; }
+.history-week-col { display: flex; flex-direction: column; gap: 3px; flex-shrink: 0; }
+.history-cell { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; cursor: pointer; transition: transform 0.12s; }
+.history-cell:active { transform: scale(0.88); }
+.history-cell.cell-today { outline: 2px solid var(--text); outline-offset: 1px; }
+.history-day-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; margin-bottom: 20px; min-height: 72px; transition: border-color 0.25s; }
+.history-day-card.has-data { border-left-width: 3px; }
+.history-day-date { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+.history-day-cat { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+.history-day-score { font-size: 12px; color: var(--muted); }
+.history-day-empty { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.history-guide-title { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.history-guide { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+.history-guide-row { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); }
+.history-guide-swatch { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; margin-top: 2px; }
+.history-guide-text strong { display: block; font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.history-guide-text span { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.history-intensity-note { font-size: 12px; color: var(--muted); line-height: 1.6; padding: 12px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); }
+.history-entry-row { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 14px; cursor: pointer; transition: opacity 0.18s; }
+.history-entry-row:active { opacity: 0.75; }
+.history-entry-left { display: flex; flex-direction: column; gap: 2px; }
+.history-entry-label { font-size: 13px; font-weight: 500; color: var(--text); }
+.history-entry-sub { font-size: 11px; color: var(--muted); }
+.history-entry-chevron { color: var(--muted); font-size: 18px; line-height: 1; }
+
 /* ═══ THEME TOGGLE ══════════════════════════════════════════ */
 .theme-toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; }
 .theme-toggle-left { display: flex; align-items: center; gap: 12px; }
@@ -1186,6 +1223,14 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
           <div id="weeklyTrendChart"></div>
         </div>
 
+        <!-- Journey entry point -->
+        <div class="history-entry-row" onclick="showHistoryScreen()">
+          <div class="history-entry-left">
+            <span class="history-entry-label">Your journey, so far</span>
+            <span class="history-entry-sub">See every day you have shown up</span>
+          </div>
+          <span class="history-entry-chevron">›</span>
+        </div>
 
         <!-- Premium Insights (collapsed) -->
         <div class="premium-collapse-wrap">
@@ -1564,6 +1609,82 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
         <span style="font-size:11px;color:var(--coach);font-weight:600">⭐ Premium feature</span>
         <p style="font-size:12px;color:var(--muted);margin:4px 0 0;line-height:1.5">Detailed numerical scoring, category breakdowns, and weekly trend analysis are available in NeuroHabit Premium.</p>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     HISTORY SCREEN
+     ══════════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-history" style="display:none">
+  <div class="history-back-bar">
+    <button class="grade-back-btn" onclick="hideScreen('screen-history')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </button>
+    <span class="grade-screen-title">Your journey</span>
+  </div>
+  <div class="history-screen-content">
+    <h2 class="history-screen-title">Every day you showed up</h2>
+    <p class="history-screen-sub">Each cell is one day. The colour tells you which part of your brain you fed most. The deeper the shade, the more you gave.</p>
+
+    <!-- Grid -->
+    <div class="history-grid-card">
+      <div class="history-grid-card-label">All time</div>
+      <div id="historyMonthLabels" class="history-month-labels"></div>
+      <div class="history-grid-body">
+        <div class="history-dow-labels">
+          <div class="history-dow-label"></div>
+          <div class="history-dow-label">Tue</div>
+          <div class="history-dow-label"></div>
+          <div class="history-dow-label">Thu</div>
+          <div class="history-dow-label"></div>
+          <div class="history-dow-label">Sat</div>
+          <div class="history-dow-label"></div>
+        </div>
+        <div id="historyGridCells" class="history-grid-cells"></div>
+      </div>
+    </div>
+
+    <!-- Selected day detail -->
+    <div class="history-day-card" id="historyDayCard">
+      <div class="history-day-empty">Tap any day to see what you logged.</div>
+    </div>
+
+    <!-- Reading guide -->
+    <div>
+      <div class="history-guide-title">What the colours mean</div>
+      <div class="history-guide">
+        <div class="history-guide-row">
+          <div class="history-guide-swatch" style="background:var(--dopamine)"></div>
+          <div class="history-guide-text">
+            <strong style="color:var(--dopamine)">Dopamine</strong>
+            <span>Drive, focus, and reward. A dopamine day means you moved toward something — a goal, a task, a finish line.</span>
+          </div>
+        </div>
+        <div class="history-guide-row">
+          <div class="history-guide-swatch" style="background:var(--serotonin)"></div>
+          <div class="history-guide-text">
+            <strong style="color:var(--serotonin)">Serotonin</strong>
+            <span>Calm, groundedness, and stability. A serotonin day means you tended to your nervous system — sleep, light, stillness.</span>
+          </div>
+        </div>
+        <div class="history-guide-row">
+          <div class="history-guide-swatch" style="background:var(--oxytocin)"></div>
+          <div class="history-guide-text">
+            <strong style="color:var(--oxytocin)">Oxytocin</strong>
+            <span>Connection, trust, and belonging. An oxytocin day means you reached toward another person — and meant it.</span>
+          </div>
+        </div>
+        <div class="history-guide-row">
+          <div class="history-guide-swatch" style="background:var(--endorphin)"></div>
+          <div class="history-guide-text">
+            <strong style="color:var(--endorphin)">Endorphin</strong>
+            <span>Resilience and release. An endorphin day means you did something that asked something of your body.</span>
+          </div>
+        </div>
+      </div>
+      <div class="history-intensity-note">A deeper shade means a stronger day — more habits logged, more of your foundation covered. A lighter shade still counts. You were here.</div>
     </div>
   </div>
 </div>
@@ -3331,6 +3452,105 @@ function renderWeeklyTrend() {
     '</div>';
 }
 
+/* ── HG-01: History screen ─────────────────────────────────────────────────── */
+function showHistoryScreen() {
+  showScreen('screen-history');
+  renderHistoryGrid();
+  selectHistoryDay(today);
+}
+
+function renderHistoryGrid() {
+  var cellsEl  = document.getElementById('historyGridCells');
+  var monthsEl = document.getElementById('historyMonthLabels');
+  if (!cellsEl || !monthsEl) return;
+
+  var CAT_COLORS = { dopamine:'var(--dopamine)', serotonin:'var(--serotonin)', oxytocin:'var(--oxytocin)', endorphin:'var(--endorphin)' };
+  var CAT_NAMES  = { dopamine:'Dopamine', serotonin:'Serotonin', oxytocin:'Oxytocin', endorphin:'Endorphin' };
+  var CATS = Object.keys(CAT_COLORS);
+
+  var allKeys = Object.keys(appState).filter(function(k) { return /^\d{4}-\d{2}-\d{2}$/.test(k); });
+  var earliest = allKeys.length > 0 ? allKeys.reduce(function(a,b){ return a<b?a:b; }) : today;
+
+  function mondayOf(ds) {
+    var d = new Date(ds + 'T00:00:00'), dow = d.getDay();
+    d.setDate(d.getDate() + (dow===0 ? -6 : 1-dow));
+    return localDateStr(d);
+  }
+
+  var weeks = [], cur = new Date(mondayOf(earliest)+'T00:00:00'), endD = new Date(mondayOf(today)+'T00:00:00');
+  while (cur <= endD) { weeks.push(localDateStr(cur)); cur.setDate(cur.getDate()+7); }
+
+  function dayInfo(ds) {
+    if (ds > today) return null;
+    var state = appState[ds], catScores = {dopamine:0,serotonin:0,oxytocin:0,endorphin:0}, total = 0;
+    if (state) {
+      CATS.forEach(function(cat) {
+        var habits = (HABITS[cat]&&HABITS[cat].habits) ? HABITS[cat].habits : [];
+        habits.forEach(function(h,idx) { if (state[cat+'_'+idx]===true) { catScores[cat]+=(h.weight||1); total++; } });
+      });
+    }
+    if (total===0) return { color:'var(--surface3)', opacity:1, dominant:null, score:0 };
+    var dominant = CATS.reduce(function(a,b){ return catScores[a]>=catScores[b]?a:b; });
+    var score = ds===today ? Math.round(heroScore()) : (weekData[ds]||0);
+    return { color:CAT_COLORS[dominant], opacity:0.3+0.7*Math.min(score/100,1), dominant:dominant, score:score };
+  }
+
+  var MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var seenMonths = {}, monthPos = {};
+  weeks.forEach(function(wStart,wi) {
+    for (var d=0;d<7;d++) {
+      var dd=new Date(wStart+'T00:00:00'); dd.setDate(dd.getDate()+d);
+      var key=localDateStr(dd); if (key>today) break;
+      var mk=dd.getFullYear()+'-'+dd.getMonth();
+      if (!seenMonths[mk]) { seenMonths[mk]=true; monthPos[wi]=MONTH_NAMES[dd.getMonth()]; break; }
+    }
+  });
+
+  monthsEl.innerHTML = weeks.map(function(_,wi){ return '<div class="history-month-label">'+(monthPos[wi]||'')+'</div>'; }).join('');
+
+  cellsEl.innerHTML = weeks.map(function(wStart) {
+    var days = Array.from({length:7},function(_,d){ var dd=new Date(wStart+'T00:00:00'); dd.setDate(dd.getDate()+d); return localDateStr(dd); });
+    return '<div class="history-week-col">'+days.map(function(ds) {
+      if (ds>today) return '<div class="history-cell" style="background:transparent;cursor:default"></div>';
+      var info=dayInfo(ds), isToday=ds===today;
+      return '<div class="history-cell'+(isToday?' cell-today':'')+'" '+
+        'data-date="'+ds+'" '+
+        'style="background:'+info.color+';opacity:'+info.opacity.toFixed(2)+'" '+
+        'onclick="selectHistoryDay(\''+ds+'\')" title="'+ds+'"></div>';
+    }).join('')+'</div>';
+  }).join('');
+
+  window._histDayInfo  = dayInfo;
+  window._histCatNames = CAT_NAMES;
+  window._histCatColors= CAT_COLORS;
+}
+
+function selectHistoryDay(ds) {
+  var card = document.getElementById('historyDayCard');
+  if (!card) return;
+  var d = new Date(ds+'T00:00:00');
+  var DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var label = DAYS[d.getDay()]+', '+d.getDate()+' '+MON[d.getMonth()]+' '+d.getFullYear();
+  if (ds===today) label = 'Today \u2014 '+label;
+  var info = window._histDayInfo ? window._histDayInfo(ds) : null;
+  if (!info || info.score===0) {
+    card.className='history-day-card';
+    card.style.borderLeftColor='';
+    card.innerHTML='<div class="history-day-date">'+label+'</div>'+
+      '<div class="history-day-empty">'+(ds===today?'Nothing logged yet today. The day is still yours.':'Nothing was logged this day.')+'</div>';
+    return;
+  }
+  var catName=window._histCatNames[info.dominant]||'', catColor=window._histCatColors[info.dominant]||'var(--text)';
+  card.className='history-day-card has-data';
+  card.style.borderLeftColor=catColor;
+  card.innerHTML='<div class="history-day-date">'+label+'</div>'+
+    '<div class="history-day-cat" style="color:'+catColor+'">'+catName+' day</div>'+
+    '<div class="history-day-score">'+info.score+'% foundation completed</div>';
+}
+window.showHistoryScreen = showHistoryScreen;
+window.selectHistoryDay  = selectHistoryDay;
+
 /* 2. Per-category streaks — computed from weekData history */
 function renderCatStreaks() {
   const el = document.getElementById('catStreaksPanel');
@@ -4303,6 +4523,10 @@ document.querySelectorAll('.nav-tab').forEach(btn => {
     const gradeScreen = document.getElementById('screen-grade');
     if (gradeScreen.classList.contains('screen-active')) {
       hideScreen('screen-grade');
+    }
+    const histScreen = document.getElementById('screen-history');
+    if (histScreen && histScreen.classList.contains('screen-active')) {
+      hideScreen('screen-history');
     }
     document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.page').forEach(p => p.classList.remove('page-active'));
@@ -5406,6 +5630,7 @@ window.dismissInstall     = dismissInstall;
 window.dismissIosSheet    = dismissIosSheet;
 window.triggerInstall     = triggerInstall;
 window.showScreen         = showScreen;
+window.showHistoryScreen  = showHistoryScreen;
 window.hideScreen         = hideScreen;
 window.showOnboarding      = showOnboarding;
 window.showAvatarOnboarding = showAvatarOnboarding;
