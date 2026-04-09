@@ -2272,7 +2272,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 39;
+const APP_BUILD   = 40;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -2499,6 +2499,7 @@ function localDateStr(d) {
 }
 
 const today = localDateStr();
+function getToday() { return localDateStr(); }
 if (!appState[today]) appState[today] = {};
 
 /* ═══════════════════════════════════════════════════════════
