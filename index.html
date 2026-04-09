@@ -1090,6 +1090,92 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
   .page-container, .coach-page-inner { max-width: 680px; margin-left: auto; margin-right: auto; }
   .app-header, .bottom-nav { max-width: 680px; left: 50%; transform: translateX(-50%); border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
 }
+
+/* ── Patterns Report (screen-history rebuild, build 38) ─────────────── */
+.pr-content { overflow-y: auto; flex: 1; padding: 20px 18px 100px; }
+.pr-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
+.pr-title { font-family: 'Instrument Serif', serif; font-size: 22px; font-weight: 400; color: var(--text); line-height: 1.2; margin-bottom: 3px; }
+.pr-sub { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+.pr-selfmon { font-size: 11px; color: var(--muted); line-height: 1.5; padding: 8px 12px; border-left: 2px solid var(--border2); margin-bottom: 14px; }
+.pr-range-row { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
+.pr-rb { font-size: 12px; padding: 5px 13px; border-radius: 20px; border: 1px solid var(--border2); background: transparent; color: var(--muted); cursor: pointer; font-family: 'Geist', sans-serif; transition: all 0.15s; }
+.pr-rb.active { background: var(--surface2); border-color: var(--border2); color: var(--text); font-weight: 500; }
+.pr-divider { height: 1px; background: var(--border); margin: 18px 0; }
+/* Grid */
+.pr-grid-scroll { overflow-x: auto; padding-bottom: 4px; }
+.pr-grid-wrap { display: flex; gap: 3px; width: fit-content; }
+.pr-gcol { display: flex; flex-direction: column; gap: 3px; }
+.pr-gcell { width: 14px; height: 14px; border-radius: 2px; cursor: pointer; flex-shrink: 0; }
+.pr-gcell:hover { filter: brightness(1.15); }
+.pr-gempty { background: var(--surface3); }
+.pr-cell-today { outline: 2px solid var(--text); outline-offset: 1px; }
+.pr-grid-legend { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+.pr-gli { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); }
+.pr-gls { width: 10px; height: 10px; border-radius: 2px; display: inline-block; flex-shrink: 0; }
+.pr-grid-caption { font-size: 11px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+/* Day card (tap inspect) */
+.pr-day-card { margin-top: 10px; padding: 10px 12px; border-radius: var(--radius-sm); border-left: 3px solid var(--border2); background: var(--surface); border: 1px solid var(--border); font-size: 13px; }
+.pr-day-card.has-data { border-left: 3px solid var(--border2); }
+.pr-day-date { font-size: 11px; color: var(--muted); margin-bottom: 3px; }
+.pr-day-cat { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+.pr-day-score { font-size: 12px; color: var(--muted); }
+.pr-day-empty { font-size: 13px; color: var(--muted); }
+/* Section label */
+.pr-sec-label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+/* At a glance */
+.pr-glance-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px; margin-bottom: 18px; }
+.pr-glance-card { background: var(--surface2); border-radius: var(--radius-sm); padding: 12px 10px; }
+.pr-glance-label { font-size: 10px; color: var(--muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 500; }
+.pr-glance-num { font-family: 'Instrument Serif', serif; font-size: 26px; font-weight: 400; color: var(--text); line-height: 1; }
+.pr-glance-ctx { font-size: 11px; color: var(--muted); margin-top: 5px; line-height: 1.4; }
+.pr-droop { display: inline-block; margin-top: 7px; font-size: 10px; color: var(--muted); background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 3px 8px; line-height: 1.4; }
+/* Chart */
+.pr-chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 14px 10px; margin-bottom: 18px; }
+/* Neuro bars */
+.pr-neuro-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 18px; }
+.pr-neuro-block { padding-bottom: 14px; margin-bottom: 14px; border-bottom: 1px solid var(--border); }
+.pr-neuro-block:last-child { padding-bottom: 0; margin-bottom: 0; border-bottom: none; }
+.pr-neuro-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.pr-neuro-name { font-size: 13px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 6px; }
+.pr-neuro-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.pr-neuro-pct { font-size: 13px; font-weight: 600; }
+.pr-neuro-track { height: 6px; border-radius: 3px; background: var(--surface2); overflow: hidden; margin-bottom: 7px; }
+.pr-neuro-fill { height: 100%; border-radius: 3px; }
+.pr-neuro-feel { font-size: 12px; color: var(--text); line-height: 1.5; margin-bottom: 3px; }
+.pr-neuro-science { font-size: 11px; color: var(--muted); line-height: 1.5; }
+/* Foundations */
+.pr-found-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 4px 14px; margin-bottom: 18px; }
+.pr-found-intro { font-size: 12px; color: var(--muted); margin-bottom: 10px; line-height: 1.5; }
+.pr-fi { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); }
+.pr-fi:last-child { border-bottom: none; }
+.pr-fi-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.pr-fi-name { font-size: 12px; font-weight: 500; color: var(--text); flex: 1; min-width: 0; }
+.pr-fi-bar { width: 60px; flex-shrink: 0; }
+.pr-fi-track { height: 3px; border-radius: 2px; background: var(--surface2); }
+.pr-fi-fill { height: 100%; border-radius: 2px; }
+.pr-fi-days { font-size: 11px; color: var(--muted); white-space: nowrap; }
+/* Insights */
+.pr-insights-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 4px 14px; margin-bottom: 10px; }
+.pr-insight { display: flex; gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--border); }
+.pr-insight:last-child { border-bottom: none; }
+.pr-insight-bar { width: 3px; border-radius: 2px; flex-shrink: 0; align-self: stretch; min-height: 16px; }
+.pr-insight-text { font-size: 12px; color: var(--text); line-height: 1.55; }
+.pr-insight-src { font-size: 10px; color: var(--muted); margin-top: 3px; line-height: 1.4; }
+/* Keystone */
+.pr-keystone { background: var(--surface2); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 18px; }
+.pr-keystone-eye { font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 6px; }
+.pr-keystone-text { font-size: 12px; color: var(--text); line-height: 1.55; }
+.pr-keystone-sub { font-size: 11px; color: var(--muted); margin-top: 5px; line-height: 1.5; }
+/* Nudge */
+.pr-nudge { border: 1px solid var(--border2); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 18px; }
+.pr-nudge-eye { font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 8px; }
+.pr-nudge-ifthen { font-family: 'Instrument Serif', serif; font-size: 15px; font-weight: 400; color: var(--text); line-height: 1.6; }
+.pr-nudge-sub { font-size: 11px; color: var(--muted); margin-top: 7px; line-height: 1.5; }
+/* Footer */
+.pr-footer { font-size: 11px; color: var(--muted); text-align: center; line-height: 1.7; padding-top: 8px; }
+/* Holding state */
+.pr-holding { font-size: 13px; color: var(--muted); text-align: center; padding: 24px 0; line-height: 1.6; }
+
 </style>
 </head>
 <body>
@@ -1226,8 +1312,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
         <!-- Journey entry point -->
         <div class="history-entry-row" onclick="showHistoryScreen()">
           <div class="history-entry-left">
-            <span class="history-entry-label">Your journey, so far</span>
-            <span class="history-entry-sub">See every day you have shown up</span>
+            <span class="history-entry-label">What your habits are showing</span>
+            <span class="history-entry-sub">Patterns, insights, and your journey so far</span>
           </div>
           <span class="history-entry-chevron">›</span>
         </div>
@@ -1481,14 +1567,6 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
             </div>
             <button class="theme-pill" id="themePill" onclick="toggleTheme()" aria-label="Toggle light mode"></button>
           </div>
-          <div class="profile-row" onclick="showScreen('screen-grade')">
-            <div class="profile-row-icon">📊</div>
-            <div class="profile-row-body">
-              <strong>How You're Graded</strong>
-              <span>Scoring rules, grade tiers & flex mode</span>
-            </div>
-            <svg class="profile-row-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </div>
           <div class="profile-row" onclick="openShareModal()">
             <div class="profile-row-icon">⬆️</div>
             <div class="profile-row-body">
@@ -1624,68 +1702,95 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
     </button>
     <span class="grade-screen-title">Your journey</span>
   </div>
-  <div class="history-screen-content">
-    <h2 class="history-screen-title">Every day you showed up</h2>
-    <p class="history-screen-sub">Each cell is one day. The colour tells you which part of your brain you fed most. The deeper the shade, the more you gave.</p>
+  <div class="pr-content" id="prContent">
 
-    <!-- Grid -->
-    <div class="history-grid-card">
-      <div class="history-grid-card-label">All time</div>
-      <div id="historyMonthLabels" class="history-month-labels"></div>
-      <div class="history-grid-body">
-        <div class="history-dow-labels">
-          <div class="history-dow-label"></div>
-          <div class="history-dow-label">Tue</div>
-          <div class="history-dow-label"></div>
-          <div class="history-dow-label">Thu</div>
-          <div class="history-dow-label"></div>
-          <div class="history-dow-label">Sat</div>
-          <div class="history-dow-label"></div>
-        </div>
-        <div id="historyGridCells" class="history-grid-cells"></div>
+    <div class="pr-eyebrow">Your patterns</div>
+    <div class="pr-title" id="prTitle">What this week is telling you</div>
+    <div class="pr-sub" id="prSub"></div>
+    <div class="pr-selfmon">Reviewing your own patterns is part of building them. Research shows self-monitoring alongside practice produces stronger, longer-lasting results.</div>
+
+    <div class="pr-range-row">
+      <button class="pr-rb active" onclick="prSetRange(7,this)">This week</button>
+      <button class="pr-rb" onclick="prSetRange(14,this)">14 days</button>
+      <button class="pr-rb" onclick="prSetRange(30,this)">30 days</button>
+    </div>
+
+    <!-- Journey grid hero -->
+    <div id="prGridScroll" class="pr-grid-scroll">
+      <div class="pr-grid-wrap" id="prGridWrap"></div>
+    </div>
+    <div class="pr-grid-legend">
+      <div class="pr-gli"><span class="pr-gls" style="background:var(--dopamine)"></span>Dopamine</div>
+      <div class="pr-gli"><span class="pr-gls" style="background:var(--serotonin)"></span>Serotonin</div>
+      <div class="pr-gli"><span class="pr-gls" style="background:var(--oxytocin)"></span>Oxytocin</div>
+      <div class="pr-gli"><span class="pr-gls" style="background:var(--endorphin)"></span>Endorphin</div>
+      <div class="pr-gli"><span class="pr-gls" style="background:var(--surface3);border:1px solid var(--border2)"></span>No entry</div>
+    </div>
+    <div class="pr-grid-caption">A deeper shade means a stronger day. A lighter shade still counts. You were here.</div>
+
+    <!-- Tap-to-inspect day card -->
+    <div class="pr-day-card" id="prDayCard"><div class="pr-day-empty">Tap any day to see what you logged.</div></div>
+
+    <div class="pr-divider"></div>
+
+    <!-- At a glance -->
+    <div class="pr-sec-label">At a glance</div>
+    <div class="pr-glance-grid">
+      <div class="pr-glance-card">
+        <div class="pr-glance-label">Most days</div>
+        <div class="pr-glance-num" id="prAvgNum">--</div>
+        <div class="pr-glance-ctx" id="prAvgCtx"></div>
+      </div>
+      <div class="pr-glance-card">
+        <div class="pr-glance-label">Your best</div>
+        <div class="pr-glance-num" id="prBestNum" style="color:var(--serotonin)">--</div>
+        <div class="pr-glance-ctx" id="prBestCtx"></div>
+      </div>
+      <div class="pr-glance-card">
+        <div class="pr-glance-label">Hardest day</div>
+        <div class="pr-glance-num" id="prLowNum" style="color:var(--oxytocin)">--</div>
+        <div class="pr-glance-ctx" id="prLowCtx"></div>
+        <div class="pr-droop" id="prDroopTag"></div>
       </div>
     </div>
 
-    <!-- Selected day detail -->
-    <div class="history-day-card" id="historyDayCard">
-      <div class="history-day-empty">Tap any day to see what you logged.</div>
+    <!-- Line chart -->
+    <div class="pr-chart-card">
+      <div class="pr-sec-label">How it moved</div>
+      <div style="position:relative;width:100%;height:160px">
+        <canvas id="prTrendChart" role="img" aria-label="Daily habit scores over the selected period">Daily habit score line chart.</canvas>
+      </div>
     </div>
 
-    <!-- Reading guide -->
-    <div>
-      <div class="history-guide-title">What the colours mean</div>
-      <div class="history-guide">
-        <div class="history-guide-row">
-          <div class="history-guide-swatch" style="background:var(--dopamine)"></div>
-          <div class="history-guide-text">
-            <strong style="color:var(--dopamine)">Dopamine</strong>
-            <span>Drive, focus, and reward. A dopamine day means you moved toward something — a goal, a task, a finish line.</span>
-          </div>
-        </div>
-        <div class="history-guide-row">
-          <div class="history-guide-swatch" style="background:var(--serotonin)"></div>
-          <div class="history-guide-text">
-            <strong style="color:var(--serotonin)">Serotonin</strong>
-            <span>Calm, groundedness, and stability. A serotonin day means you tended to your nervous system — sleep, light, stillness.</span>
-          </div>
-        </div>
-        <div class="history-guide-row">
-          <div class="history-guide-swatch" style="background:var(--oxytocin)"></div>
-          <div class="history-guide-text">
-            <strong style="color:var(--oxytocin)">Oxytocin</strong>
-            <span>Connection, trust, and belonging. An oxytocin day means you reached toward another person — and meant it.</span>
-          </div>
-        </div>
-        <div class="history-guide-row">
-          <div class="history-guide-swatch" style="background:var(--endorphin)"></div>
-          <div class="history-guide-text">
-            <strong style="color:var(--endorphin)">Endorphin</strong>
-            <span>Resilience and release. An endorphin day means you did something that asked something of your body.</span>
-          </div>
-        </div>
-      </div>
-      <div class="history-intensity-note">A deeper shade means a stronger day — more habits logged, more of your foundation covered. A lighter shade still counts. You were here.</div>
+    <div class="pr-divider"></div>
+
+    <!-- Neurotransmitter bars -->
+    <div class="pr-sec-label">Where your energy went</div>
+    <div class="pr-neuro-card" id="prNeuroBlocks"></div>
+
+    <div class="pr-divider"></div>
+
+    <!-- Foundations -->
+    <div class="pr-sec-label">Your foundations</div>
+    <div class="pr-found-intro">The habits you chose to build on. Everything else is extra.</div>
+    <div class="pr-found-card" id="prFoundList"></div>
+
+    <div class="pr-divider"></div>
+
+    <!-- Insights + keystone -->
+    <div class="pr-sec-label">What the patterns suggest</div>
+    <div class="pr-insights-card" id="prInsightList"></div>
+    <div id="prKeystoneBlock"></div>
+
+    <!-- If/then nudge -->
+    <div class="pr-nudge" id="prNudge"></div>
+
+    <div class="pr-footer">
+      Self-reported habits only — not a clinical assessment.<br>
+      Worth sharing with a healthcare professional if it helps the conversation.<br><br>
+      NeuroHabit · Stop chasing. Start building.
     </div>
+
   </div>
 </div>
 
@@ -2166,7 +2271,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 37;
+const APP_BUILD   = 38;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -3211,7 +3316,14 @@ function buildCoachFeed() {
 }
 
 /* Interleaved category rotation — tap cycles neuro → nutrition → stoic */
-var _catTapIdx = Math.floor((Date.now() - new Date(new Date().getFullYear(),0,0)) / 86400000);
+var _catTapIdx = Math.floor(Math.random() * 1000);
+(function() {
+  var cats = Object.keys(_categoryCounters);
+  cats.forEach(function(c) {
+    var len = (_poolByCategory[c] || [1]).length;
+    _categoryCounters[c] = Math.floor(Math.random() * len);
+  });
+}());
 
 function renderThoughtBubble() {
   var wrap = document.getElementById('brainThoughtWrap');
@@ -3453,103 +3565,474 @@ function renderWeeklyTrend() {
 }
 
 /* ── HG-01: History screen ─────────────────────────────────────────────────── */
-function showHistoryScreen() {
-  showScreen('screen-history');
-  renderHistoryGrid();
-  selectHistoryDay(today);
-}
+/* ══════════════════════════════════════════════════════════════
+   PATTERNS REPORT — build 38
+   Replaces the old renderHistoryGrid / selectHistoryDay system.
+   ══════════════════════════════════════════════════════════════ */
 
-function renderHistoryGrid() {
-  var cellsEl  = document.getElementById('historyGridCells');
-  var monthsEl = document.getElementById('historyMonthLabels');
-  if (!cellsEl || !monthsEl) return;
+var _prRange      = 7;
+var _prTrendChart = null;
 
-  var CAT_COLORS = { dopamine:'var(--dopamine)', serotonin:'var(--serotonin)', oxytocin:'var(--oxytocin)', endorphin:'var(--endorphin)' };
-  var CAT_NAMES  = { dopamine:'Dopamine', serotonin:'Serotonin', oxytocin:'Oxytocin', endorphin:'Endorphin' };
-  var CATS = Object.keys(CAT_COLORS);
+var PR_CAT_COLORS = { dopamine:'var(--dopamine)', serotonin:'var(--serotonin)', oxytocin:'var(--oxytocin)', endorphin:'var(--endorphin)' };
+var PR_CAT_HEX    = { dopamine:'#c8712a', serotonin:'#4a9e82', oxytocin:'#b85070', endorphin:'#5a82c0' };
+var PR_CAT_NAMES  = { dopamine:'Dopamine', serotonin:'Serotonin', oxytocin:'Oxytocin', endorphin:'Endorphin' };
+var PR_CATS       = ['dopamine','serotonin','oxytocin','endorphin'];
 
-  var allKeys = Object.keys(appState).filter(function(k) { return /^\d{4}-\d{2}-\d{2}$/.test(k); });
-  var earliest = allKeys.length > 0 ? allKeys.reduce(function(a,b){ return a<b?a:b; }) : today;
-
-  function mondayOf(ds) {
-    var d = new Date(ds + 'T00:00:00'), dow = d.getDay();
-    d.setDate(d.getDate() + (dow===0 ? -6 : 1-dow));
-    return localDateStr(d);
+var PR_NEURO_VOICE = {
+  dopamine: {
+    high: { feel:'A driven week. This is what motivation feels like when the system is fed.', science:'Goal-directed habits were showing up consistently. Each session compounds the reward signal.' },
+    mid:  { feel:'Present but uneven. Some days had the pull, others felt like pushing through fog.', science:'A few more deep work sessions could shift this noticeably.' },
+    low:  { feel:'Drive felt harder to find. Not laziness \u2014 more like a signal the system needs refilling.', science:'Low dopamine weeks often feel like low-grade flatness. Meaningful tasks are the fastest lever.' }
+  },
+  serotonin: {
+    high: { feel:'A stable week. The kind of steadiness that doesn\'t announce itself \u2014 you notice its absence when it\'s gone.', science:'Sleep and rhythm habits were holding. These are the structural habits everything else rests on.' },
+    mid:  { feel:'Some steadiness, some drift. Weeks like this can carry a low-grade restlessness.', science:'Sleep and prayer are the fastest serotonin levers. When these slip, the baseline drops.' },
+    low:  { feel:'This week may have felt harder to settle. That "do something" feeling without knowing what is often a serotonin signal.', science:'When foundation habits slip, everything else costs more effort. The baseline needs tending first.' }
+  },
+  oxytocin: {
+    high: { feel:'Connection was part of your week. The brain treats belonging as a survival signal.', science:'Social bonding habits were showing up. Oxytocin from genuine connection builds trust circuits that persist.' },
+    mid:  { feel:'Some moments of real connection. Worth being more intentional \u2014 it\'s the first habit traded away and the last noticed missing.', science:'Brief, genuine contact counts more than sustained but distracted presence.' },
+    low:  { feel:'This week was quieter on the connection side. Quiet weeks can feel fine in the moment but accumulate over time.', science:'Oxytocin is the one habit category most people sacrifice first. The evidence on social connection is stronger than almost any other single factor.' }
+  },
+  endorphin: {
+    high: { feel:'Your body was moving. That physical resilience carries over \u2014 endorphin habits lower the threshold for every other habit.', science:'Physical activity creates a neurochemical buffer that persists for hours after the session ends.' },
+    mid:  { feel:'Some physical activity, but inconsistent. The body was getting signal but not enough to build the buffer reliably.', science:'Consistency matters more than intensity. Three moderate sessions beat one intense one for sustained mood effect.' },
+    low:  { feel:'Physical habits were light this week. Even a short walk changes the neurochemical landscape of a day.', science:'The threshold for effect is low \u2014 15 minutes of rhythmic movement is enough to shift the day.' }
   }
+};
 
-  var weeks = [], cur = new Date(mondayOf(earliest)+'T00:00:00'), endD = new Date(mondayOf(today)+'T00:00:00');
-  while (cur <= endD) { weeks.push(localDateStr(cur)); cur.setDate(cur.getDate()+7); }
+var PR_NUDGES = {
+  dopamine:  { ifthen: 'If tomorrow starts without a clear task, write down one thing tonight \u2014 just one. The morning trigger is seeing it, not deciding it.', sub: 'Dopamine habits were quietest this week. This is the smallest possible version of a Deep Work start.' },
+  serotonin: { ifthen: 'If the weekend felt harder, try anchoring one serotonin habit to something that already happens \u2014 the first drink of the day, or Isyak. The habit rides the existing routine.', sub: 'Serotonin habits dipped toward the end of the week. Rhythm is the lever, not intensity.' },
+  oxytocin:  { ifthen: 'If tomorrow feels like a low-connection day, a shared meal counts. It doesn\'t need to be planned or meaningful \u2014 just present.', sub: 'Oxytocin habits were the quietest this week. This is the lowest-friction version of showing up for connection.' },
+  endorphin: { ifthen: 'If motivation to exercise isn\'t there tomorrow, commit to only 10 minutes. The rhythm itself tends to extend it \u2014 and if it doesn\'t, 10 minutes still moved the needle.', sub: 'Physical habits were light this week. The threshold for effect is lower than it feels.' }
+};
 
-  function dayInfo(ds) {
-    if (ds > today) return null;
-    var state = appState[ds], catScores = {dopamine:0,serotonin:0,oxytocin:0,endorphin:0}, total = 0;
-    if (state) {
-      CATS.forEach(function(cat) {
-        var habits = (HABITS[cat]&&HABITS[cat].habits) ? HABITS[cat].habits : [];
-        habits.forEach(function(h,idx) { if (state[cat+'_'+idx]===true) { catScores[cat]+=(h.weight||1); total++; } });
+/* Core: compute a day's info from appState */
+function prDayInfo(ds) {
+  if (ds > getToday()) return null;
+  var state = appState[ds];
+  var catScores = { dopamine:0, serotonin:0, oxytocin:0, endorphin:0 };
+  var total = 0;
+  if (state) {
+    PR_CATS.forEach(function(cat) {
+      var habits = (HABITS[cat] && HABITS[cat].habits) ? HABITS[cat].habits : [];
+      habits.forEach(function(h, idx) {
+        if (state[cat + '_' + idx] === true) { catScores[cat] += (h.weight || 1); total++; }
       });
-    }
-    if (total===0) return { color:'var(--surface3)', opacity:1, dominant:null, score:0 };
-    var dominant = CATS.reduce(function(a,b){ return catScores[a]>=catScores[b]?a:b; });
-    var score = ds===today ? Math.round(heroScore()) : (weekData[ds]||0);
-    return { color:CAT_COLORS[dominant], opacity:0.3+0.7*Math.min(score/100,1), dominant:dominant, score:score };
+    });
   }
-
-  var MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  var seenMonths = {}, monthPos = {};
-  weeks.forEach(function(wStart,wi) {
-    for (var d=0;d<7;d++) {
-      var dd=new Date(wStart+'T00:00:00'); dd.setDate(dd.getDate()+d);
-      var key=localDateStr(dd); if (key>today) break;
-      var mk=dd.getFullYear()+'-'+dd.getMonth();
-      if (!seenMonths[mk]) { seenMonths[mk]=true; monthPos[wi]=MONTH_NAMES[dd.getMonth()]; break; }
-    }
-  });
-
-  monthsEl.innerHTML = weeks.map(function(_,wi){ return '<div class="history-month-label">'+(monthPos[wi]||'')+'</div>'; }).join('');
-
-  cellsEl.innerHTML = weeks.map(function(wStart) {
-    var days = Array.from({length:7},function(_,d){ var dd=new Date(wStart+'T00:00:00'); dd.setDate(dd.getDate()+d); return localDateStr(dd); });
-    return '<div class="history-week-col">'+days.map(function(ds) {
-      if (ds>today) return '<div class="history-cell" style="background:transparent;cursor:default"></div>';
-      var info=dayInfo(ds), isToday=ds===today;
-      return '<div class="history-cell'+(isToday?' cell-today':'')+'" '+
-        'data-date="'+ds+'" '+
-        'style="background:'+info.color+';opacity:'+info.opacity.toFixed(2)+'" '+
-        'onclick="selectHistoryDay(\''+ds+'\')" title="'+ds+'"></div>';
-    }).join('')+'</div>';
-  }).join('');
-
-  window._histDayInfo  = dayInfo;
-  window._histCatNames = CAT_NAMES;
-  window._histCatColors= CAT_COLORS;
+  if (total === 0) return { color: 'var(--surface3)', opacity: 1, dominant: null, score: 0 };
+  var dominant = PR_CATS.reduce(function(a, b) { return catScores[a] >= catScores[b] ? a : b; });
+  var score = ds === getToday() ? Math.round(heroScore()) : (weekData[ds] || 0);
+  return { color: PR_CAT_COLORS[dominant], hex: PR_CAT_HEX[dominant], opacity: 0.3 + 0.7 * Math.min(score / 100, 1), dominant: dominant, score: score };
 }
 
-function selectHistoryDay(ds) {
-  var card = document.getElementById('historyDayCard');
+/* Get date keys within last N days */
+function prDateKeysForRange(days) {
+  var result = [];
+  var td = getToday();
+  for (var i = days - 1; i >= 0; i--) {
+    var d = new Date(td + 'T00:00:00');
+    d.setDate(d.getDate() - i);
+    result.push(localDateStr(d));
+  }
+  return result;
+}
+
+/* Count logged days in range */
+function prCountLoggedDays(dateKeys) {
+  return dateKeys.filter(function(ds) {
+    return appState[ds] && Object.keys(appState[ds]).some(function(k) { return appState[ds][k] === true; });
+  }).length;
+}
+
+/* Compute cat scores averaged over range */
+function prCatAverages(dateKeys) {
+  var sums = { dopamine:0, serotonin:0, oxytocin:0, endorphin:0 };
+  var maxes = { dopamine:0, serotonin:0, oxytocin:0, endorphin:0 };
+  PR_CATS.forEach(function(cat) {
+    var habits = (HABITS[cat] && HABITS[cat].habits) ? HABITS[cat].habits : [];
+    maxes[cat] = habits.reduce(function(acc, h) { return acc + (h.weight || 1); }, 0);
+  });
+  var daysWithData = 0;
+  dateKeys.forEach(function(ds) {
+    var state = appState[ds];
+    if (!state) return;
+    var hasAny = PR_CATS.some(function(cat) {
+      var habits = (HABITS[cat] && HABITS[cat].habits) ? HABITS[cat].habits : [];
+      return habits.some(function(h, idx) { return state[cat + '_' + idx] === true; });
+    });
+    if (!hasAny) return;
+    daysWithData++;
+    PR_CATS.forEach(function(cat) {
+      var habits = (HABITS[cat] && HABITS[cat].habits) ? HABITS[cat].habits : [];
+      habits.forEach(function(h, idx) {
+        if (state[cat + '_' + idx] === true) sums[cat] += (h.weight || 1);
+      });
+    });
+  });
+  if (daysWithData === 0) return { dopamine:0, serotonin:0, oxytocin:0, endorphin:0 };
+  var result = {};
+  PR_CATS.forEach(function(cat) {
+    var max = maxes[cat] * daysWithData;
+    result[cat] = max > 0 ? Math.round((sums[cat] / max) * 100) : 0;
+  });
+  return result;
+}
+
+/* Determine default range from available data */
+function prSmartDefaultRange() {
+  var allKeys = Object.keys(appState).filter(function(k) { return /^\d{4}-\d{2}-\d{2}$/.test(k); });
+  var logged = allKeys.filter(function(ds) {
+    return appState[ds] && Object.keys(appState[ds]).some(function(k) { return appState[ds][k] === true; });
+  });
+  if (logged.length >= 20) return 30;
+  if (logged.length >= 10) return 14;
+  return 7;
+}
+
+/* Render the contribution grid */
+function prRenderGrid(days) {
+  var wrap = document.getElementById('prGridWrap');
+  if (!wrap) return;
+  var td = getToday();
+  var startD = new Date(td + 'T00:00:00');
+  startD.setDate(startD.getDate() - days + 1);
+  /* Find Monday of startD */
+  var dow = startD.getDay();
+  var mondayStart = new Date(startD);
+  mondayStart.setDate(mondayStart.getDate() + (dow === 0 ? -6 : 1 - dow));
+  var weeks = [];
+  var cur = new Date(mondayStart);
+  var endD = new Date(td + 'T00:00:00');
+  while (cur <= endD) {
+    weeks.push(localDateStr(cur));
+    cur.setDate(cur.getDate() + 7);
+  }
+  var html = '';
+  weeks.forEach(function(wStart) {
+    html += '<div class="pr-gcol">';
+    for (var d = 0; d < 7; d++) {
+      var dd = new Date(wStart + 'T00:00:00');
+      dd.setDate(dd.getDate() + d);
+      var ds = localDateStr(dd);
+      if (ds > td) { html += '<div class="pr-gcell" style="opacity:0;pointer-events:none"></div>'; continue; }
+      var info = prDayInfo(ds);
+      var isToday = ds === td;
+      if (!info || info.score === 0) {
+        html += '<div class="pr-gcell pr-gempty' + (isToday ? ' pr-cell-today' : '') + '" onclick="prSelectDay(\'' + ds + '\')" title="' + ds + '"></div>';
+      } else {
+        html += '<div class="pr-gcell' + (isToday ? ' pr-cell-today' : '') + '" style="background:' + info.color + ';opacity:' + info.opacity.toFixed(2) + '" onclick="prSelectDay(\'' + ds + '\')" title="' + ds + '"></div>';
+      }
+    }
+    html += '</div>';
+  });
+  wrap.innerHTML = html;
+}
+
+/* Tap-to-inspect day card */
+function prSelectDay(ds) {
+  var card = document.getElementById('prDayCard');
   if (!card) return;
-  var d = new Date(ds+'T00:00:00');
-  var DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  var label = DAYS[d.getDay()]+', '+d.getDate()+' '+MON[d.getMonth()]+' '+d.getFullYear();
-  if (ds===today) label = 'Today \u2014 '+label;
-  var info = window._histDayInfo ? window._histDayInfo(ds) : null;
-  if (!info || info.score===0) {
-    card.className='history-day-card';
-    card.style.borderLeftColor='';
-    card.innerHTML='<div class="history-day-date">'+label+'</div>'+
-      '<div class="history-day-empty">'+(ds===today?'Nothing logged yet today. The day is still yours.':'Nothing was logged this day.')+'</div>';
+  var d = new Date(ds + 'T00:00:00');
+  var DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var MON  = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var label = DAYS[d.getDay()] + ', ' + d.getDate() + ' ' + MON[d.getMonth()] + ' ' + d.getFullYear();
+  var td = getToday();
+  if (ds === td) label = 'Today \u2014 ' + label;
+  var info = prDayInfo(ds);
+  card.className = 'pr-day-card';
+  card.style.borderLeftColor = '';
+  if (!info || info.score === 0) {
+    card.innerHTML = '<div class="pr-day-date">' + label + '</div><div class="pr-day-empty">' + (ds === td ? 'Nothing logged yet today. The day is still yours.' : 'Nothing was logged this day.') + '</div>';
     return;
   }
-  var catName=window._histCatNames[info.dominant]||'', catColor=window._histCatColors[info.dominant]||'var(--text)';
-  card.className='history-day-card has-data';
-  card.style.borderLeftColor=catColor;
-  card.innerHTML='<div class="history-day-date">'+label+'</div>'+
-    '<div class="history-day-cat" style="color:'+catColor+'">'+catName+' day</div>'+
-    '<div class="history-day-score">'+info.score+'% foundation completed</div>';
+  card.className = 'pr-day-card has-data';
+  card.style.borderLeftColor = info.hex;
+  card.innerHTML = '<div class="pr-day-date">' + label + '</div>' +
+    '<div class="pr-day-cat" style="color:' + info.hex + '">' + (PR_CAT_NAMES[info.dominant] || '') + ' day</div>' +
+    '<div class="pr-day-score">' + info.score + '% foundation covered</div>';
 }
+
+/* Render neurotransmitter bars */
+function prRenderNeuro(avgs) {
+  var el = document.getElementById('prNeuroBlocks');
+  if (!el) return;
+  var html = '';
+  PR_CATS.forEach(function(cat, i) {
+    var pct   = avgs[cat] || 0;
+    var level = pct >= 65 ? 'high' : pct >= 45 ? 'mid' : 'low';
+    var voice = PR_NEURO_VOICE[cat][level];
+    var hex   = PR_CAT_HEX[cat];
+    html += '<div class="pr-neuro-block">' +
+      '<div class="pr-neuro-header">' +
+        '<div class="pr-neuro-name"><span class="pr-neuro-dot" style="background:' + hex + '"></span>' + PR_CAT_NAMES[cat] + '</div>' +
+        '<div class="pr-neuro-pct" style="color:' + hex + '">' + pct + '%</div>' +
+      '</div>' +
+      '<div class="pr-neuro-track"><div class="pr-neuro-fill" style="width:' + pct + '%;background:' + hex + '"></div></div>' +
+      '<div class="pr-neuro-feel">' + voice.feel + '</div>' +
+      '<div class="pr-neuro-science">' + voice.science + '</div>' +
+    '</div>';
+  });
+  el.innerHTML = html;
+}
+
+/* Render foundations list */
+function prRenderFoundations(days) {
+  var el = document.getElementById('prFoundList');
+  if (!el) return;
+  var dateKeys = prDateKeysForRange(days);
+  var html = '';
+  PR_CATS.forEach(function(cat) {
+    var habits = (HABITS[cat] && HABITS[cat].habits) ? HABITS[cat].habits : [];
+    habits.forEach(function(h, idx) {
+      if (!h.foundational) return;
+      var logged = dateKeys.filter(function(ds) {
+        return appState[ds] && appState[ds][cat + '_' + idx] === true;
+      }).length;
+      var pct = Math.round((logged / days) * 100);
+      var hex = PR_CAT_HEX[cat];
+      html += '<div class="pr-fi">' +
+        '<span class="pr-fi-dot" style="background:' + hex + '"></span>' +
+        '<span class="pr-fi-name">' + h.label + '</span>' +
+        '<div class="pr-fi-bar"><div class="pr-fi-track"><div class="pr-fi-fill" style="width:' + pct + '%;background:' + hex + '"></div></div></div>' +
+        '<span class="pr-fi-days">' + logged + ' of ' + days + '</span>' +
+      '</div>';
+    });
+  });
+  if (!html) html = '<div class="pr-day-empty" style="padding:12px 0">No foundational habits selected yet.</div>';
+  el.innerHTML = html;
+}
+
+/* Rule-based insights from real data */
+function prRenderInsights(dateKeys) {
+  var el = document.getElementById('prInsightList');
+  if (!el) return;
+  var insights = [];
+
+  /* 1. Weekend vs weekday drop */
+  var wdScores = [], weScores = [];
+  dateKeys.forEach(function(ds) {
+    var dow = new Date(ds + 'T00:00:00').getDay();
+    var score = ds === getToday() ? Math.round(heroScore()) : (weekData[ds] || 0);
+    if (score > 0) {
+      if (dow === 0 || dow === 6) weScores.push(score); else wdScores.push(score);
+    }
+  });
+  if (wdScores.length >= 2 && weScores.length >= 1) {
+    var wdAvg = Math.round(wdScores.reduce(function(a,b){return a+b;},0) / wdScores.length);
+    var weAvg = Math.round(weScores.reduce(function(a,b){return a+b;},0) / weScores.length);
+    if (wdAvg - weAvg >= 10) {
+      insights.push({ cat:'serotonin', text:'Weekday scores averaged ' + wdAvg + '% vs ' + weAvg + '% on weekends. That weekend dip is a pattern worth noticing \u2014 routine habits tend to drop when structure loosens.', src:'Rhythm habits \u2014 sleep, prayer, rhythmic movement \u2014 anchor the rest. When they slip on rest days, the baseline follows.' });
+    }
+  }
+
+  /* 2. Oxytocin deficit notice */
+  var oxHabits = (HABITS.oxytocin && HABITS.oxytocin.habits) ? HABITS.oxytocin.habits : [];
+  var oxLoggedDays = dateKeys.filter(function(ds) {
+    var state = appState[ds];
+    return state && oxHabits.some(function(h, idx) { return state['oxytocin_' + idx] === true; });
+  }).length;
+  if (oxLoggedDays < Math.ceil(dateKeys.length * 0.5)) {
+    insights.push({ cat:'oxytocin', text:'Connection habits appeared on fewer than half the days in this period. This is the one most people sacrifice first \u2014 and feel last.', src:'Holt-Lunstad (2024): social connection is one of the strongest independent predictors of sustained wellbeing.' });
+  }
+
+  /* 3. Best day notice */
+  var bestDs = null, bestScore = 0;
+  dateKeys.forEach(function(ds) {
+    var score = ds === getToday() ? Math.round(heroScore()) : (weekData[ds] || 0);
+    if (score > bestScore) { bestScore = score; bestDs = ds; }
+  });
+  if (bestDs) {
+    var bestDow = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date(bestDs + 'T00:00:00').getDay()];
+    insights.push({ cat:'dopamine', text:'Your strongest day this period was ' + bestDow + ' at ' + bestScore + '%. Notice what you did that day \u2014 that is your formula.', src:'Keystone habits have ripple effects. A strong day often has one habit that lowered the threshold for all the others.' });
+  }
+
+  /* 4. Generic endorphin note if low */
+  var exHabits = (HABITS.endorphin && HABITS.endorphin.habits) ? HABITS.endorphin.habits : [];
+  var exLoggedDays = dateKeys.filter(function(ds) {
+    var state = appState[ds];
+    return state && exHabits.some(function(h, idx) { return state['endorphin_' + idx] === true; });
+  }).length;
+  if (exLoggedDays > 0 && exLoggedDays < dateKeys.length) {
+    insights.push({ cat:'endorphin', text:'Physical habits showed up on ' + exLoggedDays + ' of ' + dateKeys.length + ' days. On those days your score tended to be steadier \u2014 physical habits create a buffer.', src:'Physical activity produces a neurochemical buffer that persists for several hours after the session ends.' });
+  }
+
+  if (insights.length === 0) {
+    insights.push({ cat:'serotonin', text:'Keep logging \u2014 your patterns get clearer the more data there is to read.', src:'' });
+  }
+
+  var html = '';
+  insights.forEach(function(ins) {
+    html += '<div class="pr-insight">' +
+      '<div class="pr-insight-bar" style="background:' + PR_CAT_HEX[ins.cat] + '"></div>' +
+      '<div><div class="pr-insight-text">' + ins.text + '</div>' +
+      (ins.src ? '<div class="pr-insight-src">' + ins.src + '</div>' : '') +
+      '</div></div>';
+  });
+  el.innerHTML = html;
+}
+
+/* Keystone habit detection */
+function prRenderKeystone(dateKeys) {
+  var el = document.getElementById('prKeystoneBlock');
+  if (!el) return;
+  if (dateKeys.length < 14) { el.innerHTML = ''; return; }
+  var best = null, bestGap = 0;
+  PR_CATS.forEach(function(cat) {
+    var habits = (HABITS[cat] && HABITS[cat].habits) ? HABITS[cat].habits : [];
+    habits.forEach(function(h, idx) {
+      var withDays = [], withoutDays = [];
+      dateKeys.forEach(function(ds) {
+        var score = ds === getToday() ? Math.round(heroScore()) : (weekData[ds] || 0);
+        if (score === 0) return;
+        var state = appState[ds];
+        if (state && state[cat + '_' + idx] === true) withDays.push(score);
+        else withoutDays.push(score);
+      });
+      if (withDays.length < 3 || withoutDays.length < 3) return;
+      var withAvg    = Math.round(withDays.reduce(function(a,b){return a+b;},0) / withDays.length);
+      var withoutAvg = Math.round(withoutDays.reduce(function(a,b){return a+b;},0) / withoutDays.length);
+      var gap = withAvg - withoutAvg;
+      if (gap > bestGap) { bestGap = gap; best = { label: h.label, cat: cat, withAvg: withAvg, withoutAvg: withoutAvg }; }
+    });
+  });
+  if (!best || bestGap < 10) { el.innerHTML = ''; return; }
+  var hex = PR_CAT_HEX[best.cat];
+  el.innerHTML = '<div class="pr-keystone">' +
+    '<div class="pr-keystone-eye" style="color:' + hex + '">Possible keystone habit identified</div>' +
+    '<div class="pr-keystone-text">' + best.label + ' may be doing more structural work than it appears. Your overall score averaged ' + best.withAvg + '% on days it was logged, compared to ' + best.withoutAvg + '% when it was not.</div>' +
+    '<div class="pr-keystone-sub">A keystone habit is one that ripples outward \u2014 when logged, it lowers the threshold for every other habit that follows. This is your own data, not a diagnosis. But it is worth treating this habit as the first one of the day.</div>' +
+  '</div>';
+}
+
+/* If/then nudge */
+function prRenderNudge(avgs) {
+  var el = document.getElementById('prNudge');
+  if (!el) return;
+  var weakest = PR_CATS.reduce(function(a, b) { return (avgs[a] || 0) <= (avgs[b] || 0) ? a : b; });
+  var nudge = PR_NUDGES[weakest];
+  var hex = PR_CAT_HEX[weakest];
+  el.innerHTML = '<div class="pr-nudge-eye" style="color:' + hex + '">One thing for tomorrow</div>' +
+    '<div class="pr-nudge-ifthen">' + nudge.ifthen + '</div>' +
+    '<div class="pr-nudge-sub">' + nudge.sub + '</div>';
+}
+
+/* Render at-a-glance cards */
+function prRenderGlance(dateKeys) {
+  var scores = dateKeys.map(function(ds) {
+    return ds === getToday() ? Math.round(heroScore()) : (weekData[ds] || 0);
+  }).filter(function(s) { return s > 0; });
+  var avgNum  = document.getElementById('prAvgNum');
+  var avgCtx  = document.getElementById('prAvgCtx');
+  var bestNum = document.getElementById('prBestNum');
+  var bestCtx = document.getElementById('prBestCtx');
+  var lowNum  = document.getElementById('prLowNum');
+  var lowCtx  = document.getElementById('prLowCtx');
+  var droop   = document.getElementById('prDroopTag');
+  if (!avgNum) return;
+  if (scores.length === 0) {
+    avgNum.textContent = '--'; bestNum.textContent = '--'; lowNum.textContent = '--';
+    avgCtx.textContent = 'No data yet for this period.';
+    bestCtx.textContent = ''; lowCtx.textContent = ''; droop.textContent = '';
+    return;
+  }
+  var avg  = Math.round(scores.reduce(function(a,b){return a+b;},0) / scores.length);
+  var best = Math.max.apply(null, scores);
+  var low  = Math.min.apply(null, scores);
+  var bestDs = dateKeys[scores.indexOf(best)] || '';
+  var lowDs  = dateKeys[scores.lastIndexOf(low)] || '';
+  var DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var bestDay = bestDs ? DAYS[new Date(bestDs + 'T00:00:00').getDay()] : '';
+  var lowDay  = lowDs  ? DAYS[new Date(lowDs  + 'T00:00:00').getDay()] : '';
+  avgNum.textContent  = avg + '%';
+  bestNum.textContent = best + '%';
+  lowNum.textContent  = low + '%';
+  avgCtx.textContent  = avg >= 70 ? 'A strong period. Your brain was working for you most days.' : avg >= 50 ? 'A solid base. More good days than not.' : 'A quieter period. The data is still useful.';
+  bestCtx.textContent = bestDay + '. Notice what you did that day \u2014 that\'s your formula.';
+  lowCtx.textContent  = lowDay + '. One quiet day doesn\'t define the period.';
+  droop.textContent   = 'Your brain is designed to return to neutral after a peak. A dip isn\'t failure \u2014 it\'s biology.';
+}
+
+/* Render trend line chart */
+function prRenderChart(dateKeys) {
+  var canvas = document.getElementById('prTrendChart');
+  if (!canvas) return;
+  var labels = dateKeys.map(function(ds) {
+    var d = new Date(ds + 'T00:00:00');
+    return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
+  });
+  var data = dateKeys.map(function(ds) {
+    return ds === getToday() ? Math.round(heroScore()) : (weekData[ds] || 0);
+  });
+  var isDark = document.documentElement.getAttribute('data-theme') === 'dark' ||
+    (window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches);
+  var gridC = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.07)';
+  var textC = isDark ? 'rgba(255,255,255,0.38)' : 'rgba(0,0,0,0.38)';
+  if (_prTrendChart) { _prTrendChart.destroy(); _prTrendChart = null; }
+  _prTrendChart = new Chart(canvas, {
+    type: 'line',
+    data: { labels: labels, datasets: [{ data: data, borderColor:'#4a9e82', backgroundColor:'rgba(74,158,130,0.07)', fill:true, tension:0.38, pointBackgroundColor:'#4a9e82', pointRadius:3, pointHoverRadius:5, borderWidth:2 }] },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label:function(ctx){ return ctx.parsed.y + '%'; } } } },
+      scales:{
+        y:{ min:0, max:100, grid:{color:gridC}, ticks:{color:textC, callback:function(v){return v+'%';}, maxTicksLimit:5} },
+        x:{ grid:{display:false}, ticks:{color:textC, autoSkip:true, maxTicksLimit:10} }
+      }
+    }
+  });
+}
+
+/* Master render */
+function prRender(days) {
+  _prRange = days;
+  var td = getToday();
+  var titles = { 7:'What this week is telling you', 14:'What the last two weeks are showing', 30:'What your month is showing' };
+  var titleEl = document.getElementById('prTitle');
+  var subEl   = document.getElementById('prSub');
+  if (titleEl) titleEl.textContent = titles[days] || titles[7];
+  if (subEl) {
+    var endD = new Date(td + 'T00:00:00');
+    var startD = new Date(td + 'T00:00:00'); startD.setDate(startD.getDate() - days + 1);
+    var MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    subEl.textContent = startD.getDate() + ' ' + MON[startD.getMonth()] + ' \u2013 ' + endD.getDate() + ' ' + MON[endD.getMonth()] + ' ' + endD.getFullYear();
+  }
+  var dateKeys = prDateKeysForRange(days);
+  var avgs = prCatAverages(dateKeys);
+  prRenderGrid(days);
+  prSelectDay(td);
+  prRenderGlance(dateKeys);
+  prRenderChart(dateKeys);
+  prRenderNeuro(avgs);
+  prRenderFoundations(days);
+  prRenderInsights(dateKeys);
+  prRenderKeystone(dateKeys);
+  prRenderNudge(avgs);
+}
+
+/* Range button handler */
+function prSetRange(days, btn) {
+  document.querySelectorAll('.pr-rb').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  prRender(days);
+}
+
+/* Entry point — called by showHistoryScreen */
+function showHistoryScreen() {
+  showScreen('screen-history');
+  var defaultRange = prSmartDefaultRange();
+  /* Sync range buttons */
+  document.querySelectorAll('.pr-rb').forEach(function(b) { b.classList.remove('active'); });
+  var activeBtn = document.querySelector('.pr-rb[onclick*="prSetRange(' + defaultRange + ',"]');
+  if (activeBtn) activeBtn.classList.add('active');
+  prRender(defaultRange);
+}
+
 window.showHistoryScreen = showHistoryScreen;
-window.selectHistoryDay  = selectHistoryDay;
+window.prSelectDay       = prSelectDay;
+window.prSetRange        = prSetRange;
 
 /* 2. Per-category streaks — computed from weekData history */
 function renderCatStreaks() {
@@ -4537,10 +5020,8 @@ document.querySelectorAll('.nav-tab').forEach(btn => {
     document.getElementById(`page-${tab}`).classList.add('page-active');
     document.getElementById(`page-${tab}`).scrollTop = 0;
     if (tab === 'profile') { renderProfile(); updateThemeUI(); }
-    // Advance thought bubble category each time user returns to coach tab
+    // Re-render thought bubble when returning to coach tab (tap to progress)
     if (tab === 'coach') {
-      _categoryCounters[_categoryOrder[_catTapIdx % _categoryOrder.length]]++;
-      _catTapIdx++;
       renderThoughtBubble();
     }
   });
@@ -5633,7 +6114,7 @@ window.dismissInstall     = dismissInstall;
 window.dismissIosSheet    = dismissIosSheet;
 window.triggerInstall     = triggerInstall;
 window.showScreen         = showScreen;
-window.showHistoryScreen  = showHistoryScreen;
+/* showHistoryScreen registered above */
 window.hideScreen         = hideScreen;
 window.showOnboarding      = showOnboarding;
 window.showAvatarOnboarding = showAvatarOnboarding;
