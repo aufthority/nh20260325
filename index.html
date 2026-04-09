@@ -1751,6 +1751,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
         <div class="pr-glance-label">Hardest day</div>
         <div class="pr-glance-num" id="prLowNum" style="color:var(--oxytocin)">--</div>
         <div class="pr-glance-ctx" id="prLowCtx"></div>
+        <div class="pr-droop" id="prDroopTag"></div>
       </div>
     </div>
 
@@ -2271,7 +2272,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 41;
+const APP_BUILD   = 40;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -3879,7 +3880,7 @@ function prRenderInsights(dateKeys) {
 function prRenderKeystone(dateKeys) {
   var el = document.getElementById('prKeystoneBlock');
   if (!el) return;
-  if (dateKeys.length < 7) { el.innerHTML = ''; return; }
+  if (dateKeys.length < 14) { el.innerHTML = ''; return; }
   var best = null, bestGap = 0;
   PR_CATS.forEach(function(cat) {
     var habits = (HABITS[cat] && HABITS[cat].habits) ? HABITS[cat].habits : [];
@@ -3892,14 +3893,14 @@ function prRenderKeystone(dateKeys) {
         if (state && state[cat + '_' + idx] === true) withDays.push(score);
         else withoutDays.push(score);
       });
-      if (withDays.length < 2 || withoutDays.length < 2) return;
+      if (withDays.length < 3 || withoutDays.length < 3) return;
       var withAvg    = Math.round(withDays.reduce(function(a,b){return a+b;},0) / withDays.length);
       var withoutAvg = Math.round(withoutDays.reduce(function(a,b){return a+b;},0) / withoutDays.length);
       var gap = withAvg - withoutAvg;
       if (gap > bestGap) { bestGap = gap; best = { label: h.label, cat: cat, withAvg: withAvg, withoutAvg: withoutAvg }; }
     });
   });
-  if (!best || bestGap < 5) { el.innerHTML = ''; return; }
+  if (!best || bestGap < 10) { el.innerHTML = ''; return; }
   var hex = PR_CAT_HEX[best.cat];
   el.innerHTML = '<div class="pr-keystone">' +
     '<div class="pr-keystone-eye" style="color:' + hex + '">Possible keystone habit identified</div>' +
@@ -3931,11 +3932,12 @@ function prRenderGlance(dateKeys) {
   var bestCtx = document.getElementById('prBestCtx');
   var lowNum  = document.getElementById('prLowNum');
   var lowCtx  = document.getElementById('prLowCtx');
+  var droop   = document.getElementById('prDroopTag');
   if (!avgNum) return;
   if (scores.length === 0) {
     avgNum.textContent = '--'; bestNum.textContent = '--'; lowNum.textContent = '--';
     avgCtx.textContent = 'No data yet for this period.';
-    bestCtx.textContent = ''; lowCtx.textContent = '';
+    bestCtx.textContent = ''; lowCtx.textContent = ''; droop.textContent = '';
     return;
   }
   var avg  = Math.round(scores.reduce(function(a,b){return a+b;},0) / scores.length);
@@ -3952,6 +3954,7 @@ function prRenderGlance(dateKeys) {
   avgCtx.textContent  = avg >= 70 ? 'A strong period. Your brain was working for you most days.' : avg >= 50 ? 'A solid base. More good days than not.' : 'A quieter period. The data is still useful.';
   bestCtx.textContent = bestDay + '. Notice what you did that day \u2014 that\'s your formula.';
   lowCtx.textContent  = lowDay + '. One quiet day doesn\'t define the period.';
+  droop.textContent   = 'Your brain is designed to return to neutral after a peak. A dip isn\'t failure \u2014 it\'s biology.';
 }
 
 /* Render trend line chart */
