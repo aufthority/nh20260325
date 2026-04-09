@@ -30,6 +30,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 
 <!-- ============================================================
      NEUROHABIT PWA — by The Aufthority  v3
@@ -972,7 +973,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .trend-active-dot { transition: r 0.2s; }
 
 /* ═══ HISTORY SCREEN ════════════════════════════════════════ */
-.history-back-bar { position: sticky; top: 0; z-index: 50; background: var(--surface); border-bottom: 1px solid var(--border); padding: calc(var(--safe-t) + 12px) 18px 12px; display: flex; align-items: center; gap: 10px; }
+.history-back-bar { position: sticky; top: 0; z-index: 50; background: var(--surface); border-bottom: 1px solid var(--border); padding: calc(var(--safe-t) + 48px) 18px 12px; display: flex; align-items: center; gap: 10px; }
 .history-screen-content { overflow-y: auto; flex: 1; padding: 24px 20px 80px; }
 .history-screen-title { font-family: 'Instrument Serif', serif; font-size: 22px; font-weight: 400; letter-spacing: -0.3px; margin-bottom: 4px; }
 .history-screen-sub { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 24px; }
@@ -2271,7 +2272,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 38;
+const APP_BUILD   = 39;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
