@@ -2272,7 +2272,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 40;
+const APP_BUILD   = 42;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -2839,6 +2839,12 @@ function toggleHabit(key, type, idx) {
   // BUILD 32: stub note field for future note input feature
   if (appState[today][key] && appState[today][key + '_note'] === undefined) {
     appState[today][key + '_note'] = null;
+  }
+  // BUILD 41: fire custom analytics event on check-on only
+  if (appState[today][key]) {
+    analytics.logEvent('habit_logged', {
+      neuro_type: type.charAt(0).toUpperCase() + type.slice(1)
+    });
   }
   sv(SK, appState);
   // Fix 1: immediately lock today's score to weekData on every toggle
@@ -5544,13 +5550,15 @@ function closePhaseModal(e) {
 function addHabitToSet(type, hid) {
   if (!userHabitConfig) userHabitConfig = JSON.parse(JSON.stringify(DEFAULT_HABIT_CONFIG));
   if (userHabitConfig[type].selected.includes(hid)) return;
+  // BUILD 42: block addition during lock period — floor stays honest
+  if (isLockActive()) {
+    showToast('Habit set is locked for ' + daysUntilUnlock() + ' more days. You can remove secondary or bonus habits, but no new ones can be added until the lock ends.', 'info');
+    return;
+  }
   var h = HABITS[type].habits.find(function(x) { return x.id === hid; });
   if (!h) return;
   var catNames = { dopamine: 'Dopamine', serotonin: 'Serotonin', oxytocin: 'Oxytocin', endorphin: 'Endorphin' };
-  var lockNote = isLockActive()
-    ? 'Once added, it is locked for ' + daysUntilUnlock() + ' more days.'
-    : 'You can remove it at any time after adding.';
-  var msgLine1 = 'Add this habit to your ' + (catNames[type] || type) + ' set?';
+  var lockNote = 'You can remove it at any time after adding.';
   var msgLine2 = lockNote;
   if (!confirm(msgLine1 + ' ' + msgLine2)) return;
   userHabitConfig[type].selected.push(hid);
@@ -5693,9 +5701,19 @@ function removeHabitFromSet(type, hid) {
     return;
   }
 
-  // Locked — nothing moves
+  // BUILD 42: during lock, foundational habits are fully blocked;
+  // secondary and bonus habits may be removed (floor stays honest, users not trapped)
   if (isLockActive()) {
-    showToast('Habit set locked for ' + daysUntilUnlock() + ' more days. Science shows ' + LOCK_MIN_DAYS + ' days is the minimum to know if a habit works for you.', 'info');
+    if (h.foundational) {
+      showToast('Core habits are locked for ' + daysUntilUnlock() + ' more days. Science shows ' + LOCK_MIN_DAYS + ' days is the minimum to know if a habit works for you.', 'info');
+      return;
+    }
+    // Secondary or bonus — allow removal during lock
+    if (!userHabitConfig) userHabitConfig = JSON.parse(JSON.stringify(DEFAULT_HABIT_CONFIG));
+    userHabitConfig[type].selected = userHabitConfig[type].selected.filter(function(id) { return id !== hid; });
+    sv(HCK, userHabitConfig);
+    renderSection(type); updateCatUI(type); renderCoach();
+    showToast(h.label + ' removed. You can add it back after the lock ends in ' + daysUntilUnlock() + ' days.', 'success');
     return;
   }
 
