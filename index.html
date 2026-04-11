@@ -251,8 +251,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .flex-toggle-btn.active { color: var(--warning); border-color: color-mix(in srgb, var(--warning) 35%, transparent); background: color-mix(in srgb, var(--warning) 8%, var(--surface2)); }
 
 /* ── BUILD 44: Habit personalisation label ── */
-.habit-label-area { max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.3s ease, opacity 0.25s ease, padding 0.3s ease; padding: 0 13px 0 46px; }
-.habit-label-area.visible { max-height: 72px; opacity: 1; padding: 8px 13px 12px 46px; }
+.habit-label-area { max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.3s ease, opacity 0.25s ease, padding 0.3s ease; padding: 0 13px; }
+.habit-label-area.visible { max-height: 80px; opacity: 1; padding: 6px 13px 12px 13px; }
 .habit-label-prompt { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
 .habit-label-wrap { display: flex; align-items: center; gap: 7px; background: var(--surface2); border: 1px solid var(--border2); border-radius: 8px; padding: 7px 10px; transition: border-color 0.15s; }
 .habit-label-wrap:focus-within { border-color: color-mix(in srgb, var(--ac) 50%, var(--border2)); }
@@ -261,6 +261,12 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .habit-label-input::placeholder { color: var(--muted); font-style: italic; }
 .habit-label-saved { font-size: 10px; color: var(--serotonin); flex-shrink: 0; opacity: 0; transition: opacity 0.2s; font-weight: 500; }
 .habit-label-saved.show { opacity: 1; }
+.habit-label-confirm { flex-shrink: 0; width: 32px; height: 32px; border-radius: 8px; background: var(--serotonin); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: opacity 0.15s, transform 0.1s, box-shadow 0.15s; opacity: 0.9; box-shadow: 0 1px 4px rgba(74,158,130,0.25); }
+.habit-label-confirm:hover { opacity: 1; box-shadow: 0 2px 8px rgba(74,158,130,0.4); }
+.habit-label-confirm:active { transform: scale(0.91); }
+.habit-label-confirm svg { display: block; }
+.habit-edit-btn { background: none; border: none; padding: 2px; cursor: pointer; opacity: 0.5; transition: opacity 0.15s; color: var(--muted); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.habit-edit-btn:hover { opacity: 1; }
 .habit-label-preview { font-size: 10.5px; color: var(--muted); margin-top: 2px; font-style: italic; display: none; align-items: center; gap: 4px; }
 .habit-label-preview.show { display: flex; }
 .habit-label-preview-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--ac); flex-shrink: 0; opacity: 0.7; }
@@ -2295,7 +2301,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 47;
+const APP_BUILD   = 48;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -2801,58 +2807,75 @@ function renderSection(type) {
       const labelKey = type + '_' + i;
       const savedLabel = habitLabels[labelKey] || '';
 
+      // BUILD 48: label area — confirm button collapses input; pencil re-opens it
       const labelArea = document.createElement('div');
-      labelArea.className = 'habit-label-area' + (isDone ? ' visible' : '');
+      // Show input only if not yet saved
+      labelArea.className = 'habit-label-area' + (isDone && !savedLabel ? ' visible' : '');
       labelArea.id = 'hla-' + labelKey;
 
-      const previewHTML = savedLabel
-        ? '<div class="habit-label-preview show" id="hlp-' + labelKey + '"><div class="habit-label-preview-dot"></div><span>' + savedLabel.replace(/</g,'&lt;') + '</span></div>'
-        : '<div class="habit-label-preview" id="hlp-' + labelKey + '"><div class="habit-label-preview-dot"></div><span></span></div>';
+      const PENCIL = '<svg width="13" height="13" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d=\"M13 2.5l2.5 2.5-9 9L3 15l.5-3.5 9-9z\"/><line x1=\"11\" y1=\"4.5\" x2=\"13.5\" y2=\"7\"/></svg>';
+      const CHECK  = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polyline points=\"2,7 5.5,10.5 12,3.5\" stroke=\"white\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>';
 
       labelArea.innerHTML =
         '<div class="habit-label-prompt">What\'s your version of this habit?</div>' +
-        '<div class="habit-label-wrap' + (savedLabel ? ' hl-saved' : '') + '" id="hlw-' + labelKey + '">' +
+        '<div class="habit-label-wrap" id="hlw-' + labelKey + '">' +
           '<input class="habit-label-input" id="hli-' + labelKey + '" type="text" maxlength="60"' +
             ' placeholder="e.g. ' + h.label.toLowerCase() + '..."' +
             ' value="' + savedLabel.replace(/"/g, '&quot;') + '">' +
-          '<span class="habit-label-saved" id="hls-' + labelKey + '">saved</span>' +
+          '<button class="habit-label-confirm" id="hlc-' + labelKey + '" title="Save">' + CHECK + '</button>' +
         '</div>';
 
-      // Insert preview into habit-meta inside the row
+      // Inline personalisation preview (pencil edit icon) inside the habit card
+      const previewHTML = '<div class="habit-label-preview' + (savedLabel ? ' show' : '') + '" id="hlp-' + labelKey + '">' +
+        '<div class="habit-label-preview-dot"></div>' +
+        '<span>' + (savedLabel ? savedLabel.replace(/</g,'&lt;') : '') + '</span>' +
+        '<button class="habit-edit-btn" id="hleb-' + labelKey + '" title="Edit" style="' + (savedLabel ? '' : 'display:none') + '">' + PENCIL + '</button>' +
+        '</div>';
+
       const metaEl = row.querySelector('.habit-meta');
       if (metaEl) metaEl.insertAdjacentHTML('afterend', previewHTML);
 
-      const input = labelArea.querySelector('.habit-label-input');
-      input.addEventListener('input', function() {
-        document.getElementById('hls-' + labelKey).classList.remove('show');
-        document.getElementById('hlw-' + labelKey).classList.remove('hl-saved');
-      });
-      input.addEventListener('blur', function() {
+      // Confirm button — saves and collapses
+      function doConfirm() {
+        const input = document.getElementById('hli-' + labelKey);
         const val = input.value.trim();
-        const prev = habitLabels[labelKey] || '';
-        if (val === prev) return;
         if (val) { habitLabels[labelKey] = val; } else { delete habitLabels[labelKey]; }
         localStorage.setItem(HBL, JSON.stringify(habitLabels));
-        // Update preview
-        const previewEl = document.getElementById('hlp-' + labelKey);
-        if (previewEl) {
+        const previewEl  = document.getElementById('hlp-' + labelKey);
+        const previewSpan = previewEl ? previewEl.querySelector('span') : null;
+        const editBtn    = document.getElementById('hleb-' + labelKey);
+        if (previewEl && previewSpan) {
           if (val) {
-            previewEl.querySelector('span').textContent = val;
+            previewSpan.textContent = val;
             previewEl.classList.add('show');
+            if (editBtn) editBtn.style.display = '';
           } else {
+            previewSpan.textContent = '';
             previewEl.classList.remove('show');
+            if (editBtn) editBtn.style.display = 'none';
           }
         }
-        if (val) {
-          document.getElementById('hls-' + labelKey).classList.add('show');
-          document.getElementById('hlw-' + labelKey).classList.add('hl-saved');
-          setTimeout(function() {
-            var s = document.getElementById('hls-' + labelKey);
-            if (s) s.classList.remove('show');
-          }, 2000);
-        }
-      });
+        document.getElementById('hla-' + labelKey).classList.remove('visible');
+      }
+
+      const confirmBtn = labelArea.querySelector('.habit-label-confirm');
+      if (confirmBtn) confirmBtn.addEventListener('click', function(e) { e.stopPropagation(); doConfirm(); });
+
+      const input = labelArea.querySelector('.habit-label-input');
+      input.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); doConfirm(); } });
       input.addEventListener('click', function(e) { e.stopPropagation(); });
+
+      // Pencil edit button — re-opens input
+      setTimeout(function() {
+        var editBtn = document.getElementById('hleb-' + labelKey);
+        if (editBtn) editBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var area = document.getElementById('hla-' + labelKey);
+          var inp  = document.getElementById('hli-' + labelKey);
+          if (area) area.classList.add('visible');
+          if (inp)  { inp.value = habitLabels[labelKey] || ''; setTimeout(function() { inp.focus(); }, 280); }
+        });
+      }, 0);
 
       list.appendChild(labelArea);
     }
@@ -6085,9 +6108,7 @@ function maybeShowChangelog() {
 
 function showChangelog() {
   var items = [
-    { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2.5l2.5 2.5-9 9L3 15l.5-3.5 9-9z"/><line x1="11" y1="4.5" x2="13.5" y2="7"/></svg>', title: 'Make it yours', desc: 'Secondary and bonus habits now have a personalisation label. Type in what your version of the habit actually looks like — "skincare routine", "Zumba", "morning muhasabah" — and it will pre-fill every day going forward.' },
-    { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="14" height="11" rx="1.5"/><line x1="2" y1="8" x2="16" y2="8"/><line x1="6" y1="2" x2="6" y2="6"/><line x1="12" y1="2" x2="12" y2="6"/></svg>', title: 'Your journey, so far', desc: 'A new history screen on the Coach page shows every day you have logged — coloured by which neurochemical system you fed most that day.' },
-    { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="7"/><line x1="9" y1="5" x2="9" y2="9"/><line x1="9" y1="9" x2="12" y2="9"/></svg>', title: 'Midnight rollover fix', desc: 'The app now resets at midnight your local time. Previously it was resetting at 8am for users in Malaysia — that is now fixed.' },
+    { icon: '<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2.5l2.5 2.5-9 9L3 15l.5-3.5 9-9z"/><line x1="11" y1="4.5" x2="13.5" y2="7"/></svg>', title: 'Cleaner personalisation', desc: 'The habit personalisation field now collapses after you save it. Tap the pencil icon next to your saved label to edit it anytime — no more open text boxes cluttering your list.' },
   ];
 
   var list = document.getElementById('changelogList');
