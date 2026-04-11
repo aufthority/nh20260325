@@ -1049,10 +1049,10 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .avatar-option { display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 10px 6px; border-radius: var(--radius-sm); border: 2px solid var(--border); background: var(--surface); cursor: pointer; transition: all 0.15s; text-align: center; }
 .avatar-option:hover { border-color: var(--border2); background: var(--surface2); }
 .avatar-option.selected { border-color: var(--coach); background: color-mix(in srgb, var(--coach) 10%, var(--surface)); }
-.avatar-option-emoji { font-size: 28px; line-height: 1; }
+.avatar-option-img { width: 52px; height: 52px; border-radius: 50%; object-fit: contain; background: var(--surface2); padding: 3px; }
 .avatar-option-label { font-size: 10px; color: var(--muted); line-height: 1.3; }
 .avatar-option.selected .avatar-option-label { color: var(--text); }
-.profile-avatar-emoji { font-size: 32px; line-height: 1; display: flex; align-items: center; justify-content: center; }
+.profile-avatar-img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; display: block; padding: 4px; background: var(--surface2); }
 
 /* ═══ ONBOARDING  ════════════════════════════════════════════ */
 #screen-onboarding { overflow-y: auto; padding: 0; background: var(--bg); }
@@ -2295,7 +2295,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 47;
+const APP_BUILD   = 48;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -2361,7 +2361,7 @@ const AVATAR_HABIT_CONFIGS = {
     oxytocin:  { selected: ['as','sm','ch'] },
     endorphin: { selected: ['ex','nt','ym'] }
   },
-  'corp-survivor': {
+  'corporate-survivor': {
     dopamine:  { selected: ['dw','tl','fast'] },
     serotonin: { selected: ['sl','bw','ns'] },
     oxytocin:  { selected: ['sa','sm','rc'] },
@@ -2379,7 +2379,7 @@ const AVATAR_HABIT_CONFIGS = {
     oxytocin:  { selected: ['sa','rc','sl2'] },
     endorphin: { selected: ['ex','ym','cs'] }
   },
-  'introvert': {
+  'proud-introvert': {
     dopamine:  { selected: ['dw','sk','jn'] },
     serotonin: { selected: ['rh','sl','gr'] },
     oxytocin:  { selected: ['pt','sa','sm'] },
@@ -4952,9 +4952,24 @@ async function generateShareImage() {
     ctx.beginPath(); ctx.arc(photoX, photoY, photoR, 0, Math.PI * 2);
     ctx.fillStyle = '#2e2b24'; ctx.fill();
     ctx.strokeStyle = '#4a4640'; ctx.lineWidth = 2; ctx.stroke();
-    ctx.font = '26px system-ui'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText(userAvatar ? userAvatar.emoji : '🧠', photoX, photoY + 1);
-    ctx.textBaseline = 'alphabetic';
+    if (userAvatar && userAvatar.img) {
+      try {
+        var avImg = new Image();
+        await new Promise(function(res2) {
+          avImg.onload = function() {
+            ctx.save(); ctx.beginPath(); ctx.arc(photoX, photoY, photoR, 0, Math.PI*2); ctx.clip();
+            ctx.drawImage(avImg, photoX - photoR, photoY - photoR, photoR*2, photoR*2); ctx.restore();
+            res2();
+          };
+          avImg.onerror = res2;
+          avImg.src = userAvatar.img; setTimeout(res2, 1500);
+        });
+      } catch(e) {}
+    } else {
+      ctx.font = '26px system-ui'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText('\u{1F9E0}', photoX, photoY + 1);
+      ctx.textBaseline = 'alphabetic';
+    }
   }
   var txX = PAD + photoR * 2 + 16;
   ctx.textAlign = 'left';
@@ -5240,14 +5255,14 @@ function showAvatarPicker() {
     const el = document.createElement('div');
     el.className = 'avatar-option' + (isSelected ? ' selected' : '');
     el.innerHTML =
-      '<div class="avatar-option-emoji">' + av.emoji + '</div>' +
+      '<img class="avatar-option-img" src="' + av.img + '" alt="' + av.label + '">' +
       '<div class="avatar-option-label">' + av.label + '<br><span style="font-size:9px;opacity:0.7">' + av.desc + '</span></div>';
     el.addEventListener('click', function() {
-      userAvatar = { id: av.id, emoji: av.emoji, label: av.label };
+      userAvatar = { id: av.id, img: av.img, label: av.label };
       sv(AVK, userAvatar);
       renderProfileAvatar();
       const mini = document.getElementById('profileAvatarMini');
-      if (mini) mini.textContent = av.emoji;
+      if (mini && av.img) { mini.innerHTML = '<img style="width:22px;height:22px;border-radius:50%;object-fit:contain;" src="' + av.img + '" alt="">'; }
       grid.querySelectorAll('.avatar-option').forEach(function(opt) { opt.classList.remove('selected'); });
       el.classList.add('selected');
     });
@@ -5263,30 +5278,29 @@ function showAvatarPicker() {
    AVATAR SYSTEM — relatable character identities
    ═══════════════════════════════════════════════════════════ */
 const AVATARS = [
-  { id: 'tired-carer',       emoji: '😪', label: 'Tired Carer',          desc: 'Running on love and coffee' },
-  { id: 'shift-worker',      emoji: '🥱', label: 'Shift Worker',          desc: 'My schedule is a mystery' },
-  { id: 'neurodivergent',    emoji: '🤔', label: 'Neurodivergent',        desc: 'My brain works differently' },
-  { id: 'busy-student',      emoji: '😅', label: 'Busy Student',          desc: 'Deadline? What deadline?' },
-  { id: 'gamer',             emoji: '😎', label: 'The Gamer',             desc: 'One more round, I promise' },
-  { id: 'outdoor-junkie',    emoji: '😄', label: 'Outdoor Junkie',        desc: 'If there is no trail, I make one' },
-  { id: 'corp-survivor',     emoji: '😬', label: 'Corporate Survivor',    desc: 'Meetings that could be emails' },
-  { id: 'overachiever',      emoji: '🤩', label: 'The Overachiever',      desc: 'Sleep is for the weekend' },
-  { id: 'overthinker',       emoji: '😰', label: 'The Overthinker',       desc: 'Overthinking this choice right now' },
-  { id: 'introvert',         emoji: '🙂', label: 'Proud Introvert',       desc: 'People are exhausting' },
-  { id: 'gym-devotee',       emoji: '😤', label: 'Gym Devotee',           desc: 'Did I mention I lift?' },
-  { id: 'runner',            emoji: '🥵', label: 'The Runner',            desc: 'One more kilometre' },
-  { id: 'extrovert',         emoji: '😁', label: 'The Extrovert',         desc: 'I made friends in the queue' },
-  { id: 'homemaker',         emoji: '🤗', label: 'Home Maker',            desc: 'The house runs because of me' },
-  { id: 'creative',          emoji: '😋', label: 'The Creative',          desc: 'Living in my own world' },
+  { id: 'busy-student',      img: 'busy_student.svg',       label: 'Busy Student',       desc: 'Deadlines are my cardio'            },
+  { id: 'corporate-survivor',img: 'corporate_survivor.svg', label: 'Corporate Survivor', desc: 'Meetings that could be emails'      },
+  { id: 'creative',          img: 'creative.svg',           label: 'The Creative',       desc: 'Running on inspiration and cold brew'},
+  { id: 'extrovert',         img: 'exrovert.svg',           label: 'The Extrovert',      desc: 'Energy levels: always on'    },
+  { id: 'gamer',             img: 'gamer.svg',              label: 'The Gamer',          desc: 'One more level, I promise'          },
+  { id: 'gym-devotee',       img: 'Gym_devotee.svg',        label: 'Gym Devotee',        desc: 'Rest day? Never heard of her'       },
+  { id: 'homemaker',         img: 'homemaker.svg',          label: 'The Homemaker',      desc: 'The house runs because of me'       },
+  { id: 'neurodivergent',    img: 'neurodivergent.svg',     label: 'Neurodivergent',     desc: 'Different brain, different playbook'},
+  { id: 'outdoor-junkie',    img: 'outdoor_junkie.svg',     label: 'Outdoor Junkie',     desc: 'If there is no trail, I make one'   },
+  { id: 'overachiever',      img: 'overachiever.svg',       label: 'The Overachiever',   desc: 'The to-do list has a to-do list'    },
+  { id: 'overthinker',       img: 'overthinker.svg',        label: 'The Overthinker',    desc: 'Analysed 47 apps. Still thinking'   },
+  { id: 'proud-introvert',   img: 'proud_introvert.svg',    label: 'Proud Introvert',    desc: 'Social battery on 12%'              },
+  { id: 'shift-worker',      img: 'shift_worker.svg',       label: 'Shift Worker',       desc: 'Sleep schedule: creative fiction'   },
+  { id: 'runner',            img: 'the_runner.svg',         label: 'The Runner',         desc: 'Miles logged. Habits stacked'       },
+  { id: 'tired-carer',       img: 'tired_carer.svg',        label: 'Tired Carer',        desc: 'Giving 100% — including their own'  },
 ];
 
 const AVK = 'nh_pwa_avatar'; // localStorage key
-let userAvatar = ld(AVK) || null; // { id, emoji, label }
+let userAvatar = ld(AVK) || null; // { id, img, label }
 
-function getAvatarEmoji() {
-  if (userAvatar) return userAvatar.emoji;
-  if (userData && userData.name) return userData.name.slice(0, 2).toUpperCase();
-  return '?';
+function getAvatarImg() {
+  if (userAvatar && userAvatar.img) return userAvatar.img;
+  return null;
 }
 
 function renderProfileAvatar() {
@@ -5301,17 +5315,17 @@ function renderProfileAvatar() {
     img.onerror = function() {
       // Fallback to emoji or initials if photo fails to load
       el.innerHTML = '';
-      if (userAvatar) {
-        el.innerHTML = '<span class="profile-avatar-emoji">' + userAvatar.emoji + '</span>';
+      if (userAvatar && userAvatar.img) {
+        el.innerHTML = '<img class="profile-avatar-img" src="' + userAvatar.img + '" alt="' + userAvatar.label + '">';
       } else {
         el.textContent = userData.name ? userData.name.slice(0, 2).toUpperCase() : '?';
       }
     };
     el.innerHTML = '';
     el.appendChild(img);
-  } else if (userAvatar) {
-    el.innerHTML = '<span class="profile-avatar-emoji">' + userAvatar.emoji + '</span>';
-    el.style.fontSize = '32px';
+  } else if (userAvatar && userAvatar.img) {
+    el.innerHTML = '<img class="profile-avatar-img" src="' + userAvatar.img + '" alt="' + userAvatar.label + '">';
+    el.style.fontSize = '';
   } else {
     el.textContent = userData && userData.name ? userData.name.slice(0, 2).toUpperCase() : '?';
   }
@@ -5319,7 +5333,7 @@ function renderProfileAvatar() {
   const lbl = document.getElementById('profileAvatarLabel');
   if (lbl) {
     if (userAvatar && userAvatar.label) {
-      lbl.textContent = userAvatar.emoji + ' ' + userAvatar.label;
+      lbl.textContent = userAvatar.label;
       lbl.style.display = 'block';
     } else {
       lbl.style.display = 'none';
@@ -5327,7 +5341,7 @@ function renderProfileAvatar() {
   }
   // Update profile mini icon
   const mini = document.getElementById('profileAvatarMini');
-  if (mini) mini.textContent = userAvatar ? userAvatar.emoji : '';
+  if (mini) { if (userAvatar && userAvatar.img) { mini.innerHTML = '<img style="width:22px;height:22px;border-radius:50%;object-fit:contain;" src="' + userAvatar.img + '" alt="">'; } }
 }
 
 const CAT_META = [
@@ -5382,10 +5396,10 @@ function renderOnboardAvatarGrid() {
     const el = document.createElement('div');
     el.className = 'avatar-option' + (isSelected ? ' selected' : '');
     el.innerHTML =
-      '<div class="avatar-option-emoji">' + av.emoji + '</div>' +
+      '<img class="avatar-option-img" src="' + av.img + '" alt="' + av.label + '">' +
       '<div class="avatar-option-label">' + av.label + '<br><span style="font-size:9px;opacity:0.7">' + av.desc + '</span></div>';
     el.addEventListener('click', function() {
-      userAvatar = { id: av.id, emoji: av.emoji, label: av.label };
+      userAvatar = { id: av.id, img: av.img, label: av.label };
       sv(AVK, userAvatar);
       renderOnboardAvatarGrid();
     });
