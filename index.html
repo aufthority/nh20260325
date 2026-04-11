@@ -1386,14 +1386,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
               <div class="premium-cat-streaks" id="catStreaksPanel"></div>
               <p class="premium-preview-desc">Consecutive days you activated each neurochemical system.</p>
             </div>
-            <div class="premium-preview-block">
-              <div class="premium-preview-header">
-                <span class="premium-preview-title">🏅 Personal Bests</span>
-                <span class="beta-tag"><svg width="9" height="9" color="var(--warning)"><use href="#icon-star"/></svg> Premium</span>
-              </div>
-              <div class="premium-milestones" id="milestonesPanel"></div>
-              <p class="premium-preview-desc">Your best recorded moments — tracked automatically each day.</p>
-            </div>
+
             <div class="premium-preview-block">
               <div class="premium-preview-header">
                 <span class="premium-preview-title">🕸 Brain Balance Radar</span>
@@ -2313,7 +2306,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 49;
+const APP_BUILD   = 50;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -3604,7 +3597,7 @@ function renderCoach() {
   // Premium panels (if open)
   const premBody = document.getElementById('premiumCollapseBody');
   if (premBody && premBody.style.display !== 'none') {
-    renderCatStreaks(); renderMilestones(); renderRadar(); renderAdvInsights();
+    renderCatStreaks(); renderRadar(); renderAdvInsights();
   }
 }
 
@@ -4316,44 +4309,6 @@ function renderCatStreaks() {
         </div>
       </div>`;
   }).join('');
-}
-
-/* 3. Personal bests & milestones */
-function renderMilestones() {
-  const el = document.getElementById('milestonesPanel');
-  if (!el) return;
-
-  const currentScore = Math.round(heroScore());
-
-  // Best score: max of all stored week scores + today
-  const allScores = Object.values(weekData).concat(currentScore).filter(s => s > 0);
-  const bestScore = allScores.length ? Math.max(...allScores) : 0;
-
-  // Perfect days: days with score >= 100
-  const perfectDays = Object.values(weekData).filter(s => s >= 100).length;
-
-  // Longest streak: current streak count
-  const longestStreak = Math.max(streak.count || 0, 0);
-
-  // 21-day badge
-  const has21 = longestStreak >= 21;
-
-  const milestones = [
-    { icon:'🥇', label:'Best Hero Score',    val: bestScore > 0 ? bestScore + '%' : '—',   sub: 'Highest single-day score' },
-    { icon:'<svg width="13" height="15" viewBox="0 0 13 15" fill="none" stroke="var(--warning)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 1C6.5 1 9.5 4 9.5 7C9.5 8.8 8.6 10.2 6.5 11C4.4 10.2 3.5 8.8 3.5 7C3.5 5.2 4.5 3.5 4.5 3.5C4.5 3.5 3.5 5.5 5.5 6.5C5.5 4.5 6.5 2.5 6.5 1Z"/><path d="M6.5 11C6.5 11 4 11.8 4 13.5H9C9 11.8 6.5 11 6.5 11Z"/></svg>', label:'Longest Streak',     val: longestStreak > 0 ? longestStreak + 'd' : '—', sub: 'Consecutive days ≥50%' },
-    { icon:'⭐', label:'Perfect Days',       val: perfectDays > 0 ? perfectDays : '—',     sub: '100% Hero Score days' },
-    { icon:'🧠', label:'21-Day Streak',      val: has21 ? '✓' : `${longestStreak}/21`,     sub: has21 ? 'Badge earned!' : 'Keep going — habit forming starts here' },
-  ];
-
-  el.innerHTML = milestones.map(m => `
-    <div class="live-milestone">
-      <div class="live-milestone-icon">${m.icon}</div>
-      <div class="live-milestone-body">
-        <strong>${m.label}</strong>
-        <span>${m.sub}</span>
-      </div>
-      <div class="live-milestone-val">${m.val}</div>
-    </div>`).join('');
 }
 
 /* 4. Brain Balance Radar chart — live SVG */
@@ -6308,7 +6263,6 @@ function togglePremiumPanel() {
   // Render panels when opened for first time so they load on demand
   if (!isOpen) {
     renderCatStreaks();
-    renderMilestones();
     renderRadar();
     renderAdvInsights();
   }
