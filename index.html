@@ -228,7 +228,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .habit-row.flex-active { border-style: dashed; border-color: color-mix(in srgb, var(--warning) 40%, var(--border)); }
 
 /* Checkbox */
-.habit-check { width: 22px; height: 22px; border-radius: 7px; border: 1.5px solid var(--border2); flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: var(--surface2); transition: all 0.2s cubic-bezier(.34,1.56,.64,1); }
+.habit-check { width: 24px; height: 24px; border-radius: 50%; border: 1.8px solid var(--border2); flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: transparent; transition: all 0.2s cubic-bezier(.34,1.56,.64,1); }
 .habit-check svg { opacity: 0; transform: scale(0); transition: all 0.2s cubic-bezier(.34,1.56,.64,1); }
 .habit-row.done .habit-check { background: var(--ac); border-color: var(--ac); }
 .habit-row.done .habit-check svg { opacity: 1; transform: scale(1); }
@@ -2306,7 +2306,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 51;
+const APP_BUILD   = 52;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -2745,8 +2745,8 @@ function renderSection(type) {
 
     row.innerHTML =
       '<div class="habit-check">' +
-        '<svg width="11" height="9" viewBox="0 0 12 10" fill="none">' +
-          '<path d="M1 5l3.5 3.5L11 1" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '<svg width="12" height="10" viewBox="0 0 13 10" fill="none">' +
+          '<path d="M1.5 5l3.5 3.5L11.5 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
         '</svg>' +
       '</div>' +
       '<div class="habit-body">' +
