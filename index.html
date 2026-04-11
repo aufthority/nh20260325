@@ -2580,7 +2580,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 57;
+const APP_BUILD   = 58;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -3077,6 +3077,7 @@ function renderSection(type) {
     const remBtn2 = row.querySelector('.habit-rem-btn');
     if (remBtn2) remBtn2.addEventListener('click', function(e) {
       e.stopPropagation();
+      if (!canRem) return; // dimmed button is truly inert
       removeHabitFromSet(type, h.id);
     });
 
@@ -6160,8 +6161,13 @@ function removeHabitFromSet(type, hid) {
   var h = HABITS[type].habits.find(function(x) { return x.id === hid; });
   if (!h) return;
 
-  // Grace period — free removal allowed
+  // Grace period — free removal allowed, but core minimum enforced
   if (isInGracePeriod()) {
+    if (h.foundational && getSelectedFoundationals(type).length <= 1) {
+      // Last core habit in this category — block and explain
+      showCoreReplaceModal(type, hid);
+      return;
+    }
     if (!userHabitConfig) userHabitConfig = JSON.parse(JSON.stringify(DEFAULT_HABIT_CONFIG));
     userHabitConfig[type].selected = userHabitConfig[type].selected.filter(function(id) { return id !== hid; });
     sv(HCK, userHabitConfig);
