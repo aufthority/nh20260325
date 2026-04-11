@@ -1049,10 +1049,10 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .avatar-option { display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 10px 6px; border-radius: var(--radius-sm); border: 2px solid var(--border); background: var(--surface); cursor: pointer; transition: all 0.15s; text-align: center; }
 .avatar-option:hover { border-color: var(--border2); background: var(--surface2); }
 .avatar-option.selected { border-color: var(--coach); background: color-mix(in srgb, var(--coach) 10%, var(--surface)); }
-.avatar-option-img { width: 52px; height: 52px; border-radius: 50%; object-fit: contain; background: var(--surface2); padding: 3px; }
+.avatar-option-img { width: 64px; height: 64px; border-radius: 0; object-fit: contain; background: transparent; padding: 0; display: block; }
 .avatar-option-label { font-size: 10px; color: var(--muted); line-height: 1.3; }
 .avatar-option.selected .avatar-option-label { color: var(--text); }
-.profile-avatar-img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; display: block; padding: 4px; background: var(--surface2); }
+.profile-avatar-img { width: 100%; height: 100%; object-fit: contain; border-radius: 8px; display: block; padding: 2px; background: transparent; }
 
 /* ═══ ONBOARDING  ════════════════════════════════════════════ */
 #screen-onboarding { overflow-y: auto; padding: 0; background: var(--bg); }
@@ -2295,7 +2295,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 48;
+const APP_BUILD   = 49;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -5262,7 +5262,7 @@ function showAvatarPicker() {
       sv(AVK, userAvatar);
       renderProfileAvatar();
       const mini = document.getElementById('profileAvatarMini');
-      if (mini && av.img) { mini.innerHTML = '<img style="width:22px;height:22px;border-radius:50%;object-fit:contain;" src="' + av.img + '" alt="">'; }
+      if (mini && av.img) { mini.innerHTML = '<img style="width:28px;height:28px;border-radius:4px;object-fit:contain;" src="' + av.img + '" alt="">'; }
       grid.querySelectorAll('.avatar-option').forEach(function(opt) { opt.classList.remove('selected'); });
       el.classList.add('selected');
     });
@@ -5341,7 +5341,7 @@ function renderProfileAvatar() {
   }
   // Update profile mini icon
   const mini = document.getElementById('profileAvatarMini');
-  if (mini) { if (userAvatar && userAvatar.img) { mini.innerHTML = '<img style="width:22px;height:22px;border-radius:50%;object-fit:contain;" src="' + userAvatar.img + '" alt="">'; } }
+  if (mini) { if (userAvatar && userAvatar.img) { mini.innerHTML = '<img style="width:28px;height:28px;border-radius:4px;object-fit:contain;" src="' + userAvatar.img + '" alt="">'; } }
 }
 
 const CAT_META = [
