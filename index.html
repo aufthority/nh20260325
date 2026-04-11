@@ -675,7 +675,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .premium-card p { font-size: 12.5px; color: var(--muted); line-height: 1.55; margin-bottom: 14px; }
 .premium-features { display: flex; flex-direction: column; gap: 5px; margin-bottom: 16px; }
 .premium-feature { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text); }
-.premium-feature::before { content: '✓'; color: var(--serotonin); font-weight: 700; font-size: 13px; flex-shrink: 0; }
+.premium-feature svg { flex-shrink: 0; }
 .premium-cta {
   width: 100%; padding: 13px; border-radius: var(--radius-sm);
   background: linear-gradient(135deg, var(--dopamine), var(--coach));
@@ -1210,6 +1210,18 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 </style>
 </head>
 <body>
+<!-- ═══ SVG ICON DEFS ═══════════════════════════════════════ -->
+<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
+  <defs>
+    <symbol id="icon-star" viewBox="0 0 12 12">
+      <path d="M6 1.2l1.3 2.63 2.9.42-2.1 2.05.5 2.89L6 7.74 3.4 9.19l.5-2.89L1.8 4.25l2.9-.42L6 1.2z" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-pf-check" viewBox="0 0 14 14">
+      <circle cx="7" cy="7" r="6.25" stroke="#4D9E7A" stroke-width="1.4" fill="none"/>
+      <polyline points="4.2,7 6.1,9 9.8,5" stroke="#4D9E7A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </symbol>
+  </defs>
+</svg>
 
 <!-- ══════════════════════════════════════════════════════════
      LOGIN
@@ -1352,14 +1364,14 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
         <!-- Premium Insights (collapsed) -->
         <div class="premium-collapse-wrap">
           <button class="premium-collapse-btn" id="premiumToggleBtn" onclick="togglePremiumPanel()">
-            <span>⭐ Premium Insights</span>
+            <span style="display:inline-flex;align-items:center;gap:5px"><svg width="13" height="13" color="var(--warning)"><use href="#icon-star"/></svg> Premium Insights</span>
             <span class="premium-collapse-chevron" id="premiumChevron">▾</span>
           </button>
           <div class="premium-collapse-body" id="premiumCollapseBody" style="display:none">
             <div class="premium-preview-block">
               <div class="premium-preview-header">
                 <span class="premium-preview-title">📅 This Week</span>
-                <span class="beta-tag">⭐ Premium</span>
+                <span class="beta-tag"><svg width="9" height="9" color="var(--warning)"><use href="#icon-star"/></svg> Premium</span>
               </div>
               <div class="week-section" style="border:none;margin:0;padding:8px 0 0">
                 <div class="week-grid" id="weekGrid"></div>
@@ -1369,7 +1381,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
             <div class="premium-preview-block">
               <div class="premium-preview-header">
                 <span class="premium-preview-title"><svg width="12" height="14" viewBox="0 0 13 15" fill="none" stroke="var(--warning)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><path d="M6.5 1C6.5 1 9.5 4 9.5 7C9.5 8.8 8.6 10.2 6.5 11C4.4 10.2 3.5 8.8 3.5 7C3.5 5.2 4.5 3.5 4.5 3.5C4.5 3.5 3.5 5.5 5.5 6.5C5.5 4.5 6.5 2.5 6.5 1Z"/><path d="M6.5 11C6.5 11 4 11.8 4 13.5H9C9 11.8 6.5 11 6.5 11Z"/></svg>Category Streaks</span>
-                <span class="beta-tag">⭐ Premium</span>
+                <span class="beta-tag"><svg width="9" height="9" color="var(--warning)"><use href="#icon-star"/></svg> Premium</span>
               </div>
               <div class="premium-cat-streaks" id="catStreaksPanel"></div>
               <p class="premium-preview-desc">Consecutive days you activated each neurochemical system.</p>
@@ -1377,7 +1389,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
             <div class="premium-preview-block">
               <div class="premium-preview-header">
                 <span class="premium-preview-title">🏅 Personal Bests</span>
-                <span class="beta-tag">⭐ Premium</span>
+                <span class="beta-tag"><svg width="9" height="9" color="var(--warning)"><use href="#icon-star"/></svg> Premium</span>
               </div>
               <div class="premium-milestones" id="milestonesPanel"></div>
               <p class="premium-preview-desc">Your best recorded moments — tracked automatically each day.</p>
@@ -1385,7 +1397,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
             <div class="premium-preview-block">
               <div class="premium-preview-header">
                 <span class="premium-preview-title">🕸 Brain Balance Radar</span>
-                <span class="beta-tag">⭐ Premium</span>
+                <span class="beta-tag"><svg width="9" height="9" color="var(--warning)"><use href="#icon-star"/></svg> Premium</span>
               </div>
               <div class="premium-radar-wrap">
                 <svg id="radarChart" viewBox="0 0 280 240" width="100%" style="max-width:280px"></svg>
@@ -1396,7 +1408,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
             <div class="premium-preview-block">
               <div class="premium-preview-header">
                 <span class="premium-preview-title">🧠 Advanced NeuroCoach</span>
-                <span class="beta-tag">⭐ Premium</span>
+                <span class="beta-tag"><svg width="9" height="9" color="var(--warning)"><use href="#icon-star"/></svg> Premium</span>
               </div>
               <div class="premium-adv-insights" id="advInsightsPanel"></div>
               <p class="premium-preview-desc">Pattern analysis and proactive nudges based on your actual data.</p>
@@ -1546,11 +1558,11 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
           </div>
           <p>Unlock the full picture of your neurochemical performance — trends, history, and personalised coaching.</p>
           <div class="premium-features">
-            <div class="premium-feature">Weekly & monthly score trend charts</div>
-            <div class="premium-feature">Per-category habit completion streaks</div>
-            <div class="premium-feature">Personal bests & milestone badges</div>
-            <div class="premium-feature">All 4 categories overview at a glance</div>
-            <div class="premium-feature">Advanced NeuroCoach insights</div>
+            <div class="premium-feature"><svg width="14" height="14"><use href="#icon-pf-check"/></svg>Weekly & monthly score trend charts</div>
+            <div class="premium-feature"><svg width="14" height="14"><use href="#icon-pf-check"/></svg>Per-category habit completion streaks</div>
+            <div class="premium-feature"><svg width="14" height="14"><use href="#icon-pf-check"/></svg>Personal bests & milestone badges</div>
+            <div class="premium-feature"><svg width="14" height="14"><use href="#icon-pf-check"/></svg>All 4 categories overview at a glance</div>
+            <div class="premium-feature"><svg width="14" height="14"><use href="#icon-pf-check"/></svg>Advanced NeuroCoach insights</div>
           </div>
           <button class="premium-cta" onclick="alert('Premium is coming soon. Stay tuned!')">Get Early Access</button>
         </div>
@@ -1715,7 +1727,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
       <p><strong>Phase 3 — Foundation Active</strong> is the key threshold. At least 50% of your core habits across all four categories are done. The evidence says this is a genuinely good day for your brain.</p>
       <p>Secondary and bonus habits deepen each category further — they do not change your brain phase. The phase is driven purely by your core habits.</p>
       <div style="margin-top:12px;padding:10px 12px;background:color-mix(in srgb,var(--coach) 10%,var(--surface2));border:1px solid color-mix(in srgb,var(--coach) 25%,transparent);border-radius:var(--radius-sm)">
-        <span style="font-size:11px;color:var(--coach);font-weight:600">⭐ Premium feature</span>
+        <span style="font-size:11px;color:var(--coach);font-weight:600;display:inline-flex;align-items:center;gap:4px"><svg width="10" height="10" color="var(--coach)"><use href="#icon-star"/></svg> Premium feature</span>
         <p style="font-size:12px;color:var(--muted);margin:4px 0 0;line-height:1.5">Detailed numerical scoring, category breakdowns, and weekly trend analysis are available in NeuroHabit Premium.</p>
       </div>
     </div>
@@ -2301,7 +2313,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 48;
+const APP_BUILD   = 49;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
