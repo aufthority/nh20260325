@@ -685,21 +685,37 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 .premium-cta:hover { opacity: 0.88; }
 .premium-cta:active { transform: scale(0.97); }
 
-/* Stats strip */
-.profile-stats {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 8px; margin-bottom: 10px;
+/* Big Why card */
+.big-why-card {
+  background: color-mix(in srgb, var(--oxytocin) 6%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--oxytocin) 20%, var(--border));
+  border-radius: var(--radius-sm); padding: 16px;
+  margin-bottom: 10px; cursor: pointer; transition: border-color 0.2s;
 }
-.profile-stat {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); padding: 12px;
-  text-align: center;
+.big-why-card:hover { border-color: color-mix(in srgb, var(--oxytocin) 35%, var(--border)); }
+.big-why-counting { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.big-why-counting strong { color: var(--text); font-size: 18px; font-weight: 700; display: block; margin: 4px 0 2px; letter-spacing: -0.3px; }
+.big-why-counting.empty strong { font-size: 14px; color: var(--muted); font-weight: 400; font-style: italic; }
+.big-why-edit { font-size: 11px; color: color-mix(in srgb, var(--oxytocin) 70%, var(--muted)); margin-top: 10px; display: flex; align-items: center; gap: 4px; }
+.big-why-input-wrap { display: none; margin-top: 10px; }
+.big-why-input-wrap.visible { display: block; }
+.big-why-input-label { font-size: 11px; color: var(--muted); margin-bottom: 8px; line-height: 1.5; }
+.big-why-input-row { display: flex; gap: 8px; align-items: center; }
+.big-why-input {
+  flex: 1; background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: var(--radius-sm); padding: 10px 13px;
+  font-family: 'Geist', sans-serif; font-size: 15px; color: var(--text);
+  outline: none; transition: border-color 0.2s;
 }
-.profile-stat-val {
-  font-family: 'Instrument Serif', serif; font-size: 24px;
-  font-weight: 400; line-height: 1; color: var(--text);
+.big-why-input:focus { border-color: color-mix(in srgb, var(--oxytocin) 50%, var(--border)); }
+.big-why-input::placeholder { color: var(--muted); }
+.big-why-save {
+  background: var(--oxytocin); border: none; border-radius: var(--radius-sm);
+  padding: 10px 16px; font-family: 'Geist', sans-serif;
+  font-size: 13px; font-weight: 600; color: white; cursor: pointer;
+  transition: opacity 0.15s; flex-shrink: 0;
 }
-.profile-stat-lbl { font-size: 10px; color: var(--muted); margin-top: 3px; letter-spacing: 0.3px; }
+.big-why-save:active { opacity: 0.8; }
 
 /* App info footer */
 .profile-app-footer {
@@ -1527,19 +1543,24 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
           <div class="profile-badge" id="profilePlanBadge">Free</div>
         </div>
 
-        <!-- Today's snapshot stats -->
-        <div class="profile-stats">
-          <div class="profile-stat">
-            <div class="profile-stat-val" id="statHeroScore">0%</div>
-            <div class="profile-stat-lbl">Brain State</div>
+
+        <!-- Big Why -->
+        <div class="big-why-card" id="bigWhyCard" onclick="toggleBigWhyInput()">
+          <div class="big-why-counting" id="bigWhyCounting">
+            Who are you doing this for?
+            <strong>Add a name.</strong>
+            It makes a difference.
           </div>
-          <div class="profile-stat">
-            <div class="profile-stat-val" id="statStreak">0</div>
-            <div class="profile-stat-lbl">Day Streak</div>
+          <div class="big-why-input-wrap" id="bigWhyInputWrap">
+            <div class="big-why-input-label">Add a name. It could be anyone — a child, a parent, a partner, yourself.</div>
+            <div class="big-why-input-row">
+              <input class="big-why-input" id="bigWhyInput" placeholder="e.g. Mia, my mum, myself…" maxlength="40">
+              <button class="big-why-save" onclick="saveBigWhy(event)">Save</button>
+            </div>
           </div>
-          <div class="profile-stat">
-            <div class="profile-stat-val" id="statGrade">—</div>
-            <div class="profile-stat-lbl">Core habits</div>
+          <div class="big-why-edit" id="bigWhyEdit" style="display:none">
+            <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 1.5l2 2L3 11H1V9L8.5 1.5z"/></svg>
+            edit
           </div>
         </div>
 
@@ -2306,7 +2327,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 52;
+const APP_BUILD   = 53;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -5312,6 +5333,46 @@ function getAvatarEmoji() {
   return '?';
 }
 
+function renderBigWhy() {
+  var name = localStorage.getItem('nh_big_why') || '';
+  var counting = document.getElementById('bigWhyCounting');
+  var editBtn  = document.getElementById('bigWhyEdit');
+  var input    = document.getElementById('bigWhyInput');
+  if (!counting) return;
+  if (name) {
+    var firstName = localStorage.getItem('profileDisplayName') || 'You';
+    counting.className = 'big-why-counting';
+    counting.innerHTML = firstName + ' is building this because<strong>' + name + '</strong>is counting on you.';
+    if (editBtn) editBtn.style.display = 'flex';
+    if (input) input.value = name;
+  } else {
+    counting.className = 'big-why-counting empty';
+    counting.innerHTML = 'Who are you doing this for?<strong>Add a name.</strong>It makes a difference.';
+    if (editBtn) editBtn.style.display = 'none';
+  }
+}
+
+function toggleBigWhyInput() {
+  var wrap = document.getElementById('bigWhyInputWrap');
+  if (!wrap) return;
+  var isOpen = wrap.classList.contains('visible');
+  if (isOpen) return;
+  wrap.classList.add('visible');
+  var inp = document.getElementById('bigWhyInput');
+  if (inp) setTimeout(function() { inp.focus(); }, 50);
+}
+
+function saveBigWhy(e) {
+  e.stopPropagation();
+  var inp = document.getElementById('bigWhyInput');
+  if (!inp) return;
+  var val = inp.value.trim();
+  if (val) localStorage.setItem('nh_big_why', val);
+  var wrap = document.getElementById('bigWhyInputWrap');
+  if (wrap) wrap.classList.remove('visible');
+  renderBigWhy();
+}
+
 function renderProfileAvatar() {
   const el = document.getElementById('profileAvatar');
   if (!el) return;
@@ -5965,11 +6026,7 @@ function renderProfile() {
   // Show guest sign-up banner only for guest sessions
   var guestBanner = document.getElementById('guestSignupBanner');
   if (guestBanner) guestBanner.style.display = userData.skipAuth ? 'block' : 'none';
-  const phaseL = ['Ready','Awakening','Warming up','Active','Thriving'];
-  document.getElementById('statHeroScore').textContent = phaseL[brainPhase()];
-  document.getElementById('statStreak').textContent    = streak.count || 0;
-  const { done: _fd, total: _ft } = countFoundationals();
-  document.getElementById('statGrade').textContent = _fd + ' / ' + _ft + ' done';
+  renderBigWhy();
   renderProfileAvatar();
   /* Update version string from constant */
   var vEl = document.getElementById('appVersionFooter');
