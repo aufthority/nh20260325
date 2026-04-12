@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="NeuroHabit">
-<meta name="description" content="Neuroscience-based daily habit tracker by The Aufthority">
+<meta name="description" content="Neuroscience-based daily habit tracker by Aufthority">
 <link rel="manifest" href="/neurohabitbeta/manifest.json">
 <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%231c1a17'/><text y='128' x='90' text-anchor='middle' font-size='100'>🧠</text></svg>">
 <title>NeuroHabit</title>
@@ -33,7 +33,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 
 <!-- ============================================================
-     NEUROHABIT PWA — by The Aufthority  v3
+     NEUROHABIT PWA — by Aufthority  v3
      Changes:
        · All paths → /neurohabitbeta/
        · Habit masterlist fully revised (D/S/O/E)
@@ -138,7 +138,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
 /* ── REVISION 1: header brand subtitle — must not exceed h1 width ── */
 .header-brand-sub {
   font-size: 6.5px;
-  /* letter-spacing tuned so "BY THE AUFTHORITY" ≈ width of "NeuroHabit" at 18px Instrument Serif */
+  /* letter-spacing tuned so "BY AUFTHORITY" ≈ width of "NeuroHabit" at 18px Instrument Serif */
   letter-spacing: 0.17em;
   text-transform: uppercase;
   color: var(--muted);
@@ -1392,15 +1392,15 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
       Back
     </button>
-    <div class="intro-eyebrow">Your weekly read</div>
-    <h1 class="intro-title">Every week, the app tells you which <em>phase</em> your brain is in.</h1>
+    <div class="intro-eyebrow">Your brain state</div>
+    <h1 class="intro-title">Every day, the app tells you which <em>phase</em> your brain is in.</h1>
     <div class="intro-phase-grid">
-      <div class="intro-phase-card"><div class="intro-phase-bar" style="background:var(--muted)"></div><div class="intro-phase-name">Restorative</div><div class="intro-phase-desc">Building the foundation</div></div>
-      <div class="intro-phase-card"><div class="intro-phase-bar" style="background:var(--dopamine)"></div><div class="intro-phase-name">Building</div><div class="intro-phase-desc">Momentum forming</div></div>
-      <div class="intro-phase-card"><div class="intro-phase-bar" style="background:var(--serotonin)"></div><div class="intro-phase-name">Peak</div><div class="intro-phase-desc">All systems active</div></div>
-      <div class="intro-phase-card"><div class="intro-phase-bar" style="background:var(--warning)"></div><div class="intro-phase-name">Overloaded</div><div class="intro-phase-desc">Time to rest</div></div>
+      <div class="intro-phase-card"><div class="intro-phase-bar" style="background:var(--muted)"></div><div class="intro-phase-name">Awakening</div><div class="intro-phase-desc">Just getting started</div></div>
+      <div class="intro-phase-card"><div class="intro-phase-bar" style="background:var(--dopamine)"></div><div class="intro-phase-name">Warming Up</div><div class="intro-phase-desc">Momentum forming</div></div>
+      <div class="intro-phase-card" style="border-color:var(--serotonin);background:color-mix(in srgb,var(--serotonin) 7%,var(--surface))"><div class="intro-phase-bar" style="background:var(--serotonin)"></div><div class="intro-phase-name">Foundation Active</div><div class="intro-phase-desc">Core habits in motion</div><div style="font-size:9px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;color:var(--serotonin);margin-top:5px">&larr; daily goal</div></div>
+      <div class="intro-phase-card"><div class="intro-phase-bar" style="background:var(--coach)"></div><div class="intro-phase-name">Thriving</div><div class="intro-phase-desc">All systems firing</div></div>
     </div>
-    <p class="intro-body" style="margin-bottom:0">Your daily goal is <strong style="color:var(--serotonin)">Foundation Active</strong> — the point where science says it is already working. Perfection is a bonus, not the target.</p>
+    <p class="intro-body" style="margin-bottom:0"><strong style="color:var(--serotonin)">Foundation Active</strong> is your daily goal — the point where science says it is already working. Everything above it is a bonus.</p>
     <div class="intro-spacer"></div>
     <button class="intro-cta" onclick="introGoTo('screen-intro-2', 2, 7)">Got it →</button>
   </div>
@@ -1557,7 +1557,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
   <div class="login-logo"><img src="icon-192.png" alt="NeuroHabit" style="width:80px;height:80px;border-radius:20px;"></div>
   <div class="login-title">NeuroHabit</div>
   <!-- REVISION 1 -->
-  <div class="login-brand-sub">By The Aufthority</div>
+  <div class="login-brand-sub">By Aufthority</div>
   <div class="login-sub">Track habits rooted in neuroscience.<br>Build a better brain, one day at a time.</div>
   <div class="login-form">
     <button class="btn-secondary" id="loginBtn-google" onclick="signInWithGoogle()" style="display:flex;align-items:center;justify-content:center;gap:8px;">
@@ -1579,7 +1579,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
   <div class="header-brand">
     <h1>NeuroHabit</h1>
     <!-- REVISION 1 -->
-    <span class="header-brand-sub">By The Aufthority</span>
+    <span class="header-brand-sub">By Aufthority</span>
     <span class="header-brand-date" id="headerDate"></span>
   </div>
   <div class="header-right">
@@ -1921,7 +1921,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
         <!-- App info -->
         <div class="profile-app-footer">
           <div>NeuroHabit</div>
-          <div>By The Aufthority</div>
+          <div>By Aufthority</div>
           <div style="margin-top:4px;font-size:10px" id="appVersionFooter">v1.0.0 (19) · neurohabit.app</div>
         </div>
 
@@ -2156,7 +2156,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
     <div class="modal-handle"></div>
     <div class="share-card-inner" id="shareCardInner">
       <div class="share-card-top">
-        <div class="share-card-brand">NeuroHabit <span>By The Aufthority</span></div>
+        <div class="share-card-brand">NeuroHabit <span>By Aufthority</span></div>
         <div class="share-card-date" id="shareDate"></div>
       </div>
 
@@ -2191,7 +2191,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Geist', system-u
         </div>
       </div>
 
-      <div class="share-tagline">neurohabit.app · by The Aufthority</div>
+      <div class="share-tagline">neurohabit.app · by Aufthority</div>
     </div>
     <div class="share-actions">
       <button class="share-action-btn primary" onclick="generateShareImage()">🖼 Save &amp; Share</button>
@@ -2579,7 +2579,7 @@ const HABITS = {
    Format: MAJOR.MINOR.PATCH (BUILD)
    ═══════════════════════════════════════════════════════════ */
 const APP_VERSION = '1.0.0';
-const APP_BUILD   = 63;
+const APP_BUILD   = 65;
 const APP_VERSION_STRING = 'v' + APP_VERSION + ' (' + APP_BUILD + ')';
 document.getElementById('loginVersionBadge').textContent = APP_VERSION_STRING;
 
@@ -4989,7 +4989,7 @@ function buildShareText() {
     '',
     'Brain State: ' + BRAIN_LABELS[phase],
     cf.done + ' of ' + cf.total + ' core habits done'
-  ].concat(catLines).concat(['', 'Tracked with NeuroHabit by The Aufthority']);
+  ].concat(catLines).concat(['', 'Tracked with NeuroHabit by Aufthority']);
   return parts.join(String.fromCharCode(10));
 }
 
@@ -5049,7 +5049,7 @@ async function generateShareImage() {
   ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
   ctx.fillText('NeuroHabit', PAD, 118);
   ctx.fillStyle = '#7a7469'; ctx.font = '400 17px system-ui, sans-serif';
-  ctx.fillText('BY THE AUFTHORITY', PAD, 144);
+  ctx.fillText('BY AUFTHORITY', PAD, 144);
   ctx.textAlign = 'right'; ctx.font = '400 20px system-ui, sans-serif';
   ctx.fillText(dateStr, W - PAD, 118); ctx.textAlign = 'left';
   ctx.strokeStyle = '#3d3a33'; ctx.lineWidth = 1;
